@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://bkvctkykfn31e"]
+
+[ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="1_qwx83"]
+
+[resource]
+font = ExtResource("1_qwx83")
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)

@@ -1,0 +1,142 @@
+[gd_scene load_steps=5 format=3 uid="uid://dwtyhaagerol4"]
+
+[ext_resource type="Script" uid="uid://e38k3u51nv0h" path="res://场景/UI/世界场景UI/top_menu.gd" id="1_0y3av"]
+[ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="1_kpeih"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0y3av"]
+bg_color = Color(0.76872, 0.560047, 7.70092e-07, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+shadow_size = 5
+
+[sub_resource type="LabelSettings" id="LabelSettings_4dp2d"]
+font = ExtResource("1_kpeih")
+font_size = 20
+
+[node name="TopMenu" type="MarginContainer"]
+custom_minimum_size = Vector2(0, 40)
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+mouse_filter = 0
+script = ExtResource("1_0y3av")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0y3av")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="set" type="MarginContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/set"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="设置按钮" type="Button" parent="HBoxContainer/set/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "设置
+"
+flat = true
+
+[node name="帮助按钮" type="Button" parent="HBoxContainer/set/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "帮助
+"
+flat = true
+
+[node name="菜单按钮" type="Button" parent="HBoxContainer/set/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "菜单
+"
+flat = true
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="function" type="MarginContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/function"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="背包按钮" type="Button" parent="HBoxContainer/function/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "背包
+"
+flat = true
+
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainerDay" type="MarginContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 5
+
+[node name="PairDay" type="HSplitContainer" parent="HBoxContainer/MarginContainerDay"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/MarginContainerDay/PairDay"]
+layout_mode = 2
+text = "天数:"
+label_settings = SubResource("LabelSettings_4dp2d")
+
+[node name="day" type="Label" parent="HBoxContainer/MarginContainerDay/PairDay"]
+layout_mode = 2
+text = "10"
+label_settings = SubResource("LabelSettings_4dp2d")
+
+[node name="coreMarginContainer" type="MarginContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 5
+
+[node name="PairCore" type="HSplitContainer" parent="HBoxContainer/coreMarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/coreMarginContainer/PairCore"]
+layout_mode = 2
+text = "金币"
+label_settings = SubResource("LabelSettings_4dp2d")
+
+[node name="core" type="Label" parent="HBoxContainer/coreMarginContainer/PairCore"]
+layout_mode = 2
+text = "10"
+label_settings = SubResource("LabelSettings_4dp2d")
+
+[connection signal="pressed" from="HBoxContainer/set/HBoxContainer/设置按钮" to="." method="_on_设置按钮_pressed"]
+[connection signal="pressed" from="HBoxContainer/set/HBoxContainer/帮助按钮" to="." method="_on_帮助按钮_pressed"]
+[connection signal="pressed" from="HBoxContainer/set/HBoxContainer/菜单按钮" to="." method="_on_菜单按钮_pressed"]
+[connection signal="pressed" from="HBoxContainer/function/HBoxContainer/背包按钮" to="." method="_on_背包按钮_pressed"]

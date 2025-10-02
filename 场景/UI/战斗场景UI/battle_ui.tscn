@@ -1,0 +1,83 @@
+[gd_scene load_steps=6 format=3 uid="uid://x461qtefu8ca"]
+
+[ext_resource type="Script" uid="uid://b6pyw642curpn" path="res://场景/UI/战斗场景UI/unit_action_ui.gd" id="1_nruvc"]
+[ext_resource type="PackedScene" uid="uid://cd718qgnqs328" path="res://场景/UI/战斗场景UI/action_card_ui.tscn" id="2_nruvc"]
+[ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="3_6xdit"]
+[ext_resource type="Script" uid="uid://dhxltd36ksh4b" path="res://场景/UI/战斗场景UI/final_ui.gd" id="3_mkr2q"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_mkr2q"]
+font = ExtResource("3_6xdit")
+font_size = 50
+
+[node name="BattleUI" type="CanvasLayer"]
+
+[node name="UnitActionUI" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_nruvc")
+action_card_ui_scence = ExtResource("2_nruvc")
+
+[node name="MarginContainer" type="MarginContainer" parent="UnitActionUI"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="ActionContainer" type="HBoxContainer" parent="UnitActionUI/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="FinalUI" type="MarginContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -250.0
+offset_right = 200.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource("3_mkr2q")
+
+[node name="Panel" type="Panel" parent="FinalUI"]
+custom_minimum_size = Vector2(400, 500)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="FinalUI2" type="MarginContainer" parent="FinalUI"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalUI/FinalUI2"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="title" type="Label" parent="FinalUI/FinalUI2/VBoxContainer"]
+layout_mode = 2
+text = "Vecter"
+label_settings = SubResource("LabelSettings_mkr2q")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="exit" type="Button" parent="FinalUI/FinalUI2/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("3_6xdit")
+theme_override_font_sizes/font_size = 40
+text = "离开"
+
+[connection signal="pressed" from="FinalUI/FinalUI2/VBoxContainer/exit" to="FinalUI" method="_on_exit_pressed"]

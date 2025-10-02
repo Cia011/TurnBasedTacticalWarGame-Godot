@@ -1,0 +1,124 @@
+[gd_scene load_steps=7 format=3 uid="uid://it0bb32jpmev"]
+
+[ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="1_1tgm5"]
+[ext_resource type="Script" uid="uid://bfsmr774ggf0w" path="res://场景/UI/世界场景UI/角色属性栏/attribute_panel.gd" id="2_s6kyb"]
+[ext_resource type="StyleBox" uid="uid://w36sxyex4j3r" path="res://资源/Style/Panel/AttributePanel.tres" id="3_vk7ih"]
+[ext_resource type="PackedScene" uid="uid://cmcj1ah5ffuki" path="res://场景/UI/世界场景UI/角色属性栏/属性显示标签.tscn" id="4_n4vi2"]
+
+[sub_resource type="Theme" id="Theme_bs2lt"]
+default_font = ExtResource("1_1tgm5")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s6kyb"]
+bg_color = Color(0.608766, 0.634163, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.99997, 0.737164, 0.527873, 1)
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_size = 2
+
+[node name="AttributePanel" type="MarginContainer"]
+custom_minimum_size = Vector2(50, 80)
+offset_right = 199.0
+offset_bottom = 490.0
+mouse_filter = 0
+theme = SubResource("Theme_bs2lt")
+script = ExtResource("2_s6kyb")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_s6kyb")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="标题" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Panel" type="Panel" parent="VBoxContainer/标题"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_vk7ih")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/标题"]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Label" type="Label" parent="VBoxContainer/标题/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "属性面板"
+
+[node name="头部固定区域" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 1
+
+[node name="Panel" type="Panel" parent="VBoxContainer/头部固定区域"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_vk7ih")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/头部固定区域"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/头部固定区域/MarginContainer"]
+layout_mode = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer/头部固定区域/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/头部固定区域/MarginContainer/VBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "角色名称:"
+
+[node name="名称" type="Label" parent="VBoxContainer/头部固定区域/MarginContainer/VBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "未命名"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="属性显示容器" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="属性显示标签" parent="VBoxContainer/ScrollContainer/MarginContainer/属性显示容器" instance=ExtResource("4_n4vi2")]
+layout_mode = 2
+
+[node name="exit" type="Button" parent="."]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"
+flat = true
+
+[connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]

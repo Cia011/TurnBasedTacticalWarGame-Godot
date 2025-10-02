@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3 uid="uid://cmcj1ah5ffuki"]
+
+[ext_resource type="Script" uid="uid://cdssbhetchtmy" path="res://场景/UI/世界场景UI/角色属性栏/属性显示标签.gd" id="1_8tp31"]
+[ext_resource type="StyleBox" uid="uid://w36sxyex4j3r" path="res://资源/Style/Panel/AttributePanel.tres" id="1_a211e"]
+[ext_resource type="FontFile" uid="uid://fi7p30t32c38" path="res://素材/字体/DejaVuSans.ttf" id="3_0pbp4"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vk7ih"]
+font = ExtResource("3_0pbp4")
+font_size = 12
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[node name="属性显示标签" type="MarginContainer"]
+offset_right = 151.0
+offset_bottom = 19.0
+size_flags_horizontal = 3
+script = ExtResource("1_8tp31")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("1_a211e")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 1
+
+[node name="key" type="Label" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "防御力:"
+label_settings = SubResource("LabelSettings_vk7ih")
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 1
+
+[node name="value" type="Label" parent="HBoxContainer/MarginContainer2"]
+layout_mode = 2
+text = "10"
+label_settings = SubResource("LabelSettings_vk7ih")
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3

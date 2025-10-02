@@ -1,0 +1,57 @@
+[gd_scene load_steps=4 format=3 uid="uid://cmdv1ww0ynpig"]
+
+[ext_resource type="StyleBox" uid="uid://w36sxyex4j3r" path="res://资源/Style/Panel/AttributePanel.tres" id="1_f0cn8"]
+[ext_resource type="Script" uid="uid://cdlgdqowbvctg" path="res://场景/UI/世界场景UI/TownSceneUI/招募栏.gd" id="1_hlm7g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j36ds"]
+bg_color = Color(0.330324, 0.680316, 0.525665, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="招募栏" type="MarginContainer"]
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+script = ExtResource("1_hlm7g")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_j36ds")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 5.0
+theme_override_constants/margin_left = 10
+
+[node name="角色名称按钮" type="Button" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "大清第一巴图鲁"
+flat = true
+text_overrun_behavior = 3
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = ExtResource("1_f0cn8")
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 10
+
+[node name="招募按钮" type="Button" parent="HBoxContainer/MarginContainer2"]
+layout_mode = 2
+text = "招募"
+flat = true

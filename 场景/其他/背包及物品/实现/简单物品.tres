@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BaseItem" load_steps=3 format=3 uid="uid://cr4fqpqpmujv4"]
+
+[ext_resource type="Script" uid="uid://cwi2qjbqeyxxr" path="res://场景/其他/背包及物品/基类/BaseItem.gd" id="1_0grdj"]
+[ext_resource type="Texture2D" uid="uid://b7rmj8h3pa4jt" path="res://素材/icon.svg" id="2_6kbg5"]
+
+[resource]
+script = ExtResource("1_0grdj")
+id = "123"
+item_name = "简单物品"
+texture = ExtResource("2_6kbg5")
+max_stack = 1
+number = 1
+description = "简单物品"
+metadata/_custom_type_script = "uid://cwi2qjbqeyxxr"

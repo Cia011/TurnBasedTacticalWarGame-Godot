@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfubjqlbc3v8n"]
+
+[ext_resource type="Script" uid="uid://vl21bhna6ca" path="res://场景/UI/世界场景UI/unit_ui_card.gd" id="1_7ape2"]
+[ext_resource type="Texture2D" uid="uid://b7rmj8h3pa4jt" path="res://素材/icon.svg" id="2_bpfsq"]
+
+[node name="UnitUICard" type="Panel"]
+custom_minimum_size = Vector2(70, 50)
+script = ExtResource("1_7ape2")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bpfsq")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -0.5
+offset_top = -23.0
+offset_right = 0.5
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+vertical_alignment = 1

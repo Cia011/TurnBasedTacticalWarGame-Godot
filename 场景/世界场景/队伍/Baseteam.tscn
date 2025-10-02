@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://jo1m33cs4xno"]
+
+[ext_resource type="Script" uid="uid://c84r8buixxm5t" path="res://场景/世界场景/队伍/baseteam.gd" id="1_5eler"]
+[ext_resource type="Texture2D" uid="uid://b7rmj8h3pa4jt" path="res://素材/icon.svg" id="2_fik06"]
+
+[node name="Baseteam" type="Node2D"]
+script = ExtResource("1_5eler")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_fik06")

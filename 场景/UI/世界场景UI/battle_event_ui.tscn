@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://cc3qy6vxt01h3"]
+
+[ext_resource type="Script" uid="uid://dwcs2nc2ksmu4" path="res://场景/UI/世界场景UI/battle_event_ui.gd" id="1_7xgdo"]
+
+[node name="BattleEventUI" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("1_7xgdo")
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Panel" type="Panel" parent="MarginContainer2"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="MarginContainer2/Panel/VBoxContainer"]
+layout_mode = 2
+text = "战斗事件"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Description" type="Label" parent="MarginContainer2/Panel/VBoxContainer"]
+layout_mode = 2
+text = "危险的战斗"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button1" type="Button" parent="MarginContainer2/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+text = "进入战斗"
+
+[node name="Button2" type="Button" parent="MarginContainer2/Panel/VBoxContainer"]
+layout_mode = 2
+text = "逃跑"

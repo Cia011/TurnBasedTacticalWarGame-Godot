@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cd718qgnqs328"]
+
+[ext_resource type="Script" uid="uid://c6wxce5swjs3o" path="res://场景/UI/战斗场景UI/action_card.gd" id="1_3tk5w"]
+
+[node name="ActionCardUI" type="Button"]
+custom_minimum_size = Vector2(60, 60)
+script = ExtResource("1_3tk5w")

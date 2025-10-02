@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3 uid="uid://brkuct61rfep3"]
+
+[ext_resource type="Texture2D" uid="uid://dffl8e2dxnhua" path="res://素材/高亮16.png" id="1_0qurb"]
+[ext_resource type="Script" uid="uid://cddrehgpae2w6" path="res://场景/其他/背包及物品/基类/BaseBagSlot.gd" id="2_p4jo0"]
+[ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="3_a2hel"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_lv2vc"]
+font = ExtResource("3_a2hel")
+font_color = Color(0.871375, 0.650317, 0, 1)
+
+[node name="Slot" type="TextureRect"]
+custom_minimum_size = Vector2(50, 50)
+texture = ExtResource("1_0qurb")
+expand_mode = 1
+script = ExtResource("2_p4jo0")
+
+[node name="高亮" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.407299, 0.0853516, 0, 0.921569)
+
+[node name="物品图标" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="数量显示" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -23.0
+offset_right = 21.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "123"
+label_settings = SubResource("LabelSettings_lv2vc")
+horizontal_alignment = 2

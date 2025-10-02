@@ -1,0 +1,56 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="战旗项目重构"
+run/main_scene="uid://7c3lfbn51y1q"
+config/features=PackedStringArray("4.4", "Forward Plus")
+config/icon="res://素材/icon.svg"
+
+[autoload]
+
+BattleGridManager="*res://场景/全局/BattleGlobal/BattleGridManager.gd"
+BattleActionManager="*res://场景/全局/BattleGlobal/BattleActionManager.gd"
+BattleTurnManager="*res://场景/全局/BattleGlobal/BattleTurnManager.gd"
+BattleUnitManager="*res://场景/全局/BattleGlobal/BattleUnitManager.gd"
+BattleEventBus="*res://场景/全局/BattleGlobal/BattleEventBus.gd"
+WorldGridManager="*res://场景/全局/WorldGlobal/WorldGridManager.gd"
+WorldEventManager="*res://场景/全局/WorldGlobal/WorldEventManager.gd"
+GameState="*res://场景/全局/OthersGlobal/GameState.gd"
+UiManager="*res://场景/全局/OthersGlobal/UIManager.gd"
+Enums="*res://场景/全局/OthersGlobal/Enums.gd"
+PopManager="*res://场景/全局/OthersGlobal/PopManager.gd"
+
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep_height"
+
+[file_customization]
+
+folder_colors={
+"res://场景/世界场景/": "blue",
+"res://场景/全局/": "orange",
+"res://场景/战斗场景/": "red"
+}
+
+[input]
+
+left_mouse_clik={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(270, 43),"global_position":Vector2(284, 116),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
+}
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+textures/stretch/mode="viewport"

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BaseItem" load_steps=3 format=3 uid="uid://celd0jfjdttms"]
+
+[ext_resource type="Script" uid="uid://cwi2qjbqeyxxr" path="res://场景/其他/背包及物品/基类/BaseItem.gd" id="1_g28fg"]
+[ext_resource type="Texture2D" uid="uid://b7rmj8h3pa4jt" path="res://素材/icon.svg" id="2_3hnni"]
+
+[resource]
+script = ExtResource("1_g28fg")
+id = "123"
+item_name = "盔甲"
+texture = ExtResource("2_3hnni")
+max_stack = 1
+number = 1
+description = ""
+item_type = 1
+metadata/_custom_type_script = "uid://cwi2qjbqeyxxr"

@@ -1,0 +1,47 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqra1odgxe84k"]
+
+[ext_resource type="Script" uid="uid://b3q1mjnnn1otp" path="res://场景/UI/世界场景UI/unit_ui_card_container.gd" id="1_2h0vi"]
+[ext_resource type="PackedScene" uid="uid://bfubjqlbc3v8n" path="res://场景/UI/世界场景UI/unit_ui_card.tscn" id="2_h8h83"]
+
+[node name="UnitUICardContainer" type="MarginContainer"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 20.0
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("1_2h0vi")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="UnitUICard1" parent="VBoxContainer" instance=ExtResource("2_h8h83")]
+layout_mode = 2
+
+[node name="UnitUICard2" parent="VBoxContainer" instance=ExtResource("2_h8h83")]
+layout_mode = 2
+
+[node name="UnitUICard3" parent="VBoxContainer" instance=ExtResource("2_h8h83")]
+layout_mode = 2
+
+[node name="UnitUICard4" parent="VBoxContainer" instance=ExtResource("2_h8h83")]
+layout_mode = 2
+
+[node name="UnitUICard5" parent="VBoxContainer" instance=ExtResource("2_h8h83")]
+layout_mode = 2
+
+[node name="UnitUICard6" parent="VBoxContainer" instance=ExtResource("2_h8h83")]
+layout_mode = 2
+
+[node name="UnitUICard7" parent="VBoxContainer" instance=ExtResource("2_h8h83")]
+layout_mode = 2
+
+[node name="UnitUICard8" parent="VBoxContainer" instance=ExtResource("2_h8h83")]
+layout_mode = 2
+
+[node name="UnitUICard9" parent="VBoxContainer" instance=ExtResource("2_h8h83")]
+layout_mode = 2

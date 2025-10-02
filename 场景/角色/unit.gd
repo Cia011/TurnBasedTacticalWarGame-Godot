@@ -1,0 +1,73 @@
+extends Node2D
+class_name Unit
+
+
+@onready var action_manager: ActionsManager = $ActionsManager
+@onready var health_ui: Node = $HealthUI
+
+@onready var data_manager: DataManager = $DataManager
+@onready var buff_manager: BuffManager = $BuffManager
+
+var is_teammate : bool = true
+var pre_health:int
+signal unit_die(unit:Unit)
+
+var grid_position :Vector2i:
+	get:return BattleGridManager.get_grid_position(global_position)
+	#set(value): grid_position = value
+	
+var unit_data:UnitData
+#从data_manager中获取属性
+#单独写一个函数是为了方便使用
+func get_stat(stat_name:String):
+	return data_manager.get_stat(stat_name)
+
+func _ready() -> void:
+	#position = BattleGridManager.get_world_position(BattleGridManager.get_grid_position(position)) 
+	#角色创建时在BattleUnitManager内注册
+	BattleUnitManager.register_unit(self)
+	
+	#暂时选择自身--没有实现回合控制
+	#BattleTurnManager.select_unit(self)
+	
+	#初始化属性管理器
+	data_manager.initialize(unit_data.get_states())
+	pre_health = get_stat("current_health")
+	data_manager.unit_data_change.connect(unit_data_change)
+	#角色创建时设置HealthUI#初始化
+	#health_ui.set_up(unit_data.max_health,unit_data.current_health)
+	health_ui.set_up(get_stat("max_health"),get_stat("current_health"))
+	
+	
+
+
+#再ready前执行
+func set_up(unit_data:UnitData,grid_position:Vector2i):
+	#战斗数据使用备份,战斗结束后再更新数据
+	self.unit_data = unit_data.duplicate()
+	name = self.unit_data.character_name
+	set_grid_position(grid_position)
+	
+	
+#由角色生成器来控制生成角色的位置,目前角色生成器为战斗场景根节点
+func set_grid_position(grid_position:Vector2i)->void:
+	#设置位置
+	position = BattleGridManager.get_world_position(grid_position)
+	#在相应位置网格注册自身
+	BattleGridManager.set_grid_occupied(grid_position,self)
+#当属性管理器发生改变时自动执行(因为连接了信号)
+func unit_data_change(new_stats:Dictionary):
+	if new_stats.has("current_health"):
+		#受伤弹幕
+		var change_health:int = new_stats["current_health"]-pre_health
+		if(change_health<=0):
+			PopManager.pop_lable(self.position,str(new_stats["current_health"]-pre_health),Color.RED)
+		elif(change_health>0):
+			PopManager.pop_lable(self.position,"+"+str(new_stats["current_health"]-pre_health),Color.GREEN)
+		
+		health_ui.set_up(get_stat("max_health"),get_stat("current_health"))
+		
+		#死亡逻辑
+		if get_stat("current_health")<=0:
+			unit_die.emit(self)
+		pre_health = new_stats["current_health"]

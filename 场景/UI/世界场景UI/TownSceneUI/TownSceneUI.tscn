@@ -1,0 +1,227 @@
+[gd_scene load_steps=13 format=3 uid="uid://b0tu5ojo15y5t"]
+
+[ext_resource type="Texture2D" uid="uid://dpki4sbegguw3" path="res://素材/城镇场景/生成魔法场景.png" id="1_db7up"]
+[ext_resource type="FontFile" uid="uid://fi7p30t32c38" path="res://素材/字体/DejaVuSans.ttf" id="1_lsyl2"]
+[ext_resource type="Script" uid="uid://dqi1wp5g13y6n" path="res://场景/UI/世界场景UI/TownSceneUI/town_scene_ui.gd" id="1_lxwvt"]
+[ext_resource type="Texture2D" uid="uid://bbdw6cjiwtdjo" path="res://素材/城镇场景/酒馆场景.png" id="2_cv1yq"]
+[ext_resource type="Script" uid="uid://pdh2tgm2faqm" path="res://场景/UI/世界场景UI/TownSceneUI/城镇主页.gd" id="2_lqe64"]
+[ext_resource type="Script" uid="uid://bwg8hc4psg2vl" path="res://场景/UI/世界场景UI/TownSceneUI/招募界面.gd" id="2_p447e"]
+[ext_resource type="StyleBox" uid="uid://ca4qiie1i6rtq" path="res://资源/Style/Panel/圆角黑边橙背景.tres" id="3_yye8p"]
+[ext_resource type="PackedScene" uid="uid://cmdv1ww0ynpig" path="res://场景/UI/世界场景UI/TownSceneUI/招募栏.tscn" id="6_lqe64"]
+
+[sub_resource type="Theme" id="Theme_3unga"]
+default_font = ExtResource("1_lsyl2")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cf2ry"]
+bg_color = Color(0.690196, 0.588235, 0.34902, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.486275)
+shadow_size = 10
+shadow_offset = Vector2(1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cv1yq"]
+bg_color = Color(0.782268, 0.535002, 0.386274, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.724563, 0.644433, 1)
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_db7up"]
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="TownSceneUi" type="MarginContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -36.0
+offset_top = -68.0
+offset_right = 36.0
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_3unga")
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_lxwvt")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cf2ry")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="左侧按钮界面" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/左侧按钮界面"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cv1yq")
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/左侧按钮界面"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="菜单栏目" type="VBoxContainer" parent="MarginContainer/HBoxContainer/左侧按钮界面/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="城镇主页按钮" type="Button" parent="MarginContainer/HBoxContainer/左侧按钮界面/MarginContainer2/菜单栏目"]
+layout_mode = 2
+text = "城镇主页"
+
+[node name="招募界面按钮" type="Button" parent="MarginContainer/HBoxContainer/左侧按钮界面/MarginContainer2/菜单栏目"]
+layout_mode = 2
+text = "招募界面"
+
+[node name="商店界面按钮" type="Button" parent="MarginContainer/HBoxContainer/左侧按钮界面/MarginContainer2/菜单栏目"]
+layout_mode = 2
+text = "商店界面"
+
+[node name="任务界面按钮" type="Button" parent="MarginContainer/HBoxContainer/左侧按钮界面/MarginContainer2/菜单栏目"]
+layout_mode = 2
+text = "任务界面"
+
+[node name="离开城镇按钮" type="Button" parent="MarginContainer/HBoxContainer/左侧按钮界面/MarginContainer2/菜单栏目"]
+layout_mode = 2
+text = "离开城镇"
+
+[node name="右侧内容界面" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 5.0
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/右侧内容界面"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_db7up")
+
+[node name="UImanager" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="城镇主页" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager"]
+layout_mode = 2
+script = ExtResource("2_lqe64")
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/城镇主页"]
+layout_mode = 2
+texture = ExtResource("1_db7up")
+expand_mode = 1
+
+[node name="招募界面" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager"]
+visible = false
+layout_mode = 2
+script = ExtResource("2_p447e")
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/招募界面"]
+layout_mode = 2
+texture = ExtResource("2_cv1yq")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/招募界面"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/招募界面/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/招募界面/HBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.29
+theme_override_styles/panel = ExtResource("3_yye8p")
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/招募界面/HBoxContainer/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="招聘栏容器" type="VBoxContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/招募界面/HBoxContainer/MarginContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="招募栏" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/招募界面/HBoxContainer/MarginContainer/ScrollContainer/MarginContainer/招聘栏容器" instance=ExtResource("6_lqe64")]
+layout_mode = 2
+
+[node name="角色信息显示" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/招募界面/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/招募界面/HBoxContainer/角色信息显示"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_yye8p")
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/招募界面/HBoxContainer/角色信息显示/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="角色介绍标签" type="Label" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/招募界面/HBoxContainer/角色信息显示/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "大清第一巴图鲁"
+autowrap_mode = 1
+clip_text = true
+
+[node name="商店界面" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager"]
+visible = false
+layout_mode = 2

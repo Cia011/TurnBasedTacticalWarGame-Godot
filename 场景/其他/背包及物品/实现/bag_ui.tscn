@@ -1,0 +1,110 @@
+[gd_scene load_steps=7 format=3 uid="uid://bwa55npykaej7"]
+
+[ext_resource type="PackedScene" uid="uid://brkuct61rfep3" path="res://场景/其他/背包及物品/基类/slot.tscn" id="1_mkhf0"]
+[ext_resource type="Script" uid="uid://6ndgohqwkyqm" path="res://场景/其他/背包及物品/基类/BaseBackpackUI.gd" id="1_ogqkc"]
+[ext_resource type="Resource" uid="uid://cdg0psx5y4gf6" path="res://场景/其他/背包及物品/实现/基本背包.tres" id="2_bm38n"]
+[ext_resource type="PackedScene" uid="uid://dgnpku0cqrbiq" path="res://场景/其他/背包及物品/背包/占位0.tscn" id="3_5gd6p"]
+[ext_resource type="Script" uid="uid://dio837royjelc" path="res://场景/其他/背包及物品/背包/占位0.gd" id="3_bm38n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ma3s"]
+bg_color = Color(0.683549, 0.597165, 0.254538, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 2
+shadow_offset = Vector2(1, 0)
+
+[node name="BagUI" type="MarginContainer" node_paths=PackedStringArray("槽位容器")]
+custom_minimum_size = Vector2(364, 0)
+offset_left = 243.0
+offset_top = 80.0
+offset_right = 607.0
+offset_bottom = 626.0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+script = ExtResource("1_ogqkc")
+"槽位容器" = NodePath("HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer/BaseBagUI")
+"背包系统" = ExtResource("2_bm38n")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8ma3s")
+
+[node name="exit" type="Button" parent="."]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 26
+text = "X"
+flat = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="标题" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/标题"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "背包"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 500)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="BaseBagUI" type="GridContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 15
+columns = 5
+
+[node name="0" parent="HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer/BaseBagUI" instance=ExtResource("3_5gd6p")]
+script = ExtResource("3_bm38n")
+
+[node name="1" parent="HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_mkhf0")]
+layout_mode = 2
+
+[node name="2" parent="HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_mkhf0")]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="3" parent="HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_mkhf0")]
+layout_mode = 2
+is_usable = false
+
+[node name="4" parent="HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_mkhf0")]
+layout_mode = 2
+
+[node name="5" parent="HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_mkhf0")]
+layout_mode = 2
+
+[connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]
