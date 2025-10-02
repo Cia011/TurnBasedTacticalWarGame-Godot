@@ -1,11 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://chmlxd2wgy1sw"]
+[gd_scene load_steps=3 format=3 uid="uid://chmlxd2wgy1sw"]
 
 [ext_resource type="Script" uid="uid://bskpa6det2rxl" path="res://场景/其他/背包及物品/杂项/0.gd" id="1_c3g3r"]
-[ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="2_ydt8u"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_an1o5"]
-font = ExtResource("2_ydt8u")
-font_color = Color(0.871375, 0.650317, 0, 1)
+[ext_resource type="LabelSettings" uid="uid://csdgttnu7i4" path="res://资源/Style/LabelSettings/slotLabel.tres" id="2_5citd"]
 
 [node name="0" type="Node2D"]
 z_index = 1
@@ -33,18 +29,18 @@ mouse_filter = 2
 expand_mode = 1
 
 [node name="数量显示" type="Label" parent="."]
-visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -10.0
-offset_top = -23.0
-offset_right = 21.0
-offset_bottom = -3.0
+offset_left = -11.0
+offset_top = -1.0
+offset_right = 20.0
+offset_bottom = 19.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "123"
-label_settings = SubResource("LabelSettings_an1o5")
+size_flags_horizontal = 0
+size_flags_vertical = 0
+label_settings = ExtResource("2_5citd")
 horizontal_alignment = 2

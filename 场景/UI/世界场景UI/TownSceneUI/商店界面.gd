@@ -1,18 +1,16 @@
 extends MarginContainer
-class_name 基本背包ui
+class_name 基本商店ui
 
 @export var 槽位容器: GridContainer
 @export var 背包系统 : BaseBackpack
 const SLOT = preload("res://场景/其他/背包及物品/基类/slot.tscn")
 
+
 func _ready() -> void:
 	
-	UiManager.open_ui(self)
-	GameState.add_backpack(背包系统)
-	
+	UiManager.register_ui(self)
 	背包系统.item_change.connect(Callable(self,"_item_change"))
-	#暂时在此设置
-	set_up(10)
+	
 
 func set_up(size:int):
 	背包系统.items.resize(size)
@@ -26,11 +24,9 @@ func set_up(size:int):
 		if not 槽位容器.get_child(index):continue
 		if not 槽位容器.get_child(index).is_usable:continue#若设置不可用则不进行信号连接
 		槽位容器.get_child(index).gui_input.connect(Callable(self,"_on_gui_input").bind(index))
-
 #向背包中添加物品
 func add_item(item:BaseItem,number:int = -1):
 	背包系统.add_item(item,number)
-
 
 func update_slot(indexs):
 	for index in indexs:
@@ -62,9 +58,10 @@ func _on_gui_input(event:InputEvent,index):
 					背包系统.set_item(index,GameState.get_mouse_slot_item(),1)
 					背包系统.reduce_item_number(-1,1)
 
-
-func _on_exit_pressed() -> void:
-	UiManager.close_ui(self)
-	queue_free()
-	#visible = false
+func leave_interface():
+	GameState.remove_backpack(背包系统)
+	visible = false
 	
+func enter_interface():
+	GameState.add_backpack(背包系统)
+	visible = true

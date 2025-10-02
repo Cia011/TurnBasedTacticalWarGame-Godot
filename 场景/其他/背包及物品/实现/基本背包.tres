@@ -1,11 +1,10 @@
-[gd_resource type="Resource" script_class="BaseBackpack" load_steps=4 format=3 uid="uid://cdg0psx5y4gf6"]
+[gd_resource type="Resource" script_class="BaseBackpack" load_steps=3 format=3 uid="uid://cdg0psx5y4gf6"]
 
 [ext_resource type="Script" uid="uid://cwi2qjbqeyxxr" path="res://场景/其他/背包及物品/基类/BaseItem.gd" id="1_g0kre"]
-[ext_resource type="Resource" uid="uid://cr4fqpqpmujv4" path="res://场景/其他/背包及物品/实现/简单物品.tres" id="1_ktudc"]
 [ext_resource type="Script" uid="uid://dyxsmv5rdxahl" path="res://场景/其他/背包及物品/基类/BaseBackpack.gd" id="1_skn5f"]
 
 [resource]
 script = ExtResource("1_skn5f")
-items = Array[ExtResource("1_g0kre")]([null, null, ExtResource("1_ktudc"), null, null, null, null])
-name = "基本背包"
+items = Array[ExtResource("1_g0kre")]([])
+name = ""
 metadata/_custom_type_script = "uid://dyxsmv5rdxahl"

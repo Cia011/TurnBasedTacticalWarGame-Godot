@@ -13,9 +13,13 @@ var is_open_UI : bool = false
 var all_backpacks : Array[BaseBackpack]
 
 var on_mouse_slot_item : BaseItem
+#此信号0接受
+signal signal_mouse_slot_change(item:BaseItem)
 func set_mouse_slot_item(item:BaseItem):
 	on_mouse_slot_item = item
+	signal_mouse_slot_change.emit(item)
 func get_mouse_slot_item()->BaseItem:
+	signal_mouse_slot_change.emit(on_mouse_slot_item)
 	return on_mouse_slot_item
 #add/remove
 func add_backpack(backpack:BaseBackpack):

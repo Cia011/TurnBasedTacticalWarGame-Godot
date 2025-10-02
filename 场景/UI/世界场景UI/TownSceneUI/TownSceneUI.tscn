@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b0tu5ojo15y5t"]
+[gd_scene load_steps=17 format=3 uid="uid://b0tu5ojo15y5t"]
 
 [ext_resource type="Texture2D" uid="uid://dpki4sbegguw3" path="res://素材/城镇场景/生成魔法场景.png" id="1_db7up"]
 [ext_resource type="FontFile" uid="uid://fi7p30t32c38" path="res://素材/字体/DejaVuSans.ttf" id="1_lsyl2"]
@@ -8,6 +8,9 @@
 [ext_resource type="Script" uid="uid://bwg8hc4psg2vl" path="res://场景/UI/世界场景UI/TownSceneUI/招募界面.gd" id="2_p447e"]
 [ext_resource type="StyleBox" uid="uid://ca4qiie1i6rtq" path="res://资源/Style/Panel/圆角黑边橙背景.tres" id="3_yye8p"]
 [ext_resource type="PackedScene" uid="uid://cmdv1ww0ynpig" path="res://场景/UI/世界场景UI/TownSceneUI/招募栏.tscn" id="6_lqe64"]
+[ext_resource type="Texture2D" uid="uid://bh0mobvx3ctr4" path="res://素材/城镇场景/天平.png" id="9_3unga"]
+[ext_resource type="Script" uid="uid://dvov48xo2134p" path="res://场景/UI/世界场景UI/TownSceneUI/商店界面.gd" id="9_gen0p"]
+[ext_resource type="Resource" uid="uid://bcojyljnufpi0" path="res://场景/其他/背包及物品/实现/简单商人背包.tres" id="10_dpyfe"]
 
 [sub_resource type="Theme" id="Theme_3unga"]
 default_font = ExtResource("1_lsyl2")
@@ -48,6 +51,19 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dpyfe"]
+bg_color = Color(0.623529, 0.607843, 0.478431, 0.647059)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="TownSceneUi" type="MarginContainer"]
 anchors_preset = 8
@@ -222,6 +238,41 @@ text = "大清第一巴图鲁"
 autowrap_mode = 1
 clip_text = true
 
-[node name="商店界面" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager"]
+[node name="商店界面" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager" node_paths=PackedStringArray("槽位容器")]
 visible = false
 layout_mode = 2
+script = ExtResource("9_gen0p")
+"槽位容器" = NodePath("MarginContainer/ScrollContainer/MarginContainer/BaseBagUI")
+"背包系统" = ExtResource("10_dpyfe")
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/商店界面"]
+layout_mode = 2
+texture = ExtResource("9_3unga")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/商店界面"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/商店界面/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dpyfe")
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/商店界面/MarginContainer/ScrollContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="BaseBagUI" type="GridContainer" parent="MarginContainer/HBoxContainer/右侧内容界面/UImanager/商店界面/MarginContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 15
+columns = 5
