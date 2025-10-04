@@ -89,6 +89,6 @@ func prepare_battle(player_chars: Array[UnitData], enemy_chars: Array[UnitData],
 func change_scene_to(scene:String):
 	match scene:
 		"battle":
-			get_tree().change_scene_to_file("res://场景/战斗场景/battle_map.tscn")
+			get_tree().change_scene_to_file("res://场景/战斗场景/根节点/battle_map.tscn")
 		"world":
 			get_tree().change_scene_to_file("res://场景/世界场景/WorldScenes.tscn")

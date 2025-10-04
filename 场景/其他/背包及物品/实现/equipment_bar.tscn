@@ -1,12 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://cyprhn0m4bxdc"]
+[gd_scene format=3 uid="uid://cyprhn0m4bxdc"]
 
-[ext_resource type="Script" uid="uid://6ndgohqwkyqm" path="res://场景/其他/背包及物品/基类/BaseBackpackUI.gd" id="1_v4nhu"]
-[ext_resource type="Resource" uid="uid://cdg0psx5y4gf6" path="res://场景/其他/背包及物品/实现/基本背包.tres" id="2_hc32g"]
-[ext_resource type="PackedScene" uid="uid://dgnpku0cqrbiq" path="res://场景/其他/背包及物品/背包/占位0.tscn" id="3_buv30"]
-[ext_resource type="Script" uid="uid://dio837royjelc" path="res://场景/其他/背包及物品/背包/占位0.gd" id="4_nhx7w"]
-[ext_resource type="PackedScene" uid="uid://brkuct61rfep3" path="res://场景/其他/背包及物品/基类/slot.tscn" id="5_wceal"]
-
-[node name="EquipmentBar" type="MarginContainer" node_paths=PackedStringArray("槽位容器")]
+[node name="EquipmentBar" type="MarginContainer"]
 offset_left = 384.0
 offset_top = 168.0
 offset_right = 614.0
@@ -16,9 +10,6 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
-script = ExtResource("1_v4nhu")
-"槽位容器" = NodePath("HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI")
-"背包系统" = ExtResource("2_hc32g")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 2
@@ -68,31 +59,5 @@ mouse_filter = 2
 theme_override_constants/h_separation = 15
 theme_override_constants/v_separation = 15
 columns = 3
-
-[node name="0" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("3_buv30")]
-script = ExtResource("4_nhx7w")
-
-[node name="1" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("5_wceal")]
-layout_mode = 2
-is_usable = false
-
-[node name="2" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("5_wceal")]
-layout_mode = 2
-mouse_filter = 0
-slot_type = 1
-
-[node name="3" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("5_wceal")]
-layout_mode = 2
-is_usable = false
-
-[node name="4" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("5_wceal")]
-layout_mode = 2
-
-[node name="5" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("5_wceal")]
-layout_mode = 2
-slot_type = 1
-
-[node name="6" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("5_wceal")]
-layout_mode = 2
 
 [connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]

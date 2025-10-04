@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bqra1odgxe84k"]
 
-[ext_resource type="Script" uid="uid://b3q1mjnnn1otp" path="res://场景/UI/世界场景UI/unit_ui_card_container.gd" id="1_2h0vi"]
-[ext_resource type="PackedScene" uid="uid://bfubjqlbc3v8n" path="res://场景/UI/世界场景UI/unit_ui_card.tscn" id="2_h8h83"]
+[ext_resource type="Script" uid="uid://b3q1mjnnn1otp" path="res://场景/UI/世界场景UI/角色侧边栏/unit_ui_card_container.gd" id="1_2h0vi"]
+[ext_resource type="PackedScene" uid="uid://bfubjqlbc3v8n" path="res://场景/UI/世界场景UI/角色侧边栏/unit_ui_card.tscn" id="2_h8h83"]
 
 [node name="UnitUICardContainer" type="MarginContainer"]
 anchors_preset = 4

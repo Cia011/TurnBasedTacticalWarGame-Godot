@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dwtyhaagerol4"]
 
-[ext_resource type="Script" uid="uid://e38k3u51nv0h" path="res://场景/UI/世界场景UI/top_menu.gd" id="1_0y3av"]
+[ext_resource type="Script" uid="uid://e38k3u51nv0h" path="res://场景/UI/世界场景UI/TopMenu/top_menu.gd" id="1_0y3av"]
 [ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="1_kpeih"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0y3av"]

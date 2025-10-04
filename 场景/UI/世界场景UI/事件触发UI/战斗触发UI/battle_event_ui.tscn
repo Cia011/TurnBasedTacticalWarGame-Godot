@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cc3qy6vxt01h3"]
 
-[ext_resource type="Script" uid="uid://dwcs2nc2ksmu4" path="res://场景/UI/世界场景UI/battle_event_ui.gd" id="1_7xgdo"]
+[ext_resource type="Script" uid="uid://dwcs2nc2ksmu4" path="res://场景/UI/世界场景UI/事件触发UI/战斗触发UI/battle_event_ui.gd" id="1_7xgdo"]
 
 [node name="BattleEventUI" type="MarginContainer"]
 anchors_preset = 15

@@ -1,0 +1,13 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://dh5h2daf6y3wn"]
+
+[ext_resource type="Texture2D" uid="uid://dipyhrvtevs77" path="res://素材/地块/world/大地图地块.png" id="1_rxtc0"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mgwor"]
+texture = ExtResource("1_rxtc0")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+1:0/0 = 0
+
+[resource]
+tile_size = Vector2i(64, 64)
+sources/3 = SubResource("TileSetAtlasSource_mgwor")

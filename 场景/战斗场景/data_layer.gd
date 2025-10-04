@@ -6,7 +6,7 @@ func _ready() -> void:
 	BattleGridManager.data_layer = self
 	initialize()
 	
-	print(Dijkstra._build_grid(get_used_rect(),grid_data_dict))
+	#print(Dijkstra._build_grid(get_used_rect(),grid_data_dict))
 	
 func initialize():
 	a_star = AStarGrid2D.new()

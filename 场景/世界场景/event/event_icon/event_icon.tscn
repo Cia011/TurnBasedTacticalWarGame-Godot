@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://nyheijvqo1cj"]
+
+[ext_resource type="Script" uid="uid://d4j2v086uwt0m" path="res://场景/世界场景/event/event_icon/event_icon.gd" id="1_l2grd"]
+
+[node name="EventIcon" type="Node2D"]
+script = ExtResource("1_l2grd")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]

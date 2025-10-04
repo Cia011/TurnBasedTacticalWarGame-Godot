@@ -6,10 +6,18 @@ extends Node2D
 func _ready() -> void:
 	WorldGridManager.virulize_layer = highlight_layer
 	
+	#初始化 事件容器
+	WorldEventManager.event_container = $EventContainer
+	
+	
+	
 	var battle_event = WorldEventManager.battle_event.new()
 	battle_event.name = "战斗事件"
 	battle_event.description = "非常艰难"
-	WorldEventManager.register_event(Vector2i(1,1),battle_event) 
+	battle_event.icon = preload("res://素材/图标/战斗图标/战斗图标.png")
+	battle_event.grid_position = Vector2i(1,1)
+
+	WorldEventManager.register_event(battle_event) 
 	
 	
 	#var battle_event_ui_scene = WorldEventManager.BATTLE_EVENT_UI.instantiate()

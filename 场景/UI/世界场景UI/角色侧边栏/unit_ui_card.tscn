@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bfubjqlbc3v8n"]
 
-[ext_resource type="Script" uid="uid://vl21bhna6ca" path="res://场景/UI/世界场景UI/unit_ui_card.gd" id="1_7ape2"]
+[ext_resource type="Script" uid="uid://vl21bhna6ca" path="res://场景/UI/世界场景UI/角色侧边栏/unit_ui_card.gd" id="1_7ape2"]
 [ext_resource type="Texture2D" uid="uid://b7rmj8h3pa4jt" path="res://素材/icon.svg" id="2_bpfsq"]
 
 [node name="UnitUICard" type="Panel"]

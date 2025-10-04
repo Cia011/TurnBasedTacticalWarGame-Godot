@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://cw73klaswiibd"]
 
-[ext_resource type="Script" uid="uid://bw3qk2ux7jfdm" path="res://场景/UI/战斗场景UI/pop_lable.gd" id="1_jl8pb"]
+[ext_resource type="Script" uid="uid://bw3qk2ux7jfdm" path="res://场景/UI/战斗场景UI/弹窗弹幕/pop_lable.gd" id="1_jl8pb"]
 [ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="2_ni0gn"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_vulbh"]

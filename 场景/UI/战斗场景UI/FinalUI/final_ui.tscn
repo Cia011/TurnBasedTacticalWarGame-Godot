@@ -1,0 +1,60 @@
+[gd_scene load_steps=4 format=3 uid="uid://5pjc2txxf2s7"]
+
+[ext_resource type="Script" uid="uid://dhxltd36ksh4b" path="res://场景/UI/战斗场景UI/FinalUI/final_ui.gd" id="1_ewfy1"]
+[ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="2_q3ups"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_mkr2q"]
+font = ExtResource("2_q3ups")
+font_size = 50
+
+[node name="FinalUI" type="MarginContainer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -250.0
+offset_right = 200.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource("1_ewfy1")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(400, 500)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="FinalUI2" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalUI2"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="title" type="Label" parent="FinalUI2/VBoxContainer"]
+layout_mode = 2
+text = "Vecter"
+label_settings = SubResource("LabelSettings_mkr2q")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="exit" type="Button" parent="FinalUI2/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_q3ups")
+theme_override_font_sizes/font_size = 40
+text = "离开"
+
+[connection signal="pressed" from="FinalUI2/VBoxContainer/exit" to="." method="_on_exit_pressed"]
