@@ -59,6 +59,7 @@ size_flags_horizontal = 4
 text = "属性面板"
 
 [node name="头部固定区域" type="MarginContainer" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 1
@@ -93,8 +94,9 @@ size_flags_horizontal = 0
 text = "未命名"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 5.0
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 

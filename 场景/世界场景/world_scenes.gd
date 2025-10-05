@@ -8,16 +8,21 @@ func _ready() -> void:
 	
 	#初始化 事件容器
 	WorldEventManager.event_container = $EventContainer
-	
-	
-	
-	var battle_event = WorldEventManager.battle_event.new()
+
+	var battle_event = BattleEvent.new()
 	battle_event.name = "战斗事件"
 	battle_event.description = "非常艰难"
 	battle_event.icon = preload("res://素材/图标/战斗图标/战斗图标.png")
 	battle_event.grid_position = Vector2i(1,1)
-
 	WorldEventManager.register_event(battle_event) 
+	
+	var town_event = townEvent.new()
+	town_event.name = "城镇"
+	town_event.description = "城镇"
+	town_event.icon = preload("res://素材/图标/战斗图标/战斗图标.png")
+	town_event.grid_position = Vector2i(-1,-1)
+	WorldEventManager.register_event(town_event)
+	
 	
 	
 	#var battle_event_ui_scene = WorldEventManager.BATTLE_EVENT_UI.instantiate()

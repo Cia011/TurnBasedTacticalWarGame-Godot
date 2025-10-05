@@ -11,7 +11,7 @@ class_name BaseEvent
 @export var type:int = 1
 @export var icon: Texture2D
 var event_icon_node : Node
-@export var is_emergency: bool = true
+@export var is_emergency: bool = false
 # 应用时的效果
 # 事件触发函数
 # 事件触发时 弹出UI

@@ -4,6 +4,8 @@ extends Node
 signal signal_player_characters_change
 var player_characters: Array[UnitData] = []
 
+var baseteam_node : BaseTeam
+
 # 当前战斗信息
 var current_battle_info: Dictionary = {}
 
@@ -44,6 +46,13 @@ func _ready():
 	var player_char2 = UnitData.new()
 	player_char2.character_name = "第二个角色"
 	player_char2.texture = preload("res://素材/角色/Sprite-0010.png")
+	
+	var equpment1 = BaseEquipment.new()
+	equpment1.item_name = "小刀"
+	equpment1.texture = preload("res://素材/角色/Sprite-0010.png")
+	equpment1.item_type = "武器"
+	#player_char2.equipments["武器"] = equpment1
+	player_char2.equipments.add_item(equpment1)
 	
 	#player_characters.append(player_char2)
 	register_unit(player_char2)

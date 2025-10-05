@@ -12,11 +12,13 @@ func _ready() -> void:
 	#position
 	pass
 
-
-func _input(event):
+func _unhandled_input(event: InputEvent) -> void:
+	#if UiManager.have_ui_opening():
+		#return
 	handle_dragging(event)
 	handle_zooming(event)
 
+	#get_viewport().set_input_as_handled()
 func handle_dragging(event: InputEvent):
 	# 鼠标中键按下开始拖拽
 	if event is InputEventMouseButton:
@@ -29,7 +31,7 @@ func handle_dragging(event: InputEvent):
 			else:
 				# 结束拖拽
 				is_dragging = false
-	
+			
 	# 鼠标移动时拖拽相机
 	elif event is InputEventMouseMotion:
 		if is_dragging:

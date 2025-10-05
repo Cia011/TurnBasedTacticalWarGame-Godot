@@ -15,6 +15,8 @@ var can_recruit:bool = true #可以招募角色,有酒馆,人才市场等场所
 var can_recruit_units:Array[UnitData]
 
 func _ready() -> void:
+	#注册此UI
+	enter_interface()
 	#点击信号连接
 	城镇主页按钮.pressed.connect(change_interface_to.bind("城镇主页"))
 	招募界面按钮.pressed.connect(change_interface_to.bind("招募界面"))

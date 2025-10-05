@@ -21,14 +21,41 @@ class_name UnitData
 #
 @export var character_background_story:String
 var character_id : String
+ #装备和物品
+#weapon armor
+var equipments: BaseBackpack
+var data_manager : DataManager
+
+var equipments_types : Array[String] = [	"武器","头盔","护甲","靴子","武器",
+										"戒指","项链","腰带","手套","戒指"]
+
 func _init() -> void:
 	var time = Time.get_unix_time_from_system()
 	var random_component = randi() % 10000
 	character_id = str(int(time*10000)+random_component)
-#@export var attack: int = 10
-#@export var speed: int = 8
-#@export var move_range: int = 4
+	
+	equipments = BaseBackpack.new()
+	equipments.items.resize(10)
+	
+	equipments.item_change.connect(item_change)
+	
+	data_manager = DataManager.new()
+	data_manager.initialize(get_states())
 
+func add_equipment(item:BaseItem)->bool:
+	for index in equipments_types.size():
+		var type:String = equipments_types[index]
+		if type == item.item_type:
+			if equipments.get_item(index) == null:
+				equipments.set_item(index,item)
+				return true
+	return false
+
+#待实现
+func item_change(indexs):
+	for index in indexs:
+		pass
+	
 ## 战斗属性
 #@export var experience: int = 0
 #@export var experience_to_next_level: int = 100
@@ -41,13 +68,8 @@ func _init() -> void:
 ## 技能和能力
 #@export var skills: Array[String] = ["attack", "defend"]
 #@export var abilities: Array[String] = []
+#
 
-# 装备和物品
-#@export var equipment: Dictionary = {
-	#"weapon": "",
-	#"armor": "",
-	#"accessory": ""
-#}
 #@export var inventory: Array[String] = []
 #
 ## 状态效果

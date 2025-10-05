@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BaseBackpack" load_steps=3 format=3 uid="uid://civ3g2vulkhps"]
+
+[ext_resource type="Script" uid="uid://cwi2qjbqeyxxr" path="res://场景/其他/背包及物品/基类/BaseItem.gd" id="1_cffn2"]
+[ext_resource type="Script" uid="uid://dyxsmv5rdxahl" path="res://场景/其他/背包及物品/基类/BaseBackpack.gd" id="2_q2ikj"]
+
+[resource]
+script = ExtResource("2_q2ikj")
+items = Array[ExtResource("1_cffn2")]([])
+name = ""
+metadata/_custom_type_script = "uid://dyxsmv5rdxahl"

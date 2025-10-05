@@ -1,27 +1,34 @@
-[gd_scene format=3 uid="uid://cyprhn0m4bxdc"]
+[gd_scene load_steps=13 format=3 uid="uid://cyprhn0m4bxdc"]
 
-[node name="EquipmentBar" type="MarginContainer"]
+[ext_resource type="Script" uid="uid://d355bba6agm5" path="res://场景/其他/背包及物品/实现/equipment_bar.gd" id="1_v4nhu"]
+[ext_resource type="PackedScene" uid="uid://brkuct61rfep3" path="res://场景/其他/背包及物品/基类/slot.tscn" id="1_xjf8a"]
+[ext_resource type="Texture2D" uid="uid://bov44g4y3vsx0" path="res://素材/图标/slot/剑slot.png" id="2_3s5ma"]
+[ext_resource type="StyleBox" uid="uid://ca4qiie1i6rtq" path="res://资源/Style/Panel/圆角黑边橙背景.tres" id="3_hc32g"]
+[ext_resource type="Texture2D" uid="uid://l4jnj07b7px7" path="res://素材/图标/slot/盔甲slot.png" id="3_v4nhu"]
+[ext_resource type="Texture2D" uid="uid://jhmks6pca5h7" path="res://素材/图标/slot/头盔slot.png" id="5_3irqf"]
+[ext_resource type="Texture2D" uid="uid://dalbwiyig0i0i" path="res://素材/图标/slot/靴子.png" id="7_mypgt"]
+[ext_resource type="Texture2D" uid="uid://cupp01dl0us3k" path="res://素材/图标/slot/盾牌slot.png" id="8_ceswj"]
+[ext_resource type="Texture2D" uid="uid://c8at5jyn72qk7" path="res://素材/图标/slot/戒指slot.png" id="9_nem54"]
+[ext_resource type="Texture2D" uid="uid://d0opo86eqe5ge" path="res://素材/图标/slot/项链slot.png" id="10_h5qob"]
+[ext_resource type="Texture2D" uid="uid://uag256adjtna" path="res://素材/图标/slot/腰带slot.png" id="11_ljceo"]
+[ext_resource type="Texture2D" uid="uid://dyi4gyyjxc52h" path="res://素材/图标/slot/手套slot.png" id="12_tp6ke"]
+
+[node name="EquipmentBar" type="MarginContainer" node_paths=PackedStringArray("槽位容器")]
 offset_left = 384.0
 offset_top = 168.0
-offset_right = 614.0
-offset_bottom = 453.0
+offset_right = 549.0
+offset_bottom = 315.0
 mouse_filter = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
+script = ExtResource("1_v4nhu")
+"槽位容器" = NodePath("HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 2
-
-[node name="exit" type="Button" parent="."]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 0
-theme_override_font_sizes/font_size = 26
-text = "X"
-flat = true
+theme_override_styles/panel = ExtResource("3_hc32g")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -47,6 +54,7 @@ text = "装备栏"
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
@@ -58,6 +66,54 @@ size_flags_vertical = 4
 mouse_filter = 2
 theme_override_constants/h_separation = 15
 theme_override_constants/v_separation = 15
-columns = 3
+columns = 5
 
-[connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]
+[node name="0" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
+layout_mode = 2
+texture = ExtResource("2_3s5ma")
+slot_type = "武器"
+
+[node name="1" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
+layout_mode = 2
+texture = ExtResource("5_3irqf")
+slot_type = "头盔"
+
+[node name="2" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
+layout_mode = 2
+texture = ExtResource("3_v4nhu")
+slot_type = "盔甲"
+
+[node name="3" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
+layout_mode = 2
+texture = ExtResource("7_mypgt")
+slot_type = "靴子"
+
+[node name="4" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
+layout_mode = 2
+texture = ExtResource("8_ceswj")
+slot_type = "盾牌"
+
+[node name="5" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
+layout_mode = 2
+texture = ExtResource("9_nem54")
+slot_type = "戒指"
+
+[node name="6" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
+layout_mode = 2
+texture = ExtResource("10_h5qob")
+slot_type = "项链"
+
+[node name="7" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
+layout_mode = 2
+texture = ExtResource("11_ljceo")
+slot_type = "披风"
+
+[node name="8" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
+layout_mode = 2
+texture = ExtResource("12_tp6ke")
+slot_type = "手套"
+
+[node name="9" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
+layout_mode = 2
+texture = ExtResource("9_nem54")
+slot_type = "戒指"

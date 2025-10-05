@@ -22,6 +22,7 @@ func set_up(unit_data:UnitData):
 func show_unit_data(unit_data:UnitData)->void:
 	
 	UiManager.open_ui(self)
+	UiManager.current_show_data_unit = unit_data
 	
 	set_up(unit_data)
 	show()

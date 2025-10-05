@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bwa55npykaej7"]
+[gd_scene load_steps=5 format=3 uid="uid://bwa55npykaej7"]
 
 [ext_resource type="Script" uid="uid://6ndgohqwkyqm" path="res://场景/其他/背包及物品/基类/BaseBackpackUI.gd" id="1_ogqkc"]
 [ext_resource type="Resource" uid="uid://cdg0psx5y4gf6" path="res://场景/其他/背包及物品/实现/基本背包.tres" id="2_bm38n"]
+[ext_resource type="PackedScene" uid="uid://cyprhn0m4bxdc" path="res://场景/其他/背包及物品/实现/equipment_bar.tscn" id="3_idguo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ma3s"]
 bg_color = Color(0.683549, 0.597165, 0.254538, 1)
@@ -21,7 +22,7 @@ custom_minimum_size = Vector2(364, 0)
 offset_left = 243.0
 offset_top = 80.0
 offset_right = 607.0
-offset_bottom = 626.0
+offset_bottom = 653.0
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
@@ -65,9 +66,16 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "背包"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 500)
+[node name="EquipmentBar" parent="HBoxContainer/VBoxContainer" instance=ExtResource("3_idguo")]
 layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 4.0
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer"]
 layout_mode = 2

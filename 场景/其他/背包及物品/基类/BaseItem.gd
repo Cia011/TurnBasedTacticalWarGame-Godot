@@ -7,4 +7,4 @@ class_name BaseItem
 @export var max_stack: int = 1  # 最大堆叠数量
 @export var number : int = 1 #当前堆叠数量
 @export var description: String = ""  # 物品描述
-@export var item_type: Enums.ItemType = Enums.ItemType.任意
+@export var item_type: String = "任意"

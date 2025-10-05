@@ -23,6 +23,6 @@ func exit_grid():
 func enter_grid():
 	print("进入" + str(grid_position))
 	#尝试触发事件
-	if WorldEventManager.events.has(grid_position):
-		WorldEventManager.events[grid_position].apply_effect()
+	WorldEventManager.trigger_event(grid_position)
+	
 	

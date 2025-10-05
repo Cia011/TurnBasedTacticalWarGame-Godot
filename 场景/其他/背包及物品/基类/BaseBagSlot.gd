@@ -5,7 +5,7 @@ class_name BaseBagSlot
 @onready var 高亮: ColorRect = $高亮
 
 @export var is_usable : bool = true
-@export var slot_type : Enums.ItemType = Enums.ItemType.任意
+@export var slot_type : String = "任意"
 
 func _ready() -> void:
 	if ! is_usable:

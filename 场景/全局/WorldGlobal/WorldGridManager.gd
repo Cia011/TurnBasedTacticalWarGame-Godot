@@ -17,6 +17,13 @@ func get_mouse_world_position()-> Vector2:
 func get_mouse_grid_position()-> Vector2i:
 	return get_grid_position(get_mouse_world_position())
 
+#从grid_data_dict中获取数据
+func get_grid_data_dict()->Dictionary[Vector2i,WorldGrid]:
+	return data_layer.grid_data_dict
+func get_grid_data(grid_position:Vector2i)->WorldGrid:
+	return get_grid_data_dict().get(grid_position)
+func get_used_rect()->Rect2i:
+	return data_layer.get_used_rect()
 
 func get_nav_grid_path(start_grid_position:Vector2i,end_grid_position:Vector2i)->Array[Vector2i]:
 	return data_layer.a_star.get_id_path(start_grid_position,end_grid_position)

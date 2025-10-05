@@ -1,7 +1,9 @@
 extends Node2D
+class_name BaseTeam
 var grid_position : Vector2i:
 	get: return WorldGridManager.get_grid_position(position)
 func _ready() -> void:
+	GameState.baseteam_node = self
 	position = WorldGridManager.get_world_position(WorldGridManager.get_grid_position(position))
 	
 	
@@ -20,17 +22,22 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	
 	if event.is_action_pressed("left_mouse_clik"):
-		if not path.is_empty():
-			var target_grid_position = path.front()
-			path.clear()
-			path.append(target_grid_position)
-			return
-		var target_grid_position = WorldGridManager.get_mouse_grid_position()
-		path = WorldGridManager.get_nav_grid_path(grid_position,target_grid_position)
-		path.pop_front()
-		if not path.is_empty():
-			move(path.front())
 		
+		get_path_and_try_move(WorldGridManager.get_mouse_grid_position())
+
+
+
+func get_path_and_try_move(mouse_grid_position:Vector2i):
+	if not path.is_empty():
+		var target_grid_position = path.front()
+		path.clear()
+		path.append(target_grid_position)
+		return
+	var target_grid_position = mouse_grid_position
+	path = WorldGridManager.get_nav_grid_path(grid_position,target_grid_position)
+	path.pop_front()
+	if not path.is_empty():
+		move(path.front())
 
 func move(target_cell: Vector2i):
 	var start_pos = position

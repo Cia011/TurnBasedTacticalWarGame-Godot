@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="战旗项目重构"
-run/main_scene="uid://7c3lfbn51y1q"
+run/main_scene="uid://crmdepyqcrl1w"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://素材/icon.svg"
 
