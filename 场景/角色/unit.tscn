@@ -79,9 +79,9 @@ metadata/_custom_type_script = "uid://dhwpeooovctke"
 script = ExtResource("5_fyqt4")
 metadata/_custom_type_script = "uid://clorqoykbke2q"
 
-[node name="BuffManager" type="Node" parent="." node_paths=PackedStringArray("角色")]
+[node name="BuffManager" type="Node" parent="." node_paths=PackedStringArray("unit")]
 script = ExtResource("6_eder8")
-"角色" = NodePath("..")
+unit = NodePath("..")
 metadata/_custom_type_script = "uid://b66uelarx1jmb"
 
 [node name="HealthUI" type="Node2D" parent="."]

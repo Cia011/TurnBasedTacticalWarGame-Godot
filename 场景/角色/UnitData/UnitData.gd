@@ -22,8 +22,10 @@ class_name UnitData
 @export var character_background_story:String
 var character_id : String
  #装备和物品
-#weapon armor
 var equipments: BaseBackpack
+
+var buffs: Dictionary = {}  # id -> BaseBuff
+
 var data_manager : DataManager
 
 var equipments_types : Array[String] = [	"武器","头盔","护甲","靴子","武器",
@@ -55,25 +57,9 @@ func add_equipment(item:BaseItem)->bool:
 func item_change(indexs):
 	for index in indexs:
 		pass
-	
-## 战斗属性
-#@export var experience: int = 0
-#@export var experience_to_next_level: int = 100
-#@export var stata_position : Vector2i = Vector2i(1,1)
+
 ## 视觉表现
 @export var texture: Texture2D
-#@export var color: Color = Color.WHITE
-#@export var scale: float = 1.0
-#
-## 技能和能力
-#@export var skills: Array[String] = ["attack", "defend"]
-#@export var abilities: Array[String] = []
-#
-
-#@export var inventory: Array[String] = []
-#
-## 状态效果
-#@export var status_effects: Array[String] = []
 
 func get_states() -> Dictionary:
 	return {
@@ -88,42 +74,3 @@ func get_states() -> Dictionary:
 		"max_health":max_health,
 		"current_health":current_health
 	}
-
-
-# 保存当前状态
-#func save_state() -> Dictionary:
-	#return {
-		#"name": character_name,
-		#"level": level,
-		#"max_health": max_health,
-		#"current_health": current_health,
-		#"attack": attack,
-		#"defense": defense,
-		#"speed": speed,
-		#"move_range": move_range,
-		#"experience": experience,
-		#"experience_to_next_level": experience_to_next_level,
-		#"skills": skills.duplicate(),
-		#"abilities": abilities.duplicate(),
-		#"equipment": equipment.duplicate(),
-		#"inventory": inventory.duplicate(),
-		#"status_effects": status_effects.duplicate()
-	#}
-#
-## 从字典加载状态
-#func load_state(data: Dictionary):
-	#character_name = data.get("name", "")
-	#level = data.get("level", 1)
-	#max_health = data.get("max_health", 100)
-	#current_health = data.get("current_health", 100)
-	#attack = data.get("attack", 10)
-	#defense = data.get("defense", 5)
-	#speed = data.get("speed", 8)
-	#move_range = data.get("move_range", 4)
-	#experience = data.get("experience", 0)
-	#experience_to_next_level = data.get("experience_to_next_level", 100)
-	#skills = data.get("skills", []).duplicate()
-	#abilities = data.get("abilities", []).duplicate()
-	#equipment = data.get("equipment", {}).duplicate()
-	#inventory = data.get("inventory", []).duplicate()
-	#status_effects = data.get("status_effects", []).duplicate()

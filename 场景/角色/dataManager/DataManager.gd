@@ -14,7 +14,8 @@ var 最终加成:Dictionary={}
 var unit:Unit
 func _ready() -> void:
 	unit = owner
-
+#func _init(unit:Unit) -> void:
+	#unit = owner
 
 func initialize(initial_stats: Dictionary):
 	基本数据 = initial_stats.duplicate()#复制副本
