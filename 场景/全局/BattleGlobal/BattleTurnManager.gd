@@ -9,6 +9,10 @@ var TurnManager : Dictionary[Unit,float]
 
 signal signal_change_unit(unit)
 
+signal signal_turn_start(unit)
+signal signal_turn_end(unit)
+
+
 func set_up():
 	for unit in BattleUnitManager.units:
 		TurnManager[unit] = 0

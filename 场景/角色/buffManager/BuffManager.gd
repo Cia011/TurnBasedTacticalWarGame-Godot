@@ -7,12 +7,13 @@ signal buff_updated(buff: BaseBuff)
 
 var buffs: Dictionary = {}  # id -> BaseBuff
 #@onready var 角色:= $".." as 角色
-@export var unit: Unit
-
-
+#@export var unit: Unit
+var unit_data: UnitData
+func _init(unit_data: UnitData) -> void:
+	self.unit_data = unit_data
 # 添加Buff
 func add_buff(buff: BaseBuff) -> bool:
-	buff.target = unit
+	buff.target = unit_data
 	
 	# 检查是否已存在相同Buff
 	if buffs.has(buff.id):

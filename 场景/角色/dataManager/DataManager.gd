@@ -11,14 +11,9 @@ var 修饰器: Dictionary = {}  # 存储所有修饰符
 
 var 最终加成:Dictionary={}
 
-var unit:Unit
-func _ready() -> void:
-	unit = owner
-#func _init(unit:Unit) -> void:
-	#unit = owner
-
 func initialize(initial_stats: Dictionary):
-	基本数据 = initial_stats.duplicate()#复制副本
+	#基本数据 = initial_stats.duplicate()#复制副本
+	基本数据 = initial_stats
 	# 初始化加成和修饰符字典
 
 	for stat in 基本数据:
@@ -30,7 +25,8 @@ func initialize(initial_stats: Dictionary):
 func get_stat(stat_name: String) -> int:
 	if not 基本数据.has(stat_name):
 		return 0
-	
+	if 基本数据[stat_name] is String:
+		return 0
 	var base_value = 基本数据[stat_name] + 基本加成[stat_name]
 	var final_value = float(base_value)
 	
@@ -43,12 +39,13 @@ func get_stat(stat_name: String) -> int:
 		加算修饰器[stat_name] += 修饰符.flat_bonus
 		
 		乘算修饰器.get_or_add(stat_name,1)
-		乘算修饰器[stat_name] += 修饰符.multiplier
+		乘算修饰器[stat_name] *= 修饰符.multiplier
 		
 		final_value += 加算修饰器[stat_name]
 		final_value = 乘算修饰器[stat_name] * final_value
 		#final_value = 修饰符.apply(final_value)
-	
+	#print("最终加成"+str(最终加成["current_health"]))
+	#print(final_value)
 	final_value += 最终加成[stat_name]
 	
 	return int(final_value)
@@ -70,12 +67,14 @@ func add_final_bonus(stat_name: String, amount: int):
 	if 最终加成.has(stat_name):
 		最终加成[stat_name] += amount
 	unit_data_change.emit({stat_name:get_stat(stat_name)})
-
+	print(str(stat_name)+":"+str(get_stat(stat_name)))
 func remove_final_bonus(stat_name: String, amount: int):
 	if 最终加成.has(stat_name):
 		最终加成[stat_name] -= amount
 	unit_data_change.emit({stat_name:get_stat(stat_name)})
-
+	print(str(stat_name)+":"+str(get_stat(stat_name)))
+	
+	
 # 添加修饰符（来自Buff等）
 func add_modifier(stat_name: String, flat_bonus: int = 0, multiplier: float = 1.0):
 	if not 修饰器.has(stat_name):

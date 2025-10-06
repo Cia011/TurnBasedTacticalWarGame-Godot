@@ -13,7 +13,7 @@ var current_stacks: int = 1
 var description: String
 
 var source: Node  # Buff来源
-var target: Unit  # Buff目标
+var target: UnitData  # Buff目标
 
 # 应用Buff时的效果
 func apply_effect() -> void:

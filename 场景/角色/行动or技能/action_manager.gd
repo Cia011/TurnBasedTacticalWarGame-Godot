@@ -5,9 +5,6 @@ var actions:Array[BaseAction] = []
 
 #在ready里自动注册行动
 func _ready() -> void:
-	#var moveaction = MoveAction.new()
-	#moveaction.unit = $".."
-	#add_child(moveaction)
 	
 	#自动将自身子节点注册到actions数组
 	for action :BaseAction in get_children():

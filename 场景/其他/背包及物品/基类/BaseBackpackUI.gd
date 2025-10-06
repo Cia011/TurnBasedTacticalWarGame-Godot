@@ -68,8 +68,9 @@ func _on_gui_input(event: InputEvent, index: int):
 	
 	accept_event()
 	
-	if not _is_item_type_compatible(index):
-		return
+	#匹配槽类型
+	#if not _is_item_type_compatible(index):
+		#return
 	
 	var mouse_event := event as InputEventMouseButton
 	
@@ -90,7 +91,6 @@ func _is_item_type_compatible(index: int) -> bool:
 	
 	if not mouse_item or slot_type == null:
 		return true
-	
 	return mouse_item.item_type == slot_type
 
 func _handle_left_click(index: int):

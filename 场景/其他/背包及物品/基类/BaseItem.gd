@@ -8,3 +8,7 @@ class_name BaseItem
 @export var number : int = 1 #当前堆叠数量
 @export var description: String = ""  # 物品描述
 @export var item_type: String = "任意"
+func get_properties()->Dictionary:
+	return {
+		
+	}

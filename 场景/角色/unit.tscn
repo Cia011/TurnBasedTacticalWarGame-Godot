@@ -1,12 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://clh336tpojrec"]
+[gd_scene load_steps=12 format=3 uid="uid://clh336tpojrec"]
 
 [ext_resource type="Script" uid="uid://tnkufuwwfm5k" path="res://场景/角色/unit.gd" id="1_23877"]
 [ext_resource type="Texture2D" uid="uid://uxo4vhkdv271" path="res://素材/角色/Sprite-0010.png" id="1_cddf8"]
 [ext_resource type="Script" uid="uid://dutife1puiymm" path="res://场景/角色/行动or技能/action_manager.gd" id="3_4h3ag"]
 [ext_resource type="Script" uid="uid://clfxsuyhxydf0" path="res://场景/角色/行动or技能/MoveAction.gd" id="3_dnxxf"]
 [ext_resource type="Script" uid="uid://dhwpeooovctke" path="res://场景/角色/行动or技能/TurnEndAction.gd" id="5_80s1k"]
-[ext_resource type="Script" uid="uid://clorqoykbke2q" path="res://场景/角色/dataManager/DataManager.gd" id="5_fyqt4"]
-[ext_resource type="Script" uid="uid://b66uelarx1jmb" path="res://场景/角色/buffManager/BuffManager.gd" id="6_eder8"]
 [ext_resource type="Script" uid="uid://b3h4l7n7dmhmu" path="res://场景/角色/行动or技能/AttackAction.gd" id="6_vc45t"]
 [ext_resource type="Script" uid="uid://d2so0yiata0kp" path="res://场景/角色/HealthUI/health_ui.gd" id="9_jlerf"]
 [ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="10_udull"]
@@ -74,15 +72,6 @@ script = ExtResource("5_80s1k")
 action_id = "TurnEndAction"
 action_name = "TurnEnd"
 metadata/_custom_type_script = "uid://dhwpeooovctke"
-
-[node name="DataManager" type="Node" parent="."]
-script = ExtResource("5_fyqt4")
-metadata/_custom_type_script = "uid://clorqoykbke2q"
-
-[node name="BuffManager" type="Node" parent="." node_paths=PackedStringArray("unit")]
-script = ExtResource("6_eder8")
-unit = NodePath("..")
-metadata/_custom_type_script = "uid://b66uelarx1jmb"
 
 [node name="HealthUI" type="Node2D" parent="."]
 script = ExtResource("9_jlerf")

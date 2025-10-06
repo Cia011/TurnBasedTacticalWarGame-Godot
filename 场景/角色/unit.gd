@@ -5,8 +5,8 @@ class_name Unit
 @onready var action_manager: ActionsManager = $ActionsManager
 @onready var health_ui: Node = $HealthUI
 
-@onready var data_manager: DataManager = $DataManager
-@onready var buff_manager: BuffManager = $BuffManager
+var data_manager: DataManager
+var buff_manager: BuffManager
 
 var is_teammate : bool = true
 var pre_health:int
@@ -18,22 +18,16 @@ var grid_position :Vector2i:
 	
 var unit_data:UnitData
 #从data_manager中获取属性
-#单独写一个函数是为了方便使用
+#单独写一个函数是为了方便使用 即 委托方法
 func get_stat(stat_name:String):
-	return data_manager.get_stat(stat_name)
+	return unit_data.get_final_stat(stat_name)
 
 func _ready() -> void:
-	#position = BattleGridManager.get_world_position(BattleGridManager.get_grid_position(position)) 
 	#角色创建时在BattleUnitManager内注册
 	BattleUnitManager.register_unit(self)
 	
-	#暂时选择自身--没有实现回合控制
-	#BattleTurnManager.select_unit(self)
-	
-	#初始化属性管理器
-	data_manager.initialize(unit_data.get_states())
 	pre_health = get_stat("current_health")
-	data_manager.unit_data_change.connect(unit_data_change)
+	
 	#角色创建时设置HealthUI#初始化
 	#health_ui.set_up(unit_data.max_health,unit_data.current_health)
 	health_ui.set_up(get_stat("max_health"),get_stat("current_health"))
@@ -43,12 +37,14 @@ func _ready() -> void:
 
 #再ready前执行
 func set_up(unit_data:UnitData,grid_position:Vector2i):
-	#战斗数据使用备份,战斗结束后再更新数据
-	self.unit_data = unit_data.duplicate()
+	self.unit_data = unit_data
 	name = self.unit_data.character_name
 	set_grid_position(grid_position)
 	
-	
+	data_manager = unit_data.data_manager
+	buff_manager = unit_data.buff_manager
+	data_manager.unit_data_change.connect(unit_data_change)
+
 #由角色生成器来控制生成角色的位置,目前角色生成器为战斗场景根节点
 func set_grid_position(grid_position:Vector2i)->void:
 	#设置位置

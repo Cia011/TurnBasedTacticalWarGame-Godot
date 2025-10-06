@@ -51,8 +51,13 @@ func _ready():
 	equpment1.item_name = "小刀"
 	equpment1.texture = preload("res://素材/角色/Sprite-0010.png")
 	equpment1.item_type = "武器"
+	equpment1.defense = 100
 	#player_char2.equipments["武器"] = equpment1
 	player_char2.equipments.add_item(equpment1)
+	
+	var attack_buff = AttackBuff.new()
+	player_char2.buff_manager.add_buff(attack_buff)
+	print(player_char2.get_final_stat("defense"))
 	
 	#player_characters.append(player_char2)
 	register_unit(player_char2)

@@ -63,8 +63,9 @@ func _on_gui_input(event: InputEvent, index: int):
 	
 	accept_event()
 	
-	if not _is_item_type_compatible(index):
-		return
+	#匹配槽类型
+	#if not _is_item_type_compatible(index):
+		#return
 	
 	var mouse_event := event as InputEventMouseButton
 	
