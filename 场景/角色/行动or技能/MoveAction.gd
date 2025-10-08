@@ -13,8 +13,6 @@ func start_action(target_grid_position:Vector2i,on_action_finished:Callable):
 	super.start_action(target_grid_position,on_action_finished)
 	#path = BattleGridManager.get_nav_grid_path(unit.grid_position,target_grid_position)
 	path = BattleGridManager.D_get_nav_grid_path(unit.grid_position,target_grid_position)["path"]
-	if not is_actioning:
-		return
 	if path and not path.is_empty():
 		#print("路径长度为:"+BattleGridManager.data_layer.a_star._compute_cost(path.front(),path.back()))
 		

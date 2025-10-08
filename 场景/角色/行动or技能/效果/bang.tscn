@@ -1,0 +1,131 @@
+[gd_scene load_steps=13 format=3 uid="uid://drioeuhcgvy05"]
+
+[ext_resource type="Script" uid="uid://doga8a7irl1y2" path="res://场景/角色/行动or技能/效果/bang.gd" id="1_kpeee"]
+[ext_resource type="Texture2D" uid="uid://bn7e1wxijss08" path="res://素材/图标/粒子/圆粒子.png" id="2_y1ihu"]
+
+[sub_resource type="Gradient" id="Gradient_x33cy"]
+offsets = PackedFloat32Array(0, 0.339394, 0.672727, 1)
+colors = PackedColorArray(0.4844, 0.484398, 0.484398, 1, 0.783524, 0.783523, 0.783523, 1, 0.744181, 0.744181, 0.744181, 1, 0.442911, 0.442911, 0.442911, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kpeee"]
+gradient = SubResource("Gradient_x33cy")
+
+[sub_resource type="Curve" id="Curve_y1ihu"]
+_data = [Vector2(0, 0.267924), 0.0, 2.90566, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0hst7"]
+curve = SubResource("Curve_y1ihu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_x33cy"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_0hst7")
+color = Color(1, 0.65098, 0.356863, 0.517647)
+color_ramp = SubResource("GradientTexture1D_kpeee")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0hst7"]
+load_path = "res://.godot/imported/圆粒子.png-342c522acf25b22dd3e1ed4faf0e4437.ctex"
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2ybc7"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_0hst7")
+color = Color(1, 0.52549, 0.352941, 0.498039)
+color_ramp = SubResource("GradientTexture1D_kpeee")
+
+[sub_resource type="Animation" id="Animation_y1ihu"]
+resource_name = "Bang"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GPUParticles2D:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GPUParticles2D2:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_0hst7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GPUParticles2D:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GPUParticles2D2:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2ybc7"]
+_data = {
+&"Bang": SubResource("Animation_y1ihu"),
+&"RESET": SubResource("Animation_0hst7")
+}
+
+[node name="Bang" type="Node2D"]
+position = Vector2(3, 2)
+script = ExtResource("1_kpeee")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 1
+texture = ExtResource("2_y1ihu")
+process_material = SubResource("ParticleProcessMaterial_x33cy")
+
+[node name="GPUParticles2D2" type="GPUParticles2D" parent="."]
+amount = 1
+texture = SubResource("CompressedTexture2D_0hst7")
+process_material = SubResource("ParticleProcessMaterial_2ybc7")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_2ybc7")
+}
+autoplay = "Bang"

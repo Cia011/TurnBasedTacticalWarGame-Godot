@@ -70,50 +70,50 @@ columns = 5
 
 [node name="0" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
 layout_mode = 2
-texture = ExtResource("2_3s5ma")
 slot_type = "武器"
+default_icon = ExtResource("2_3s5ma")
 
 [node name="1" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
 layout_mode = 2
-texture = ExtResource("5_3irqf")
 slot_type = "头盔"
+default_icon = ExtResource("5_3irqf")
 
 [node name="2" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
 layout_mode = 2
-texture = ExtResource("3_v4nhu")
 slot_type = "盔甲"
+default_icon = ExtResource("3_v4nhu")
 
 [node name="3" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
 layout_mode = 2
-texture = ExtResource("7_mypgt")
 slot_type = "靴子"
+default_icon = ExtResource("7_mypgt")
 
 [node name="4" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
 layout_mode = 2
-texture = ExtResource("8_ceswj")
 slot_type = "盾牌"
+default_icon = ExtResource("8_ceswj")
 
 [node name="5" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
 layout_mode = 2
-texture = ExtResource("9_nem54")
 slot_type = "戒指"
+default_icon = ExtResource("9_nem54")
 
 [node name="6" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
 layout_mode = 2
-texture = ExtResource("10_h5qob")
 slot_type = "项链"
+default_icon = ExtResource("10_h5qob")
 
 [node name="7" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
 layout_mode = 2
-texture = ExtResource("11_ljceo")
 slot_type = "披风"
+default_icon = ExtResource("11_ljceo")
 
 [node name="8" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
 layout_mode = 2
-texture = ExtResource("12_tp6ke")
 slot_type = "手套"
+default_icon = ExtResource("12_tp6ke")
 
 [node name="9" parent="HBoxContainer/VBoxContainer/MarginContainer/BaseBagUI" instance=ExtResource("1_xjf8a")]
 layout_mode = 2
-texture = ExtResource("9_nem54")
 slot_type = "戒指"
+default_icon = ExtResource("9_nem54")

@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://bvbosfmrbrhw3"]
+
+[ext_resource type="Script" uid="uid://ds03mt2dtbfl" path="res://场景/角色/行动or技能/效果/fireball.gd" id="1_2t6w2"]
+
+[sub_resource type="Gradient" id="Gradient_2t6w2"]
+offsets = PackedFloat32Array(0, 0.8, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.364706, 0.337255, 0.270588, 1, 0.505882, 0.180392, 0.133333, 0.482353)
+metadata/_snap_enabled = true
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_icx4y"]
+gradient = SubResource("Gradient_2t6w2")
+
+[sub_resource type="Curve" id="Curve_qrf22"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.403941, 0.909434), 0.0, 0.0, 0, 0, Vector2(1, 0.381132), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_2t6w2"]
+curve = SubResource("Curve_qrf22")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2t6w2"]
+emission_shape = 1
+emission_sphere_radius = 5.0
+angle_min = -180.0
+angle_max = 180.0
+inherit_velocity_ratio = 0.1
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 6.0
+scale_curve = SubResource("CurveTexture_2t6w2")
+color = Color(1, 0.690196, 0.568627, 1)
+color_ramp = SubResource("GradientTexture1D_icx4y")
+turbulence_enabled = true
+turbulence_noise_strength = 20.0
+
+[node name="Fireball" type="Node2D"]
+script = ExtResource("1_2t6w2")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 30
+lifetime = 0.3
+process_material = SubResource("ParticleProcessMaterial_2t6w2")

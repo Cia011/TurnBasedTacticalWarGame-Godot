@@ -112,7 +112,6 @@ func _sync_base_stat(stat_name: String, value):
 
 func get_states() -> Dictionary:
 	return {
-		"character_name" : character_name,
 		"level":level,
 		"defense":defense,
 		"agility":agility,

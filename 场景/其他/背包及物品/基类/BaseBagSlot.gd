@@ -6,7 +6,7 @@ class_name BaseBagSlot
 
 @export var is_usable : bool = true
 @export var slot_type : String = "任意"
-
+@export var default_icon : Texture2D
 func _ready() -> void:
 	if ! is_usable:
 		物品图标.visible = false
@@ -26,5 +26,9 @@ func set_item(item:BaseItem):
 			数量显示.text = str(item.number)
 		else:数量显示.text = ""
 	else:
-		物品图标.texture = null
-		数量显示.text = ""
+		if default_icon != null:
+			物品图标.texture = default_icon
+			数量显示.text = ""
+		else:
+			物品图标.texture = null
+			数量显示.text = ""
