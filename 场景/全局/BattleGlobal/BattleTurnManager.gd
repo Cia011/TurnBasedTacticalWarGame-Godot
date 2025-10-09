@@ -35,14 +35,13 @@ func set_next_turn_unit():
 				#TurnManager[unit] += unit.unit_data.agility
 		
 
-
-
 func select_unit(unit:Unit)->void:
 	if current_unit == unit:
 		return
 	current_unit = unit
 	print("select_unit" + str(unit))
+	unit.start_turn()
 	signal_change_unit.emit(unit)
-	
-	BattleActionManager.set_default_action()
+	if unit.is_teammate == true:
+		BattleActionManager.set_default_action()
 	

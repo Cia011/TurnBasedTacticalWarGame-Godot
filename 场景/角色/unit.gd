@@ -10,7 +10,10 @@ var buff_manager: BuffManager
 
 var is_teammate : bool = true
 var pre_health:int
+var current_action_points:int
+var AI : BaseAI
 signal unit_die(unit:Unit)
+signal current_action_points_changed(new_value:int)
 
 var grid_position :Vector2i:
 	get:return BattleGridManager.get_grid_position(global_position)
@@ -21,20 +24,20 @@ var unit_data:UnitData
 #单独写一个函数是为了方便使用 即 委托方法
 func get_stat(stat_name:String):
 	return unit_data.get_final_stat(stat_name)
-
-func _ready() -> void:
-	#角色创建时在BattleUnitManager内注册
-	BattleUnitManager.register_unit(self)
+func get_action_points()->int:
+	return current_action_points
+func set_action_points(num:int):
+	current_action_points = num
+	current_action_points_changed.emit(num)
 	
-	pre_health = get_stat("current_health")
+func start_turn():
+	current_action_points = unit_data.get_final_stat("action_points")
+	if is_teammate == false:
+		start_enemy_turn()
 	
-	#角色创建时设置HealthUI#初始化
-	#health_ui.set_up(unit_data.max_health,unit_data.current_health)
-	health_ui.set_up(get_stat("max_health"),get_stat("current_health"))
-	
-	
-
-
+func start_enemy_turn():
+	await AI.take_turn()
+	#await AI.turn_completed
 #再ready前执行
 func set_up(unit_data:UnitData,grid_position:Vector2i):
 	self.unit_data = unit_data
@@ -44,6 +47,22 @@ func set_up(unit_data:UnitData,grid_position:Vector2i):
 	data_manager = unit_data.data_manager
 	buff_manager = unit_data.buff_manager
 	data_manager.unit_data_change.connect(unit_data_change)
+
+func _ready() -> void:
+	#角色创建时在BattleUnitManager内注册
+	BattleUnitManager.register_unit(self)
+	
+	pre_health = get_stat("current_health")
+	
+	#角色创建时设置HealthUI#初始化
+	#health_ui.set_up(unit_data.max_health,unit_data.current_health)
+	health_ui.set_up(get_stat("max_health"),get_stat("current_health"),is_teammate)
+	
+	if is_teammate == false:
+		
+		AI = AggressiveEnemyAI.new(self)
+		add_child(AI)
+	
 
 #由角色生成器来控制生成角色的位置,目前角色生成器为战斗场景根节点
 func set_grid_position(grid_position:Vector2i)->void:

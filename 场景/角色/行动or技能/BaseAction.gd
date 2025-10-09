@@ -4,11 +4,13 @@ class_name BaseAction
 @export var action_id : String
 @export var action_name : String
 @export var grid_color : Color = Color.WHITE
+@export var action_icon : Texture2D
+@export var cost : int = 1
 
 var unit:Unit
 var is_actioning : bool = false
 var on_action_finished : Callable
-
+signal action_finished()
 
 var is_need_target : bool = true
 var is_instant : bool = false
@@ -22,6 +24,7 @@ func start_action(target_grid_position : Vector2i,on_action_finished: Callable)-
 	self.on_action_finished = on_action_finished
 func finish_action()->void:
 	is_actioning = false
+	action_finished.emit()
 	on_action_finished.call()
 
 #显示范围

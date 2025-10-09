@@ -3,13 +3,15 @@ extends Node
 # 玩家队伍
 signal signal_player_characters_change
 var player_characters: Array[UnitData] = []
-
+var enemy_characters: Array[UnitData] = []
 var baseteam_node : BaseTeam
 
 # 当前战斗信息
 var current_battle_info: Dictionary = {}
+#战斗准备阶段,放置角色位置
+var preparatory_phase = true
 
-var is_open_UI : bool = false
+#var is_open_UI : bool = false
 
 #背包部分
 var all_backpacks : Array[BaseBackpack]
@@ -33,14 +35,12 @@ func remove_backpack(backpack:BaseBackpack):
 
 # 初始化示例角色
 func _ready():
-	is_open_UI = true
+	#is_open_UI = true
 	
 	# 创建示例玩家角色
 	var player_char = UnitData.new()
 	player_char.character_name = "第一个角色"
 	player_char.texture = preload("res://素材/角色/Sprite-0010.png")
-	
-	#player_characters.append(player_char)
 	register_unit(player_char)
 	
 	var player_char2 = UnitData.new()
@@ -52,7 +52,6 @@ func _ready():
 	equpment1.texture = preload("res://素材/角色/Sprite-0010.png")
 	equpment1.item_type = "武器"
 	equpment1.defense = 100
-	#player_char2.equipments["武器"] = equpment1
 	player_char2.equipments.add_item(equpment1)
 	
 	var attack_buff = AttackBuff.new()
@@ -61,6 +60,12 @@ func _ready():
 	
 	#player_characters.append(player_char2)
 	register_unit(player_char2)
+	
+	var enemy_char = UnitData.new()
+	enemy_char.character_name = "敌人"
+	enemy_char.texture = preload("res://素材/角色/Sprite-0010.png")
+	enemy_characters.append(enemy_char)
+	
 	
 
 func register_unit(unit:UnitData) -> void:

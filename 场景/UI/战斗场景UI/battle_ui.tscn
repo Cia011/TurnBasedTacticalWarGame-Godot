@@ -1,8 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://x461qtefu8ca"]
+[gd_scene load_steps=10 format=3 uid="uid://x461qtefu8ca"]
 
 [ext_resource type="Script" uid="uid://b6pyw642curpn" path="res://场景/UI/战斗场景UI/UnitActionUI/unit_action_ui.gd" id="1_nruvc"]
 [ext_resource type="PackedScene" uid="uid://cd718qgnqs328" path="res://场景/UI/战斗场景UI/UnitActionUI/action_card_ui.tscn" id="2_nruvc"]
 [ext_resource type="PackedScene" uid="uid://5pjc2txxf2s7" path="res://场景/UI/战斗场景UI/FinalUI/final_ui.tscn" id="3_6xdit"]
+[ext_resource type="StyleBox" uid="uid://ca4qiie1i6rtq" path="res://资源/Style/Panel/圆角黑边橙背景.tres" id="3_mkr2q"]
+[ext_resource type="FontFile" uid="uid://fi7p30t32c38" path="res://素材/字体/DejaVuSans.ttf" id="4_1v5pv"]
+[ext_resource type="Script" uid="uid://b8j6ututjp8w0" path="res://场景/UI/战斗场景UI/UnitActionUI/结束回合按钮.gd" id="5_y5x0i"]
+[ext_resource type="LabelSettings" uid="uid://bkvctkykfn31e" path="res://资源/Style/LabelSettings/白字黑边.tres" id="6_s08gc"]
+[ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="7_s08gc"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ie373"]
+font = ExtResource("7_s08gc")
+font_size = 17
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
 
 [node name="BattleUI" type="CanvasLayer"]
 
@@ -16,13 +27,110 @@ theme_override_constants/margin_bottom = 20
 script = ExtResource("1_nruvc")
 action_card_ui_scence = ExtResource("2_nruvc")
 
-[node name="MarginContainer" type="MarginContainer" parent="UnitActionUI"]
+[node name="MarginContainer2" type="MarginContainer" parent="UnitActionUI"]
+custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 
-[node name="ActionContainer" type="HBoxContainer" parent="UnitActionUI/MarginContainer"]
+[node name="Panel" type="Panel" parent="UnitActionUI/MarginContainer2"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_styles/panel = ExtResource("3_mkr2q")
+
+[node name="MarginContainer" type="MarginContainer" parent="UnitActionUI/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="ActionCardUI" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+layout_mode = 2
+
+[node name="ActionCardUI2" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+layout_mode = 2
+
+[node name="ActionCardUI3" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+layout_mode = 2
+
+[node name="ActionCardUI4" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+layout_mode = 2
+
+[node name="ActionCardUI5" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+layout_mode = 2
+
+[node name="ActionCardUI6" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+layout_mode = 2
+
+[node name="ActionCardUI7" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+layout_mode = 2
+
+[node name="ActionCardUI8" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/MarginContainer"]
+layout_mode = 2
+
+[node name="上一页" type="Button" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_1v5pv")
+theme_override_font_sizes/font_size = 15
+text = "上一页"
+
+[node name="下一页" type="Button" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_1v5pv")
+theme_override_font_sizes/font_size = 15
+text = "下一页"
+
+[node name="VSeparator2" type="VSeparator" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="结束回合按钮" type="Button" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+script = ExtResource("5_y5x0i")
+
+[node name="Label" type="Label" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3/结束回合按钮"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "结束
+回合"
+label_settings = ExtResource("6_s08gc")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+
+[node name="行动点label" type="Label" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "10
+行动点"
+label_settings = SubResource("LabelSettings_ie373")
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
 
 [node name="FinalUI" parent="." instance=ExtResource("3_6xdit")]

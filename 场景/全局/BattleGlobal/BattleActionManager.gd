@@ -13,6 +13,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 #当技能卡片被点击时触发此函数
 func set_selected_action(action:BaseAction)->void:
+	if action == null:
+		return
 	if is_performing_action:
 		return
 	if selected_action == action:
@@ -31,6 +33,8 @@ func set_selected_action(action:BaseAction)->void:
 	
 	
 func try_perform_selected_action():
+	if BattleTurnManager.current_unit.is_teammate == false:
+		return
 	if is_performing_action:
 		return
 	if selected_action == null:
@@ -47,7 +51,10 @@ func try_perform_selected_action():
 	
 	is_performing_action = true
 	selected_action.start_action(target_grid_position,on_action_finished)
-
+#AI接口
+func perform_action(action:BaseAction,target_grid_position:Vector2i):
+	is_performing_action = true
+	action.start_action(target_grid_position,on_action_finished)
 func on_action_finished():
 	is_performing_action = false
 

@@ -1,7 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://cd718qgnqs328"]
+[gd_scene load_steps=3 format=3 uid="uid://cd718qgnqs328"]
 
 [ext_resource type="Script" uid="uid://c6wxce5swjs3o" path="res://场景/UI/战斗场景UI/UnitActionUI/action_card.gd" id="1_3tk5w"]
+[ext_resource type="LabelSettings" uid="uid://bkvctkykfn31e" path="res://资源/Style/LabelSettings/白字黑边.tres" id="2_c66eh"]
 
 [node name="ActionCardUI" type="Button"]
 custom_minimum_size = Vector2(60, 60)
+icon_alignment = 1
+expand_icon = true
 script = ExtResource("1_3tk5w")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = ExtResource("2_c66eh")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2

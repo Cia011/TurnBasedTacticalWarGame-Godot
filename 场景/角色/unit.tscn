@@ -1,11 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://clh336tpojrec"]
+[gd_scene load_steps=16 format=3 uid="uid://clh336tpojrec"]
 
 [ext_resource type="Script" uid="uid://tnkufuwwfm5k" path="res://场景/角色/unit.gd" id="1_23877"]
 [ext_resource type="Texture2D" uid="uid://uxo4vhkdv271" path="res://素材/角色/Sprite-0010.png" id="1_cddf8"]
 [ext_resource type="Script" uid="uid://dutife1puiymm" path="res://场景/角色/行动or技能/action_manager.gd" id="3_4h3ag"]
 [ext_resource type="Script" uid="uid://clfxsuyhxydf0" path="res://场景/角色/行动or技能/MoveAction.gd" id="3_dnxxf"]
 [ext_resource type="Texture2D" uid="uid://enb4xxna56gy" path="res://素材/图标/iton/剑.png" id="3_jlerf"]
-[ext_resource type="Script" uid="uid://dhwpeooovctke" path="res://场景/角色/行动or技能/TurnEndAction.gd" id="5_80s1k"]
 [ext_resource type="Script" uid="uid://b3h4l7n7dmhmu" path="res://场景/角色/行动or技能/AttackAction.gd" id="6_vc45t"]
 [ext_resource type="Script" uid="uid://x2ddn38tff04" path="res://场景/角色/行动or技能/MagicAttackAction.gd" id="8_udull"]
 [ext_resource type="Script" uid="uid://d2so0yiata0kp" path="res://场景/角色/HealthUI/health_ui.gd" id="9_jlerf"]
@@ -23,7 +22,7 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_etk83"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jlerf"]
 bg_color = Color(0.6, 1, 0.6, 1)
 border_width_left = 1
 border_width_top = 1
@@ -35,7 +34,7 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
-[sub_resource type="LabelSettings" id="LabelSettings_etk83"]
+[sub_resource type="LabelSettings" id="LabelSettings_jlerf"]
 font = ExtResource("10_udull")
 font_size = 19
 font_color = Color(0.9083, 0.758066, 3.85046e-07, 1)
@@ -158,13 +157,8 @@ script = ExtResource("6_vc45t")
 action_id = "AttackAction"
 action_name = "Attack"
 grid_color = Color(1, 0, 0, 1)
+action_icon = ExtResource("3_jlerf")
 metadata/_custom_type_script = "uid://b3h4l7n7dmhmu"
-
-[node name="TurnEndAction" type="Node" parent="ActionsManager"]
-script = ExtResource("5_80s1k")
-action_id = "TurnEndAction"
-action_name = "TurnEnd"
-metadata/_custom_type_script = "uid://dhwpeooovctke"
 
 [node name="MagicAttackAction" type="Node" parent="ActionsManager"]
 script = ExtResource("8_udull")
@@ -182,7 +176,7 @@ offset_right = 6.0
 offset_bottom = -19.0
 theme_override_colors/font_color = Color(0.892696, 0.762521, 0.281818, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_udull")
-theme_override_styles/fill = SubResource("StyleBoxFlat_etk83")
+theme_override_styles/fill = SubResource("StyleBoxFlat_jlerf")
 value = 50.0
 show_percentage = false
 
@@ -192,7 +186,7 @@ offset_top = -23.0
 offset_right = 23.0
 scale = Vector2(0.15, 0.15)
 text = "10"
-label_settings = SubResource("LabelSettings_etk83")
+label_settings = SubResource("LabelSettings_jlerf")
 horizontal_alignment = 1
 vertical_alignment = 1
 

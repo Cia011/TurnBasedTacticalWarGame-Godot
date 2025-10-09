@@ -4,7 +4,6 @@ class_name MoveAction
 var path : Array[Vector2i]
 var move_speed : float = 100
 var finish_grid_position :Vector2i
-var max_length = 5
 func _ready() -> void:
 	super._ready()
 	is_need_target = true
@@ -13,6 +12,7 @@ func start_action(target_grid_position:Vector2i,on_action_finished:Callable):
 	super.start_action(target_grid_position,on_action_finished)
 	#path = BattleGridManager.get_nav_grid_path(unit.grid_position,target_grid_position)
 	path = BattleGridManager.D_get_nav_grid_path(unit.grid_position,target_grid_position)["path"]
+	path.pop_front()#删去自身所在位置
 	if path and not path.is_empty():
 		#print("路径长度为:"+BattleGridManager.data_layer.a_star._compute_cost(path.front(),path.back()))
 		
@@ -22,7 +22,8 @@ func start_action(target_grid_position:Vector2i,on_action_finished:Callable):
 		finish_grid_position = path.back()
 		
 		move(path.front())
-
+	else:
+		finish_action()
 var move_duration = 0.1
 var jump_height = 10
 
@@ -49,6 +50,10 @@ func on_move_finished(target_pos:Vector2i):
 	#------------单个move结束时触发Grid的进入函数(未实现)------------
 	BattleGridManager.get_grid_data(unit.grid_position).enter_grid(unit)
 	
+	#计算行动力消耗
+	var current_action_points:int = unit.get_action_points()-cost
+	unit.set_action_points(current_action_points)
+	
 	path.pop_front()
 	unit.position = target_pos
 	BattleGridManager.visulize_grids(get_action_grids() ,grid_color)
@@ -69,7 +74,9 @@ func jump_animation(t: float):
 
 func get_action_grids(unit_grid:Vector2i = unit.grid_position)->Array[Vector2i]:
 	var results:Array[Vector2i] = []
-	results = BattleGridManager.D_get_all_path(unit_grid,max_length)["reachable"]
+	#results = BattleGridManager.D_get_all_path(unit_grid,max_length)["reachable"]
+	results = BattleGridManager.D_get_all_path(unit_grid,unit.get_action_points())["reachable"]
+	
 	
 	var deletes:Array[Vector2i]
 	for grid in results:
@@ -78,16 +85,4 @@ func get_action_grids(unit_grid:Vector2i = unit.grid_position)->Array[Vector2i]:
 	
 	for delete in deletes:
 		results.erase(delete)
-	
-	#for i in range(-max_length,max_length+1):
-		#for j in range(-max_length,max_length+1):
-			#if i==0 and j==0:
-				#continue
-			#var potential_grid = unit_grid + Vector2i(i,j)
-			#if not BattleGridManager.is_valid_grid(potential_grid):
-				#continue
-			#var grid_path = BattleGridManager.get_nav_grid_path(unit_grid,potential_grid)
-			#var length = BattleGridManager.get_grid_path_length(grid_path)
-			#if length <= max_length and length > 0:
-				#results.append(potential_grid)
 	return results

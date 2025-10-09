@@ -12,11 +12,15 @@ func _ready() -> void:
 	super._ready()
 	is_need_target = true
 	is_instant = false
-
+	cost = 2
 func start_action(target_grid_position: Vector2i, on_action_finished: Callable):
 	super.start_action(target_grid_position, on_action_finished)
 	# 检查目标是否有效
 	if not is_valid_action_grid(target_grid_position):
+		finish_action()
+		return
+	if unit.get_action_points()<cost:
+		PopManager.pop_lable(unit.position,str("行动力不足"),Color.DARK_ORANGE)
 		finish_action()
 		return
 	
@@ -26,14 +30,16 @@ func start_action(target_grid_position: Vector2i, on_action_finished: Callable):
 	var finished_animation_name = await animation_player.animation_finished
 	
 	if finished_animation_name == "attack":
+		animation_player.play("RESET")
 		# 创建并发射火球
 		await launch_fireball(target_grid_position)
 		
 		# 火球命中后处理伤害
 		var target_unit: Unit = BattleGridManager.get_grid_occupied(target_grid_position)
 		attack_logic(target_unit)
-		
 		finish_animation()
+	else:
+		finish_action()
 
 func is_valid_action_grid(target_grid_position: Vector2i) -> bool:
 	# 检查目标位置是否有单位且距离在范围内
@@ -86,6 +92,8 @@ func apply_burn_effect(target_unit: Unit):
 	pass
 
 func finish_animation():
+	var current_action_points = unit.get_action_points() - cost
+	unit.set_action_points(current_action_points)
 	finish_action()
 
 func get_action_grids(unit_grid: Vector2i = unit.grid_position) -> Array[Vector2i]:
