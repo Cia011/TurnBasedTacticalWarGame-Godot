@@ -46,10 +46,10 @@ func move(target_cell: Vector2i):
 	#tween.parallel().tween_method(jump_animation, 0.0, 1.0, move_duration)
 	tween.finished.connect(on_move_finished.bind(target_pos))
 	
-func on_move_finished(target_pos:Vector2i):
+func on_move_finished(target_pos:Vector2):
 	#------------单个move结束时触发Grid的进入函数(未实现)------------
+	unit.grid_position = BattleGridManager.get_grid_position(target_pos)
 	BattleGridManager.get_grid_data(unit.grid_position).enter_grid(unit)
-	
 	#计算行动力消耗
 	var current_action_points:int = unit.get_action_points()-cost
 	unit.set_action_points(current_action_points)
@@ -73,6 +73,7 @@ func jump_animation(t: float):
 	unit.position.y = unit.position.y - height  # 需要存储original_y
 
 func get_action_grids(unit_grid:Vector2i = unit.grid_position)->Array[Vector2i]:
+	#print("目前高亮范围中心"+str(unit_grid))
 	var results:Array[Vector2i] = []
 	#results = BattleGridManager.D_get_all_path(unit_grid,max_length)["reachable"]
 	results = BattleGridManager.D_get_all_path(unit_grid,unit.get_action_points())["reachable"]

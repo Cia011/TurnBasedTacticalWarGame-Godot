@@ -15,10 +15,11 @@ var AI : BaseAI
 signal unit_die(unit:Unit)
 signal current_action_points_changed(new_value:int)
 
-var grid_position :Vector2i:
-	get:return BattleGridManager.get_grid_position(global_position)
-	#set(value): grid_position = value
-	
+var grid_position:Vector2i
+#var grid_position :Vector2i:
+	#get:return BattleGridManager.get_grid_position(global_position)
+func get_grid_position()->Vector2i:
+	return grid_position
 var unit_data:UnitData
 #从data_manager中获取属性
 #单独写一个函数是为了方便使用 即 委托方法
@@ -43,7 +44,7 @@ func set_up(unit_data:UnitData,grid_position:Vector2i):
 	self.unit_data = unit_data
 	name = self.unit_data.character_name
 	set_grid_position(grid_position)
-	
+
 	data_manager = unit_data.data_manager
 	buff_manager = unit_data.buff_manager
 	data_manager.unit_data_change.connect(unit_data_change)
@@ -68,6 +69,8 @@ func _ready() -> void:
 func set_grid_position(grid_position:Vector2i)->void:
 	#设置位置
 	position = BattleGridManager.get_world_position(grid_position)
+	self.grid_position = grid_position
+	
 	#在相应位置网格注册自身
 	BattleGridManager.set_grid_occupied(grid_position,self)
 #当属性管理器发生改变时自动执行(因为连接了信号)

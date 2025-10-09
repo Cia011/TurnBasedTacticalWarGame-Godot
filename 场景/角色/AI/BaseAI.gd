@@ -8,88 +8,146 @@ var test_grid_position:Vector2i
 # 决策信号
 signal decision_made(action: BaseAction, target_position: Vector2i)
 signal turn_completed()
-# 创建一个工作线程
-var _think_thread: Thread
-# 创建信号，用于通知决策完成
-signal decision_ready(action: BaseAction, target_position: Vector2i)
-# 在适当的时候销毁线程，避免内存泄漏
-func _exit_tree():
-	if _think_thread and _think_thread.is_started():
-		_think_thread.wait_to_finish()
-# 这个函数将在工作线程中运行
-func _threaded_evaluate_actions() -> void:
-	# 这里是你的AI决策逻辑，可能会比较耗时
-	var best_decision = evaluate_actions()
-	# 决策完成后，使用 call_deferred 安全地发出信号
-	call_deferred("emit_signal", "decision_ready", best_decision.action, best_decision.target_position)
+
+# 异步思考相关
+var _think_thread: Thread # 创建一个工作线程
+var _current_decision: Dictionary
+var _is_thinking: bool = false
 
 func _init(unit:Unit) -> void:
 	self.unit = unit
 	action_manager = unit.action_manager
-func _ready():
-	# 连接决策完成信号
-	decision_ready.connect(_on_decision_ready)
-func _on_decision_ready(action: BaseAction, target_position: Vector2i):
-	print("异步思考完成，行动: ", action.action_name, " 目标: ", target_position)
-	decision_made.emit(action, target_position)
-	# 执行行动，这里假设 execute_action 内部会处理行动力消耗并等待行动完成
-	execute_action(action, target_position)
-	# 注意：你可能需要在这里等待行动执行完毕，再发出 turn_completed
-	# 这取决于你的 execute_action 实现，如果它是异步的，你可能需要 await
 
-	# 假设 execute_action 内部会处理好行动力和行动动画，并在最终完成时调用一个回调或发出信号
-	# 例如，你可以在 execute_action 最后 await action.action_finished (如果它有这个信号)
-	# 然后才 turn_completed.emit()
 # 主决策函数
 func take_turn() -> void:
-	#print(unit.unit_data.character_name + " 开始思考...")
-	print(unit.unit_data.character_name + " 开始异步思考...")
+
+	var action_count = 0
+	var max_actions_per_turn = 5  # 防止无限循环的安全限制
+	# 评估所有可能的行动
+	
+	while (unit.get_action_points()>0 and action_count < max_actions_per_turn):
+		action_count += 1
+		print("第 " + str(action_count) + " 次决策，剩余行动力: " + str(unit.current_action_points))
+		test_grid_position = unit.get_grid_position()
+		# 在主线程收集所有需要的数据
+		_update_snapshot_data()
+		 # 异步评估行动
+		var decision = await evaluate_actions_async()
+		# 检查决策是否有效
+		
+		if not decision.action or decision.target_position == Vector2i(-1, -1):
+			print("没有找到有效行动")
+			break
+		# 检查行动力是否足够
+		if unit.current_action_points < decision.action.cost:
+			print("行动力不足，无法执行: " + decision.action.action_name)
+			break
+		print("选择行动: " + decision.action.action_name + " 目标: " + str(decision.target_position))
+		
+		 # 执行行动并等待完成
+		await execute_action(decision.action, decision.target_position)
+	print(unit.unit_data.character_name + " 回合结束")
+	turn_completed.emit()
+	skip_turn()
+#______________________________________________________________________
+# 收集线程安全的数据快照
+func _update_snapshot_data() -> void:
+	# 单位数据
+	var unit_snapshot = {
+		"grid_position": unit.grid_position,  # 这个getter会在主线程执行
+		"current_action_points": unit.current_action_points,
+		"stats": _get_unit_stats()
+	}
+	# 玩家单位数据
+	var player_units_snapshot = _get_player_units_snapshot()
+	
+	# 行动数据 - 关键！在主线程计算所有行动相关信息
+	var actions_data = _get_actions_data()
+	
+	_snapshot_data = {
+		"unit": unit_snapshot,
+		"players": player_units_snapshot,
+		"actions": actions_data
+	}
+# 获取单位统计信息
+func _get_unit_stats() -> Dictionary:
+	return {
+		"current_health": unit.get_stat("current_health"),
+		"max_health": unit.get_stat("max_health"),
+		"strength": unit.get_stat("strength"),
+		"defense": unit.get_stat("defense"),
+		"agility": unit.get_stat("agility"),
+		"intelligence": unit.get_stat("Intelligence"),
+		"constitution": unit.get_stat("Constitution")
+	}
+#______________________________________________________________________
+# 异步评估行动
+func evaluate_actions_async() -> Dictionary:
+	# 如果已经在思考，等待之前的思考完成
+	if _is_thinking:
+		await get_tree().process_frame  # 让出一帧避免阻塞
+	_is_thinking = true
+	
+	# 在线程中进行复杂的AI计算:cite[1]
+	if _think_thread and _think_thread.is_started():
+		_think_thread.wait_to_finish()
+	
 	_think_thread = Thread.new()
+	_current_decision = {"action": null, "target_position": Vector2i(-1, -1)}
+	
+	#开始子线程
 	var error = _think_thread.start(_threaded_evaluate_actions)
+	
 	if error != OK:
 		push_error("无法启动AI思考线程!")
-		# 如果线程启动失败，可以回退到主线程决策（可能会卡）
-		var fallback_decision = evaluate_actions()
-	# 评估所有可能的行动
-	var i = 1
-	while (unit.current_action_points>0):
-		print("执行次数"+str(i))
-		i+=1
+		_is_thinking = false
+		# 回退到主线程评估
+		return evaluate_actions_sync()
 	
-		test_grid_position = unit.grid_position
-		
-		
-		print(unit.current_action_points)
-		var best_decision = evaluate_actions()
-		if best_decision.action and best_decision.target_position != Vector2i(-1, -1):
-			#print(unit.current_action_points)
-			print("选择行动: ", best_decision.action.action_name, " 目标: ", best_decision.target_position)
-			decision_made.emit(best_decision.action, best_decision.target_position)
-			# 执行行动
-			await execute_action(best_decision.action, best_decision.target_position)
-			#等一下bug
-			#await get_tree().create_timer(1).timeout
-			
-		else:
-			print("没有有效行动，跳过回合")
-			skip_turn()
-			break
-	skip_turn()
+	# 等待线程完成，但不阻塞主线程:cite[8]
+	await wait_for_thread_completion()
+	
+	_is_thinking = false
+	return _current_decision
+# 线程中执行的评估函数
+func _threaded_evaluate_actions() -> void:
+	# 这里执行耗时的AI决策逻辑
+	var decision = evaluate_actions()
+	# 使用 call_deferred 安全地更新主线程数据
+	call_deferred("_set_current_decision", decision)
+
+# 安全设置决策结果
+func _set_current_decision(decision: Dictionary) -> void:
+	_current_decision = decision
+# 等待线程完成的协程:cite[8]
+func wait_for_thread_completion() -> void:
+	while _think_thread and _think_thread.is_alive():
+		await get_tree().process_frame  # 每帧检查一次
+# 同步评估（回退方案）
+func evaluate_actions_sync() -> Dictionary:
+	print("使用同步评估")
+	return evaluate_actions()
 # 执行行动
 func execute_action(action: BaseAction, target_position: Vector2i) -> void:
-
-	BattleGridManager.visulize_grids(action.get_action_grids() ,action.grid_color)
-	BattleActionManager.perform_action(action,target_position)
+	# 可视化行动范围:cite[4]
+	BattleGridManager.visulize_grids(action.get_action_grids(), action.grid_color)
+	
+	# 执行行动并等待完成:cite[8]
+	BattleActionManager.perform_action(action, target_position)
 	await action.action_finished
-	print("执行完成")
+	
+	print("行动执行完成")
+
 #func _on_action_finished():
 	#turn_completed.emit()
-
 func skip_turn() -> void:
 	print(unit.unit_data.character_name + " 跳过回合")
 	BattleTurnManager.set_next_turn_unit()
 	turn_completed.emit()
-
+# 清理资源:cite[1]
+func _exit_tree():
+	if _think_thread and _think_thread.is_started():
+		_think_thread.wait_to_finish()
 # 需要子类实现的具体评估逻辑
 func evaluate_actions() -> Dictionary:
 	return {"action": null, "target_position": Vector2i(-1, -1)}

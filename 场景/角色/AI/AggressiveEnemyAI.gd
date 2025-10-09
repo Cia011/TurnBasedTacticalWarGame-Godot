@@ -38,7 +38,6 @@ func evaluate_actions() -> Dictionary:
 	
 	# 如果没有找到好的非移动行动，或者分数很低，考虑移动
 	if best_score < 5 or best_action == null:  # 阈值可以根据需要调整
-		print("当前行动力:"+str(unit.get_action_points()))
 		var move_action = get_move_action()
 		if move_action:
 			var move_decision = evaluate_move_strategy(move_action, player_units)
@@ -46,7 +45,6 @@ func evaluate_actions() -> Dictionary:
 				best_score = move_decision.score
 				best_action = move_decision.action
 				best_target = move_decision.target_position
-	
 	return {"action": best_action, "target_position": best_target, "score": best_score}
 
 func evaluate_action_target(action: BaseAction, target_grid: Vector2i, player_units: Array) -> float:
@@ -79,7 +77,7 @@ func evaluate_attack_action(action: BaseAction, target_unit: Unit) -> float:
 		score += 50.0
 	
 	# 距离因素 - 优先攻击近距离目标
-	var distance = test_grid_position.distance_to(target_unit.grid_position)
+	var distance = test_grid_position.distance_to(target_unit.get_grid_position())
 	score += (10.0 - distance) * 0.5
 	
 	return score
@@ -176,7 +174,7 @@ func evaluate_post_move_actions(new_position: Vector2i, player_units: Array) -> 
 			var action_grids = action.get_action_grids(new_position)
 			for target_grid in action_grids:
 				var target_unit = BattleGridManager.get_grid_occupied(target_grid)
-				if target_unit and target_unit.is_in_group("player_units"):
+				if target_unit and target_unit.is_teammate:
 					var action_score = evaluate_action_target(action, target_grid, player_units)
 					if action_score > bonus_score:
 						bonus_score = action_score
@@ -189,7 +187,7 @@ func evaluate_post_move_actions(new_position: Vector2i, player_units: Array) -> 
 func get_min_distance_to_players(position: Vector2i, player_units: Array) -> float:
 	var min_distance = INF
 	for player in player_units:
-		var distance = position.distance_to(player.grid_position)
+		var distance = position.distance_to(player.get_grid_position())
 		if distance < min_distance:
 			min_distance = distance
 	return min_distance
@@ -229,7 +227,7 @@ func can_player_attack_position(player: Unit, position: Vector2i) -> bool:
 	if player.action_manager:
 		for action in player.action_manager.actions:
 			if action is AttackAction or action is MagicAttackAction:
-				var attack_range = action.get_action_grids(player.grid_position)
+				var attack_range = action.get_action_grids(player.get_grid_position())
 				if position in attack_range:
 					return true
 	return false
@@ -268,7 +266,7 @@ func evaluate_move_action_with_cost(action: BaseAction, target_grid: Vector2i, p
 	var base_score = evaluate_move_action(action, target_grid, player_units)
 	
 	# 计算移动消耗
-	var move_cost = estimate_move_cost(action, unit.grid_position, target_grid)
+	var move_cost = estimate_move_cost(action, unit.get_grid_position(), target_grid)
 	if not can_afford_action(action, move_cost):
 		return -1000.0
 	
