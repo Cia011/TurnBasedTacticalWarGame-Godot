@@ -3,7 +3,7 @@ class_name MagicAttackAction
 
 # 魔法攻击属性
 var max_range = 10  # 魔法攻击范围比普通攻击更远
-var damage = 15    # 魔法伤害
+var damage = 30   # 魔法伤害
 
 # 火球场景 - 需要您创建一个火球场景
 const FIREBALL_SCENE = preload("res://场景/角色/行动or技能/效果/fireball.tscn")
@@ -78,6 +78,7 @@ func launch_fireball(target_grid_position: Vector2i):
 
 func attack_logic(target_unit: Unit):
 	# 魔法攻击逻辑 - 对目标造成魔法伤害
+	if target_unit == null:return
 	target_unit.data_manager.remove_final_bonus("current_health", damage)
 	print("火球对 ", target_unit.unit_data.character_name, " 造成了 ", damage, " 点伤害!")
 	

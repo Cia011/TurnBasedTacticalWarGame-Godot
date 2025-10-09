@@ -11,7 +11,9 @@ var current_battle_info: Dictionary = {}
 #战斗准备阶段,放置角色位置
 var preparatory_phase = true
 
+
 #var is_open_UI : bool = false
+
 
 #背包部分
 var all_backpacks : Array[BaseBackpack]

@@ -30,3 +30,7 @@ func finish_action()->void:
 #显示范围
 func get_action_grids(unit_grid:Vector2i = unit.grid_position)->Array[Vector2i]:
 	return []
+# 添加方法获取实际消耗（考虑buff等因素）
+func get_actual_cost() -> int:
+	var actual_cost = cost
+	return max(actual_cost, 0)  # 确保不会为负数

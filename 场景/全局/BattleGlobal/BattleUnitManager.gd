@@ -5,7 +5,7 @@ var units:Array[Unit]
 #判断胜利条件
 var our_side:Array[Unit]
 var enemy_side:Array[Unit]
-
+var battle_end : bool = false
 
 #角色在创建时自动注册在units内
 func register_unit(unit:Unit) -> void:
@@ -26,14 +26,17 @@ func unregister_unit(unit:Unit) -> void:
 		enemy_side.erase(unit)
 	#失败
 	if our_side.is_empty():
-		pass
+		battle_end = true
+		print("-----战斗失败-----")
+	#胜利
 	elif enemy_side.is_empty():
-		print("胜利")
-		pass
+		print("-----战斗胜利-----")
+		battle_end = true
 	
 func unit_die(unit:Unit):
 	unregister_unit(unit)
-	unit.queue_free()
+	BattleGridManager.set_grid_occupied(unit.grid_position, null)
 	if BattleTurnManager.current_unit == unit||BattleTurnManager.current_unit==null:
+		print("死亡重新选择角色")
 		BattleTurnManager.set_next_turn_unit()
-	
+	unit.queue_free()

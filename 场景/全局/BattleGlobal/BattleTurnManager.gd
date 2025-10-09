@@ -1,7 +1,7 @@
 extends Node
 
 var current_unit : Unit = null
-
+var pre_unit: Unit = null
 var TurnManager : Dictionary[Unit,float]
 
 #每个角色对应一个回合,当指定角色回合开始时,发送signal_change_unit信号
@@ -22,17 +22,18 @@ func set_up():
 
 #因为在BattleUnitManager.units中遍历,所以角色死亡可以直接在units里注销,而不用考虑对回合的影响
 func set_next_turn_unit():
+	if BattleUnitManager.battle_end == true:
+		return
+	pre_unit = current_unit
 	current_unit = null
 	while (current_unit == null):
 		for unit in BattleUnitManager.units:
 			if TurnManager[unit] >= 100:
-				select_unit(unit)
 				TurnManager[unit]-=100
+				select_unit(unit)
 				return
 		for unit in BattleUnitManager.units:
 			TurnManager[unit] += unit.unit_data.agility
-			#if unit != null and TurnManager.get(unit):
-				#TurnManager[unit] += unit.unit_data.agility
 		
 
 func select_unit(unit:Unit)->void:

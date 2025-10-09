@@ -99,7 +99,11 @@ func get_grid_occupied(grid_position : Vector2i) -> Unit:
 		return null
 	if not get_grid_data_dict().has(grid_position):
 		return null
+	if not is_instance_valid(data_layer.grid_data_dict[grid_position].unit):
+		return null
 	return data_layer.grid_data_dict[grid_position].unit
+
+		
 #设置占据格子的单位
 func set_grid_occupied(grid_position : Vector2i,unit:Unit)->void:
 	if not is_valid_grid(grid_position):

@@ -7,6 +7,8 @@ extends MarginContainer
 #@onready var action_container: HBoxContainer = $MarginContainer/ActionContainer
 @onready var action_container: HBoxContainer = $MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer
 @onready var 行动点label: Label = $MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3/MarginContainer/行动点label
+@onready var 结束回合按钮: Button = $MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3/结束回合按钮
+
 var unit:Unit
 func _ready() -> void:
 	BattleTurnManager.signal_change_unit.connect(on_change_unit)
@@ -42,3 +44,5 @@ func on_change_unit(unit:Unit):
 			card.set_up(action)
 		else:
 			card.set_up()
+	结束回合按钮.set_up(unit)
+	

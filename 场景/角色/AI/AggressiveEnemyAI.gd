@@ -11,27 +11,33 @@ func evaluate_actions() -> Dictionary:
 	# 首先评估所有非移动行动
 	for action in action_manager.actions:
 		if not (action is MoveAction):
+			 # 检查行动力是否足够
+			if not can_afford_action(action):
+				continue
 			var action_grids = action.get_action_grids(test_grid_position)
-			
 			if action.is_need_target:
 				for target_grid in action_grids:
 					var target_unit = BattleGridManager.get_grid_occupied(target_grid)
 					#if target_unit and target_unit.is_in_group("player_units"):
 					if target_unit and target_unit.is_teammate:
 						var score = evaluate_action_target(action, target_grid, player_units) * 5
+						 # 应用行动力消耗考虑
+						score = evaluate_action_with_cost(action, score)
 						if score > best_score:
 							best_score = score
 							best_action = action
 							best_target = target_grid
 			else:
 				var score = evaluate_self_action(action, player_units)
+				# 应用行动力消耗考虑
+				score = evaluate_action_with_cost(action, score)
 				if score > best_score:
 					best_score = score
 					best_action = action
 					best_target = test_grid_position
 	
 	# 如果没有找到好的非移动行动，或者分数很低，考虑移动
-	if best_score < 5.0:  # 阈值可以根据需要调整
+	if best_score < 5 or best_action == null:  # 阈值可以根据需要调整
 		print("当前行动力:"+str(unit.get_action_points()))
 		var move_action = get_move_action()
 		if move_action:
@@ -241,6 +247,37 @@ func estimate_move_cost(action: BaseAction, start_pos: Vector2i, target_pos: Vec
 		if path_data and path_data.has("path"):
 			return path_data["path"].size() - 1  # 减去起点
 	return start_pos.distance_to(target_pos)  # 备用方案：使用直线距离
+# 获取当前可用行动力
+func get_available_action_points() -> int:
+	return unit.get_action_points()
+# 检查行动是否可执行（考虑行动力）
+func can_afford_action(action: BaseAction, additional_cost: int = 0) -> bool:
+	var total_cost = action.get_actual_cost() + additional_cost
+	return get_available_action_points() >= total_cost
+# 评估行动时考虑行动力消耗
+func evaluate_action_with_cost(action: BaseAction, base_score: float) -> float:
+	if not can_afford_action(action):
+		return -1000.0  # 无法执行的行动给极低分数
+	
+	var cost_ratio = float(action.get_actual_cost()) / get_available_action_points()
+	var cost_penalty = cost_ratio * 20.0  # 消耗越高，惩罚越大
+	
+	return base_score - cost_penalty
+# 评估移动行动时考虑行动力
+func evaluate_move_action_with_cost(action: BaseAction, target_grid: Vector2i, player_units: Array) -> float:
+	var base_score = evaluate_move_action(action, target_grid, player_units)
+	
+	# 计算移动消耗
+	var move_cost = estimate_move_cost(action, unit.grid_position, target_grid)
+	if not can_afford_action(action, move_cost):
+		return -1000.0
+	
+	# 应用行动力消耗惩罚
+	var total_cost = action.get_actual_cost() + move_cost
+	var cost_ratio = float(total_cost) / get_available_action_points()
+	var cost_penalty = cost_ratio * 25.0
+	
+	return base_score - cost_penalty
 # 工具函数
 func estimate_damage(target_unit: Unit) -> int:
 	# 简化的伤害估算
