@@ -1,75 +1,78 @@
 extends BaseAI
 class_name AggressiveEnemyAI
 
+# 重写评估方法 - 与新的异步架构兼容
 func evaluate_actions() -> Dictionary:
-	var best_score = -INF
-	var best_action = null
-	var best_target = Vector2i(-1, -1)
+	var player_units: Array[Unit] = BattleUnitManager.our_side
+	var best_decision = {"action": null, "target_position": Vector2i(-1, -1), "score": -INF}
 	
-	#var player_units = get_tree().get_nodes_in_group("player_units")
-	var player_units:Array[Unit] = BattleUnitManager.our_side
 	# 首先评估所有非移动行动
 	for action in action_manager.actions:
 		if not (action is MoveAction):
-			 # 检查行动力是否足够
-			if not can_afford_action(action):
-				continue
-			var action_grids = action.get_action_grids(test_grid_position)
-			if action.is_need_target:
-				for target_grid in action_grids:
-					var target_unit = BattleGridManager.get_grid_occupied(target_grid)
-					#if target_unit and target_unit.is_in_group("player_units"):
-					if target_unit and target_unit.is_teammate:
-						var score = evaluate_action_target(action, target_grid, player_units) * 5
-						 # 应用行动力消耗考虑
-						score = evaluate_action_with_cost(action, score)
-						if score > best_score:
-							best_score = score
-							best_action = action
-							best_target = target_grid
-			else:
-				var score = evaluate_self_action(action, player_units)
-				# 应用行动力消耗考虑
-				score = evaluate_action_with_cost(action, score)
-				if score > best_score:
-					best_score = score
-					best_action = action
-					best_target = test_grid_position
+			var decision = evaluate_single_action(action)
+			if decision.score > best_decision.score:
+				best_decision = decision
 	
 	# 如果没有找到好的非移动行动，或者分数很低，考虑移动
-	if best_score < 5 or best_action == null:  # 阈值可以根据需要调整
+	if best_decision.score < 10 or best_decision.action == null:
 		var move_action = get_move_action()
 		if move_action:
 			var move_decision = evaluate_move_strategy(move_action, player_units)
-			if move_decision.score > best_score:
-				best_score = move_decision.score
-				best_action = move_decision.action
-				best_target = move_decision.target_position
-	return {"action": best_action, "target_position": best_target, "score": best_score}
+			if move_decision.score > best_decision.score:
+				best_decision = move_decision
+	
+	return best_decision
 
-func evaluate_action_target(action: BaseAction, target_grid: Vector2i, player_units: Array) -> float:
+# 评估单个行动 - 修复bug：添加参数检查
+func evaluate_single_action(action: BaseAction) -> Dictionary:
+	var best_score = -INF
+	var best_target = Vector2i(-1, -1)
+	
+	# 检查行动力是否足够
+	if not can_afford_action(action):
+		return {"action": null, "target_position": Vector2i(-1, -1), "score": -INF}
+	
+	if action.is_need_target:
+		# 获取行动范围
+		var action_grids = action.get_action_grids(current_grid_position)
+		
+		for target_grid in action_grids:
+			var score = evaluate_action_target(action, target_grid)
+			# 应用行动力消耗考虑
+			score = evaluate_action_with_cost(action, score)
+			if score > best_score:
+				best_score = score
+				best_target = target_grid
+	else:
+		var score = evaluate_self_action(action)
+		# 应用行动力消耗考虑
+		score = evaluate_action_with_cost(action, score)
+		best_score = score
+		best_target = current_grid_position
+	
+	return {"action": action, "target_position": best_target, "score": best_score}
+
+# 评估目标行动
+func evaluate_action_target(action: BaseAction, target_grid: Vector2i) -> float:
 	var score = 0.0
 	# 检查目标位置是否有玩家单位
-	var target_unit:Unit = BattleGridManager.get_grid_occupied(target_grid)
+	var target_unit: Unit = BattleGridManager.get_grid_occupied(target_grid)
+	
 	if target_unit and target_unit.is_teammate:
-		
 		# 根据行动类型评分
 		if action is AttackAction:
 			score += evaluate_attack_action(action, target_unit)
 		elif action is MagicAttackAction:
 			score += evaluate_magic_action(action, target_unit)
 		# 可以添加其他行动类型的评估
-	
 	return score
 
 # 评估攻击行动
 func evaluate_attack_action(action: BaseAction, target_unit: Unit) -> float:
 	var score = 0.0
-	#行动力不足则不考虑
-	if unit.get_action_points()<action.cost:
-		score = -INF
+	
 	# 基础伤害评估
-	var estimated_damage = estimate_damage(target_unit)
+	var estimated_damage = estimate_damage(action,target_unit)
 	score += estimated_damage * 2.0
 	
 	# 击杀奖励
@@ -77,7 +80,7 @@ func evaluate_attack_action(action: BaseAction, target_unit: Unit) -> float:
 		score += 50.0
 	
 	# 距离因素 - 优先攻击近距离目标
-	var distance = test_grid_position.distance_to(target_unit.get_grid_position())
+	var distance = current_grid_position.distance_to(target_unit.get_grid_position())
 	score += (10.0 - distance) * 0.5
 	
 	return score
@@ -85,12 +88,6 @@ func evaluate_attack_action(action: BaseAction, target_unit: Unit) -> float:
 # 评估魔法行动
 func evaluate_magic_action(action: BaseAction, target_unit: Unit) -> float:
 	var score = 0.0
-	#行动力不足则不考虑
-	if unit.get_action_points()<action.cost:
-		score = -INF
-	# 检查魔法值是否足够
-	#if unit.data_manager.get_stat("current_mana") < get_mana_cost(action):
-		#return -100.0  # 魔法值不足，大幅扣分
 	
 	var estimated_damage = estimate_magic_damage(target_unit)
 	score += estimated_damage * 1.5  # 魔法攻击通常有额外效果
@@ -100,52 +97,32 @@ func evaluate_magic_action(action: BaseAction, target_unit: Unit) -> float:
 	
 	return score
 
-# 评估自身行动（如治疗、buff）
-func evaluate_self_action(action: BaseAction, player_units: Array) -> float:
+# 评估自身行动
+func evaluate_self_action(action: BaseAction) -> float:
 	var score = 0.0
-	
-	## 生命值低时，治疗行动得分高
-	#var health_ratio = float(unit.data_manager.get_stat("current_health")) / unit.data_manager.get_stat("max_health")
-	#
-	#if action is HealAction and health_ratio < 0.5:
-		#score += (1.0 - health_ratio) * 30.0
-	
 	return score
 
-# 添加移动相关评估方法
-func evaluate_move_action(action: BaseAction, target_grid: Vector2i, player_units: Array) -> float:
-	var score = 0.0
-	# 基础移动评分 - 基于距离玩家单位的远近
-	var min_distance_to_player = get_min_distance_to_players(target_grid, player_units)
-	# 距离越近，分数越高（攻击型AI）
-	score += (10.0 - min_distance_to_player) * 5.0
-	# 考虑地形优势
-	score += evaluate_terrain_advantage(target_grid)
-	# 避免危险位置（如被多个玩家单位包围）
-	score -= evaluate_danger_level(target_grid, player_units) * 3.0
-	# 考虑移动消耗的行动点
-	var move_cost = estimate_move_cost(action, test_grid_position, target_grid)
-	var remaining_ap = unit.get_action_points() - move_cost
-	
-	# 如果移动后还能执行其他行动，加分
-	if remaining_ap > 0:
-		score += 15.0
-	
-	return score
-func get_move_action() -> MoveAction:
-	for action in action_manager.actions:
-		if action is MoveAction:
-			return action
-	return null
-#预测移动策略
+# 移动策略评估
 func evaluate_move_strategy(move_action: MoveAction, player_units: Array) -> Dictionary:
 	var best_move_score = -INF
-	var best_move_target = Vector2i(-1, -1)
+	var best_move_target = current_grid_position  # 默认停留在当前位置，而不是(-1,-1)
 	
 	# 获取所有可移动的位置
-	var move_grids = move_action.get_action_grids(test_grid_position)
-	print("当前可移动位置:"+str(move_grids))
+	var move_grids = move_action.get_action_grids(current_grid_position)
+	
+	# 如果没有可移动位置，返回当前位置
+	if move_grids.is_empty():
+		return {
+			"action": move_action, 
+			"target_position": current_grid_position, 
+			"score": -1000.0  # 无法移动的惩罚分数
+		}
+	
 	for target_grid in move_grids:
+		# 跳过当前位置（如果已经在当前位置，不需要移动）
+		if target_grid == current_grid_position:
+			continue
+			
 		# 评估移动到这个位置的价值
 		var move_score = evaluate_move_action(move_action, target_grid, player_units)
 		
@@ -156,17 +133,59 @@ func evaluate_move_strategy(move_action: MoveAction, player_units: Array) -> Dic
 			best_move_score = move_score
 			best_move_target = target_grid
 	
+	# 如果所有移动位置分数都很低，至少选择一个相对较好的位置
+	if best_move_score <= -INF + 1:  # 防止浮点数精度问题
+		# 选择距离玩家最近的位置
+		var closest_position = current_grid_position
+		var min_distance = INF
+		for target_grid in move_grids:
+			var distance = get_min_distance_to_players(target_grid, player_units)
+			if distance < min_distance:
+				min_distance = distance
+				closest_position = target_grid
+		best_move_target = closest_position
+		best_move_score = -min_distance  # 距离越近分数越高
+	
 	return {
 		"action": move_action, 
 		"target_position": best_move_target, 
 		"score": best_move_score
 	}
+
+# 评估移动行动
+func evaluate_move_action(action: BaseAction, target_grid: Vector2i, player_units: Array) -> float:
+	var score = 0.0
+	
+	# 基础移动评分 - 基于距离玩家单位的远近
+	var min_distance_to_player = get_min_distance_to_players(target_grid, player_units)
+	
+	# 防止INF距离导致的异常
+	if min_distance_to_player == INF:
+		min_distance_to_player = 100.0  # 设置一个较大的默认距离
+	
+	# 距离越近，分数越高（攻击型AI）
+	# 使用对数函数避免距离差异过大导致的分数跳跃
+	score += max(20.0 - min_distance_to_player, 0.0) * 2.0
+	# 考虑地形优势
+	score += evaluate_terrain_advantage(target_grid)
+	
+	# 避免危险位置（如被多个玩家单位包围）
+	
+	# var danger_level = evaluate_danger_level(target_grid, player_units)
+	# score -= danger_level * 10.0  # 增加危险惩罚
+	
+	# 避免移动到边界或无效位置
+	if target_grid.x < 0 or target_grid.y < 0:
+		score -= 5000.0
+	
+	return score
+
 func evaluate_post_move_actions(new_position: Vector2i, player_units: Array) -> float:
 	var bonus_score = 0.0
 	
 	# 模拟移动到新位置后，评估能执行的行动
-	var original_position = test_grid_position
-	test_grid_position = new_position  # 临时改变位置
+	var original_position = current_grid_position
+	current_grid_position = new_position  # 临时改变位置
 	
 	# 评估所有非移动行动在新位置的价值
 	for action in action_manager.actions:
@@ -175,51 +194,71 @@ func evaluate_post_move_actions(new_position: Vector2i, player_units: Array) -> 
 			for target_grid in action_grids:
 				var target_unit = BattleGridManager.get_grid_occupied(target_grid)
 				if target_unit and target_unit.is_teammate:
-					var action_score = evaluate_action_target(action, target_grid, player_units)
+					var action_score = evaluate_action_target(action, target_grid)
 					if action_score > bonus_score:
 						bonus_score = action_score
 	
 	# 恢复原始位置
-	test_grid_position = original_position
+	current_grid_position = original_position
 	
-	return bonus_score * 0.7  # 给移动后行动的价值打折，因为需要额外行动点
-# 评估针对特定目标的行动
+	# 确保不会返回负值
+	return max(bonus_score * 0.7, 0.0)  # 给移动后行动的价值打折，因为需要额外行动点
+
+# ========== 工具函数 ==========
+
+func get_move_action() -> MoveAction:
+	for action in action_manager.actions:
+		if action is MoveAction:
+			return action
+	return null
+
+# 检查行动是否可执行
+func can_afford_action(action: BaseAction, additional_cost: int = 0) -> bool:
+	var total_cost = action.cost + additional_cost
+	return unit.get_action_points() >= total_cost
+
+# 评估行动时考虑行动力消耗
+func evaluate_action_with_cost(action: BaseAction, base_score: float) -> float:
+	if not can_afford_action(action):
+		return -1000.0  # 无法执行的行动给极低分数
+	
+	var cost_ratio = float(action.cost) / unit.get_action_points()
+	var cost_penalty = cost_ratio * 5  # 消耗越高，惩罚越大
+	
+	return base_score - cost_penalty
+
+# 获取最小距离到玩家
 func get_min_distance_to_players(position: Vector2i, player_units: Array) -> float:
 	var min_distance = INF
+	
+	# 如果没有玩家单位，返回一个较大的默认距离
+	if player_units.is_empty():
+		return 10.0
+	
 	for player in player_units:
-		var distance = position.distance_to(player.get_grid_position())
-		if distance < min_distance:
-			min_distance = distance
+		# 确保玩家单位有效
+		if player and is_instance_valid(player):
+			var player_pos = player.get_grid_position()
+			# 使用曼哈顿距离或欧几里得距离
+			var distance = position.distance_to(player_pos)
+			if distance < min_distance:
+				min_distance = distance
+	
+	# 防止返回INF
+	if min_distance == INF:
+		min_distance = 100.0
+	
 	return min_distance
 
 func evaluate_terrain_advantage(position: Vector2i) -> float:
-	# 获取格子数据，评估地形优势
-	var grid_data = BattleGridManager.get_grid_data(position)
-	var advantage = 0.0
-	
-	## 假设格子数据有防御加成、高度优势等
-	#if grid_data and grid_data.has_method("get_defense_bonus"):
-		#advantage += grid_data.get_defense_bonus() * 2.0
-	#
-	## 高度优势
-	#if grid_data and grid_data.has_method("get_height"):
-		#advantage += grid_data.get_height() * 1.5
-	
-	return advantage
+	return 0.0  # 暂时返回0，需要根据实际地形系统实现
 
 func evaluate_danger_level(position: Vector2i, player_units: Array) -> float:
 	var danger = 0.0
-	
 	# 计算被多少玩家单位威胁
 	for player in player_units:
-		# 检查玩家是否能攻击到这个位置
 		if can_player_attack_position(player, position):
 			danger += 1.0
-			
-			# 如果玩家是远程单位，危险度更高
-			if is_ranged_unit(player):
-				danger += 0.5
-	
 	return danger
 
 func can_player_attack_position(player: Unit, position: Vector2i) -> bool:
@@ -232,64 +271,18 @@ func can_player_attack_position(player: Unit, position: Vector2i) -> bool:
 					return true
 	return false
 
-func is_ranged_unit(unit: Unit) -> bool:
-	# 检查是否是远程单位（根据单位类型或装备判断）
-	# 这里需要根据您的游戏逻辑实现
-	return false
-
-func estimate_move_cost(action: BaseAction, start_pos: Vector2i, target_pos: Vector2i) -> int:
-	# 估算移动消耗的行动点
-	if action is MoveAction:
-		# 使用A*路径计算实际消耗
-		var path_data = BattleGridManager.D_get_nav_grid_path(start_pos, target_pos)
-		if path_data and path_data.has("path"):
-			return path_data["path"].size() - 1  # 减去起点
-	return start_pos.distance_to(target_pos)  # 备用方案：使用直线距离
-# 获取当前可用行动力
-func get_available_action_points() -> int:
-	return unit.get_action_points()
-# 检查行动是否可执行（考虑行动力）
-func can_afford_action(action: BaseAction, additional_cost: int = 0) -> bool:
-	var total_cost = action.get_actual_cost() + additional_cost
-	return get_available_action_points() >= total_cost
-# 评估行动时考虑行动力消耗
-func evaluate_action_with_cost(action: BaseAction, base_score: float) -> float:
-	if not can_afford_action(action):
-		return -1000.0  # 无法执行的行动给极低分数
-	
-	var cost_ratio = float(action.get_actual_cost()) / get_available_action_points()
-	var cost_penalty = cost_ratio * 20.0  # 消耗越高，惩罚越大
-	
-	return base_score - cost_penalty
-# 评估移动行动时考虑行动力
-func evaluate_move_action_with_cost(action: BaseAction, target_grid: Vector2i, player_units: Array) -> float:
-	var base_score = evaluate_move_action(action, target_grid, player_units)
-	
-	# 计算移动消耗
-	var move_cost = estimate_move_cost(action, unit.get_grid_position(), target_grid)
-	if not can_afford_action(action, move_cost):
-		return -1000.0
-	
-	# 应用行动力消耗惩罚
-	var total_cost = action.get_actual_cost() + move_cost
-	var cost_ratio = float(total_cost) / get_available_action_points()
-	var cost_penalty = cost_ratio * 25.0
-	
-	return base_score - cost_penalty
 # 工具函数
-func estimate_damage(target_unit: Unit) -> int:
-	# 简化的伤害估算
-	var attacker_strength = unit.get_stat("strength")
-	var target_defense = target_unit.get_stat("defense")
-	#return max(attacker_strength - target_defense, 1)
-	return attacker_strength
+func estimate_damage(action: BaseAction, target_unit: Unit) -> int:
+	var attacker_strength : int
+	# 考虑武器伤害加成
+	if action is AttackAction:
+		attacker_strength += action.damage
+	return max(attacker_strength, 1)
 
-#预测魔法伤害
 func estimate_magic_damage(target_unit: Unit) -> int:
 	var attacker_intelligence = unit.get_stat("intelligence")
 	var target_defense = target_unit.get_stat("defense")
-	#return max(attacker_intelligence - target_defense / 2, 1)
-	return attacker_intelligence
+	return max(attacker_intelligence - target_defense / 2, 1)
 
 func will_kill_target(damage: int, target_unit: Unit) -> bool:
 	return target_unit.get_stat("current_health") <= damage

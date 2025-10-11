@@ -2,6 +2,7 @@ extends BaseAction
 class_name AttackAction
 
 var max_length = 1
+var damage = 20   # 魔法伤害
 func _ready() -> void:
 	super._ready()
 	cost = 2
@@ -33,9 +34,9 @@ func is_valid_action_grid(target_grid_position:Vector2i)->bool:
 	return BattleGridManager.is_grid_occupied(target_grid_position)
 func attack_logic(target_unit:Unit):
 	#具体攻击逻辑
-	target_unit.data_manager.remove_final_bonus("current_health",10)
+	target_unit.data_manager.remove_final_bonus("current_health",20)
 	#print(target_unit.data_manager.get_stat("current_health"))
-	unit.data_manager.remove_final_bonus("current_health",-20)
+	#unit.data_manager.remove_final_bonus("current_health",-20)
 func finish_animation():
 	var current_action_points = unit.get_action_points() - cost
 	unit.set_action_points(current_action_points)
