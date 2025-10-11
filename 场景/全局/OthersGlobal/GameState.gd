@@ -10,7 +10,7 @@ var baseteam_node : BaseTeam
 var current_battle_info: Dictionary = {}
 #战斗准备阶段,放置角色位置
 var preparatory_phase = true
-
+var is_battleing = false
 
 #var is_open_UI : bool = false
 

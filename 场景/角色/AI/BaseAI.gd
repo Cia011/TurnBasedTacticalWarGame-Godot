@@ -30,7 +30,7 @@ func take_turn() -> void:
 		print("第 " + str(action_count) + " 次决策，剩余行动力: " + str(unit.current_action_points))
 		test_grid_position = unit.get_grid_position()
 		# 在主线程收集所有需要的数据
-		_update_snapshot_data()
+		#_update_snapshot_data()
 		 # 异步评估行动
 		var decision = await evaluate_actions_async()
 		# 检查决策是否有效
@@ -51,35 +51,7 @@ func take_turn() -> void:
 	skip_turn()
 #______________________________________________________________________
 # 收集线程安全的数据快照
-func _update_snapshot_data() -> void:
-	# 单位数据
-	var unit_snapshot = {
-		"grid_position": unit.grid_position,  # 这个getter会在主线程执行
-		"current_action_points": unit.current_action_points,
-		"stats": _get_unit_stats()
-	}
-	# 玩家单位数据
-	var player_units_snapshot = _get_player_units_snapshot()
-	
-	# 行动数据 - 关键！在主线程计算所有行动相关信息
-	var actions_data = _get_actions_data()
-	
-	_snapshot_data = {
-		"unit": unit_snapshot,
-		"players": player_units_snapshot,
-		"actions": actions_data
-	}
-# 获取单位统计信息
-func _get_unit_stats() -> Dictionary:
-	return {
-		"current_health": unit.get_stat("current_health"),
-		"max_health": unit.get_stat("max_health"),
-		"strength": unit.get_stat("strength"),
-		"defense": unit.get_stat("defense"),
-		"agility": unit.get_stat("agility"),
-		"intelligence": unit.get_stat("Intelligence"),
-		"constitution": unit.get_stat("Constitution")
-	}
+
 #______________________________________________________________________
 # 异步评估行动
 func evaluate_actions_async() -> Dictionary:

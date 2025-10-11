@@ -7,7 +7,6 @@ var selected_action : BaseAction
 func _unhandled_input(event: InputEvent) -> void:
 	if is_performing_action:
 		return
-	
 	if event.is_action_pressed("left_mouse_clik"):
 		try_perform_selected_action()
 
@@ -33,6 +32,8 @@ func set_selected_action(action:BaseAction)->void:
 	
 	
 func try_perform_selected_action():
+	if GameState.is_battleing == false:
+		return
 	if BattleTurnManager.current_unit.is_teammate == false:
 		return
 	if is_performing_action:

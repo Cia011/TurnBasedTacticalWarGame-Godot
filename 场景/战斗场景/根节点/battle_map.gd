@@ -21,7 +21,7 @@ const UNIT = preload("res://场景/角色/unit.tscn")
 func _ready() -> void:
 	#BattleGridManager.data_layer = data_layer
 	BattleGridManager.virulize_layer = highlight_layer
-	
+	GameState.is_battleing = true
 	
 	var used_cells := dec_layer.get_used_cells()
 	for cell in used_cells:
