@@ -24,7 +24,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("left_mouse_clik"):
 		
 		get_path_and_try_move(WorldGridManager.get_mouse_grid_position())
-
+func set_grid_position(grid_position:Vector2i):
+	position = WorldGridManager.get_world_position(grid_position)
 
 
 func get_path_and_try_move(mouse_grid_position:Vector2i):

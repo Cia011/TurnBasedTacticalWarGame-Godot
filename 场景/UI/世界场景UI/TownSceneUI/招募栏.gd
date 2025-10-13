@@ -11,7 +11,7 @@ func _ready() -> void:
 	角色名称按钮.pressed.connect(select_role)
 	招募按钮.pressed.connect(recruit)
 func set_up(role_data : UnitData):
-	角色名称按钮.text =  role_data.get_states()["character_name"]
+	角色名称按钮.text =  role_data.character_name
 
 func select_role():
 	signal_select_role.emit()

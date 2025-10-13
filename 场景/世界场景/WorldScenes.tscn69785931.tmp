@@ -29,7 +29,7 @@ metadata/_edit_lock_ = true
 [node name="HighlightLayer" type="TileMapLayer" parent="."]
 metadata/_edit_lock_ = true
 
-[node name="Baseteam" parent="." groups=["player_team"] instance=ExtResource("4_0yndv")]
+[node name="Baseteam" parent="." instance=ExtResource("4_0yndv")]
 position = Vector2(6, 8)
 
 [node name="GridIndeicator" type="Node2D" parent="."]

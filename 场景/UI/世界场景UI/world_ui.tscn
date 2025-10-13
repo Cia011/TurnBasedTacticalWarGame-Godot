@@ -77,6 +77,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="PopupMenu" parent="UI" instance=ExtResource("9_x1m8d")]
+layout_mode = 0
 offset_left = 36.8567
 offset_top = -94.0693
 offset_right = 36.8567

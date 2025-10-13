@@ -28,6 +28,7 @@ GameState="*res://场景/全局/OthersGlobal/GameState.gd"
 UiManager="*res://场景/全局/OthersGlobal/UIManager.gd"
 Enums="*res://场景/全局/OthersGlobal/Enums.gd"
 PopManager="*res://场景/全局/OthersGlobal/PopManager.gd"
+WorldSaveManager="*res://场景/全局/OthersGlobal/WorldSaveManager.gd"
 
 [display]
 

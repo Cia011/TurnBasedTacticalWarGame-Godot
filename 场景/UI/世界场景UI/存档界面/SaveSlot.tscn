@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://bq5v8k8n4g5v2"]
+
+[ext_resource type="Script" uid="uid://cvm2mdaix6mib" path="res://场景/UI/世界场景UI/存档界面/SaveSlot.gd" id="1_4hg2d"]
+
+[node name="SaveSlot" type="HBoxContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 80.0
+script = ExtResource("1_4hg2d")
+
+[node name="SlotLabel" type="Label" parent="."]
+layout_mode = 2
+text = "存档槽 1"
+vertical_alignment = 1
+
+[node name="InfoLabel" type="Label" parent="."]
+layout_mode = 2
+text = "空存档槽"
+vertical_alignment = 1
+
+[node name="SaveButton" type="Button" parent="."]
+layout_mode = 2
+text = "保存"
+
+[node name="LoadButton" type="Button" parent="."]
+layout_mode = 2
+text = "加载"
+
+[node name="DeleteButton" type="Button" parent="."]
+layout_mode = 2
+text = "删除"

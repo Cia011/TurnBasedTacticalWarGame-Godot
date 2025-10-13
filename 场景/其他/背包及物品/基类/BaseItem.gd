@@ -12,3 +12,8 @@ func get_properties()->Dictionary:
 	return {
 		
 	}
+
+func has_property(property:String)->bool:
+	if get_properties().has(property):
+		return true
+	return false

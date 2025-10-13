@@ -88,8 +88,7 @@ func evaluate_attack_action(action: BaseAction, target_unit: Unit) -> float:
 # 评估魔法行动
 func evaluate_magic_action(action: BaseAction, target_unit: Unit) -> float:
 	var score = 0.0
-	
-	var estimated_damage = estimate_magic_damage(target_unit)
+	var estimated_damage = estimate_magic_damage(action,target_unit)
 	score += estimated_damage * 1.5  # 魔法攻击通常有额外效果
 	
 	if will_kill_target(estimated_damage, target_unit):
@@ -279,10 +278,11 @@ func estimate_damage(action: BaseAction, target_unit: Unit) -> int:
 		attacker_strength += action.damage
 	return max(attacker_strength, 1)
 
-func estimate_magic_damage(target_unit: Unit) -> int:
+func estimate_magic_damage(action: BaseAction,target_unit: Unit) -> int:
 	var attacker_intelligence = unit.get_stat("intelligence")
 	var target_defense = target_unit.get_stat("defense")
-	return max(attacker_intelligence - target_defense / 2, 1)
+	return max(action.damage, 1)
+	#return max(attacker_intelligence - target_defense / 2, 1)
 
 func will_kill_target(damage: int, target_unit: Unit) -> bool:
 	return target_unit.get_stat("current_health") <= damage

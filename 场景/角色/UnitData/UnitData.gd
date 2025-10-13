@@ -87,7 +87,8 @@ func _init() -> void:
 	
 	 # 创建 BuffManager
 	buff_manager = BuffManager.new(self)
-
+func get_character_id()->String:
+	return character_id
 func add_equipment(item:BaseItem)->bool:
 	for index in equipments_types.size():
 		var type:String = equipments_types[index]
@@ -165,3 +166,209 @@ func on_turn_start():
 	buff_manager.on_turn_start()
 func on_turn_end():
 	buff_manager.on_turn_end()
+
+# 获取可序列化的数据
+func get_serializable_data() -> Dictionary:
+	var data = {
+		"character_id": character_id,
+		"character_name": character_name,
+		"level": level,
+		"defense": defense,
+		"agility": agility,
+		"strength": strength,
+		"constitution": constitution,
+		"intelligence": intelligence,
+		"action_points": action_points,
+		"max_health": max_health,
+		"current_health": current_health,
+		"character_background_story": character_background_story,
+		"texture_path": texture.resource_path if texture else "",
+		"equipment_data": _serialize_equipment(),
+		"buff_data": _serialize_buffs(),
+		"skill_data": _serialize_skills(),
+		"statistics": _serialize_statistics()
+	}
+	return data
+
+# 从序列化数据恢复
+func restore_from_data(data: Dictionary) -> bool:
+	# 数据验证
+	if not data.has("character_id"):
+		push_warning("UnitData: restore_from_data called with invalid data (missing character_id)")
+		return false
+	
+	character_id = data.get("character_id", character_id)
+	character_name = data.get("character_name", character_name)
+	level = data.get("level", level)
+	defense = data.get("defense", defense)
+	agility = data.get("agility", agility)
+	strength = data.get("strength", strength)
+	constitution = data.get("constitution", constitution)
+	intelligence = data.get("intelligence", intelligence)
+	action_points = data.get("action_points", action_points)
+	max_health = data.get("max_health", max_health)
+	current_health = data.get("current_health", current_health)
+	character_background_story = data.get("character_background_story", character_background_story)
+	
+	# 恢复纹理
+	var texture_path = data.get("texture_path", "")
+	if texture_path and ResourceLoader.exists(texture_path):
+		texture = load(texture_path)
+	else:
+		texture = null
+	
+	# 恢复装备
+	_restore_equipment(data.get("equipment_data", {}))
+	
+	# 恢复buff
+	#_restore_buffs(data.get("buff_data", []))
+	
+	# 恢复技能
+	#_restore_skills(data.get("skill_data", []))
+	
+	# 恢复统计信息
+	#_restore_statistics(data.get("statistics", {}))
+	
+	# 同步基础属性到DataManager
+	if _is_initialized and data_manager:
+		var base_stats = get_states()
+		for stat_name in base_stats:
+			if data_manager.基本数据.has(stat_name):
+				data_manager.基本数据[stat_name] = base_stats[stat_name]
+		
+		# 触发重新计算
+		data_manager.unit_data_change.emit(base_stats)
+	
+	return true
+
+# 序列化装备数据
+func _serialize_equipment() -> Dictionary:
+	var equipment_data = {}
+	for i in range(equipments.items.size()):
+		var item = equipments.items[i]
+		if item:
+			equipment_data[str(i)] = {
+				"item_type": item.item_type,
+				"item_name": item.item_name,
+				"properties": item.get_properties() if item.has_method("get_properties") else {},
+				"durability": item.durability if item.has_property("durability") else 100
+			}
+	return equipment_data
+
+# 序列化buff数据
+func _serialize_buffs() -> Array[Dictionary]:
+	var buffs_data = []
+	for buff_id in buffs:
+		var buff = buffs[buff_id]
+		if buff:
+			buffs_data.append({
+				"buff_id": buff_id,
+				"buff_type": buff.get_class(),
+				"duration": buff.duration if buff.has_property("duration") else 0,
+				"stacks": buff.stacks if buff.has_property("stacks") else 1,
+				"properties": buff.get_properties() if buff.has_method("get_properties") else {}
+		})
+	# 修复：返回空数组而不是[{}]
+	if buffs_data.is_empty():
+		return [{}]
+	return buffs_data
+
+# 序列化技能数据
+func _serialize_skills() -> Array[Dictionary]:
+	var skills_data = []
+	# 这里需要根据您的技能系统实现具体的序列化逻辑
+	if skills_data.is_empty():
+		return [{}]
+	return skills_data
+
+# 序列化统计信息
+func _serialize_statistics() -> Dictionary:
+	var stats = {
+		"battles_fought": 0,
+		"enemies_defeated": 0,
+		"damage_dealt": 0,
+		"damage_taken": 0,
+		"healing_done": 0
+	}
+	# 这里需要根据您的统计系统实现具体的序列化逻辑
+	return stats
+
+# 恢复装备数据
+func _restore_equipment(equipment_data: Dictionary) -> void:
+	# 清空当前装备
+	for i in range(equipments.items.size()):
+		equipments.items[i] = null
+	
+	# 恢复装备
+	for slot_index_str in equipment_data:
+		var slot_data = equipment_data[slot_index_str]
+		var slot_index = int(slot_index_str)
+		
+		# 根据装备数据创建装备对象
+		if slot_data and slot_data.has("item_type"):
+			# 这里需要根据您的装备系统实现具体的装备创建逻辑
+			var item = _create_item_by_type(slot_data)
+			if item:
+				equipments.items[slot_index] = item
+	
+	# 更新装备加成
+	_update_equipment_bonus()
+
+# 恢复buff数据
+func _restore_buffs(buffs_data: Array[Dictionary]) -> void:
+	# 清除所有现有buff
+	buff_manager.clear_all_buffs()
+	
+	# 恢复buff数据
+	for buff_data in buffs_data:
+		var buff = _create_buff_by_data(buff_data)
+		if buff:
+			buff_manager.add_buff(buff)
+
+# 恢复技能数据
+func _restore_skills(skills_data: Array[Dictionary]) -> void:
+	# 这里需要根据您的技能系统实现具体的恢复逻辑
+	pass
+
+# 恢复统计信息
+func _restore_statistics(statistics: Dictionary) -> void:
+	# 这里需要根据您的统计系统实现具体的恢复逻辑
+	pass
+
+# 根据装备数据创建装备
+func _create_item_by_type(item_data: Dictionary) -> BaseItem:
+	# 这里需要根据您的装备系统实现具体的装备创建逻辑
+	var item = BaseItem.new()
+	item.item_type = item_data.get("item_type", "")
+	item.item_name = item_data.get("item_name", "")
+	
+	# 设置装备属性
+	if item.has_method("set_properties"):
+		item.set_properties(item_data.get("properties", {}))
+	
+	return item
+
+# 根据buff数据创建buff
+func _create_buff_by_data(buff_data: Dictionary) -> BaseBuff:
+	var buff_type = buff_data.get("buff_type", "")
+	var buff_id = buff_data.get("buff_id", "")
+	var duration = buff_data.get("duration", 0)
+	var stacks = buff_data.get("stacks", 1)
+	var properties = buff_data.get("properties", {})
+	
+	# 根据buff类型创建buff对象
+	if buff_type == "AttackBuff":
+		var buff = AttackBuff.new()
+		buff.id = buff_id
+		buff.duration = duration
+		buff.stacks = stacks
+		if buff.has_method("set_properties"):
+			buff.set_properties(properties)
+		return buff
+	
+	# 默认返回基础buff
+	var buff = BaseBuff.new()
+	buff.id = buff_id
+	buff.duration = duration
+	buff.stacks = stacks
+	return buff
