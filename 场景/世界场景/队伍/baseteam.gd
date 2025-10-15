@@ -24,9 +24,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("left_mouse_clik"):
 		
 		get_path_and_try_move(WorldGridManager.get_mouse_grid_position())
-func set_grid_position(grid_position:Vector2i):
-	position = WorldGridManager.get_world_position(grid_position)
 
+#加载存档时恢复队伍位置
+func set_grid_position(grid_position:Vector2i):
+	print("[Baseteam] set_grid_position"+str(grid_position))
+	position = WorldGridManager.get_world_position(grid_position)
+	
 
 func get_path_and_try_move(mouse_grid_position:Vector2i):
 	if not path.is_empty():
@@ -45,7 +48,8 @@ func move(target_cell: Vector2i):
 	var target_pos = WorldGridManager.get_world_position(target_cell)
 
 	#move开始时触发当前Grid的离开函数(未实现)
-	WorldGridManager.data_layer.grid_data_dict[grid_position].exit_grid()
+	var current_grid : WorldGrid = WorldGridManager.data_layer.grid_data_dict[grid_position]
+	current_grid.exit_grid()
 	#BattleGridManager.data_layer.grid_data_dict[unit.grid_position]
 
 	# 创建两个并行的 Tween：一个用于水平移动，一个用于跳跃
@@ -58,7 +62,8 @@ func on_move_finished(target_pos:Vector2i):
 	path.pop_front()
 	position = target_pos
 	#move结束时触发目标Grid的进入函数(未实现)
-	WorldGridManager.data_layer.grid_data_dict[grid_position].enter_grid()
+	var new_grid : WorldGrid = WorldGridManager.data_layer.grid_data_dict[grid_position]
+	new_grid.enter_grid()
 	#触发目标Grid的事件
 	
 	

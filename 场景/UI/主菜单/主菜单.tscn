@@ -1,0 +1,81 @@
+[gd_scene load_steps=5 format=3 uid="uid://ed62afsw0riw"]
+
+[ext_resource type="PackedScene" uid="uid://clrlqrnark0mp" path="res://场景/UI/主菜单/menu_button.tscn" id="1_i65ta"]
+[ext_resource type="Script" uid="uid://ggvge03kx80n" path="res://场景/UI/主菜单/主菜单.gd" id="1_qbaap"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4ts2"]
+bg_color = Color(0.93333334, 0.7411765, 0.5411765, 1)
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i65ta"]
+bg_color = Color(0.93333334, 0.7411765, 0.5411765, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.45882353, 0.14117648, 0.21960784, 1)
+border_blend = true
+
+[node name="主菜单" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qbaap")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g4ts2")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Panel" type="Panel" parent="MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i65ta")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="继续游戏" parent="MarginContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_i65ta")]
+layout_mode = 2
+
+[node name="新建游戏" parent="MarginContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_i65ta")]
+layout_mode = 2
+
+[node name="退出游戏" parent="MarginContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_i65ta")]
+layout_mode = 2

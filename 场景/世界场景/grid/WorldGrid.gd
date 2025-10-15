@@ -17,11 +17,11 @@ func is_occupied_by_unit():
 
 #离开----由大地图队伍触发
 func exit_grid():
-	print("离开" + str(grid_position))
+	print("[WorldGrid] "+"离开" + str(grid_position))
 
 #进入
 func enter_grid():
-	print("进入" + str(grid_position))
+	print("[WorldGrid] "+"进入" + str(grid_position))
 	#尝试触发事件
 	WorldEventManager.trigger_event(grid_position)
 	

@@ -113,3 +113,17 @@ func change_scene_to(scene:String):
 			get_tree().change_scene_to_file("res://场景/战斗场景/根节点/battle_map.tscn")
 		"world":
 			get_tree().change_scene_to_file("res://场景/世界场景/WorldScenes.tscn")
+
+
+# 重置游戏状态
+func reset_game_state():
+	print("[GameState] 重置游戏状态")
+	
+	# 清空玩家角色列表
+	player_characters.clear()
+	
+	# 重置队伍节点引用
+	baseteam_node = null
+	
+	# 重置其他游戏状态变量
+	# 根据您的项目结构添加其他需要重置的变量

@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://clrlqrnark0mp"]
+
+[ext_resource type="Script" uid="uid://dnk0t40exr4qx" path="res://场景/UI/主菜单/menu_button.gd" id="1_aiyei"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qbaap"]
+bg_color = Color(0.9073622, 0.46052837, 5.7756904e-07, 1)
+
+[node name="menu_button" type="MarginContainer"]
+script = ExtResource("1_aiyei")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qbaap")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+text = "继续游戏"
+flat = true

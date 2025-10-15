@@ -1,8 +1,4 @@
 extends Node
-#class_name WorldSaveManager
-
-# 单例实例
-#static var instance: WorldSaveManager
 
 # 存档相关常量
 const SAVE_DIRECTORY = "user://world_saves/"
@@ -12,12 +8,6 @@ const MAX_SAVE_SLOTS = 10
 
 # 当前存档数据
 var current_save_data: Dictionary
-
-## 初始化单例
-#static func get_instance() -> WorldSaveManager:
-	#if instance == null:
-		#instance = WorldSaveManager.new()
-	#return instance
 
 func _ready():
 	# 确保目录存在
@@ -104,6 +94,36 @@ func get_save_slots() -> Array:
 			slots.append(null)
 	return slots
 
+# 获取非空存档列表（按时间倒序排列）
+func get_non_empty_save_slots() -> Array:
+	var all_slots = get_save_slots()
+	var non_empty_slots = []
+	
+	# 收集非空存档
+	for i in range(all_slots.size()):
+		if all_slots[i] != null:
+			var slot_data = all_slots[i].duplicate(true)
+			slot_data["slot_index"] = i  # 保存原始槽位索引
+			non_empty_slots.append(slot_data)
+	
+	# 按时间戳倒序排列（最新的在前）
+	non_empty_slots.sort_custom(func(a, b): 
+		return a.get("timestamp", 0) > b.get("timestamp", 0)
+	)
+	
+	return non_empty_slots
+
+# 获取最新存档的槽位索引
+func get_latest_save_slot_index() -> int:
+	var non_empty_slots = get_non_empty_save_slots()
+	if non_empty_slots.is_empty():
+		return -1  # 没有存档
+	return non_empty_slots[0].get("slot_index", -1)
+
+# 检查是否有存档
+func has_save_data() -> bool:
+	return not get_non_empty_save_slots().is_empty()
+
 # 收集存档数据
 func _collect_save_data() -> Dictionary:
 	var save_data = {}
@@ -149,11 +169,26 @@ func _collect_player_team_data() -> Dictionary:
 	return team_data
 
 # 查找玩家队伍
-func _find_player_team()->BaseTeam:
-	# 根据您的项目结构查找玩家队伍
-	#var teams = get_tree().get_nodes_in_group("player_team")
-	var teams:BaseTeam = GameState.baseteam_node
-	return teams
+func _find_player_team() -> BaseTeam:
+	# 首先尝试从GameState获取
+	if GameState.baseteam_node != null:
+		return GameState.baseteam_node
+	
+	# 如果GameState中没有，尝试从场景中查找
+	var teams = get_tree().get_nodes_in_group("player_team")
+	if not teams.is_empty():
+		# 更新GameState中的引用
+		GameState.baseteam_node = teams[0]
+		return teams[0]
+	
+	# 如果还是找不到，尝试通过节点路径查找
+	var player_team = get_tree().current_scene.get_node_or_null("PlayerTeam")
+	if player_team and player_team is BaseTeam:
+		GameState.baseteam_node = player_team
+		return player_team
+	
+	push_warning("无法找到玩家队伍节点")
+	return null
 
 # 收集队伍成员数据
 func _collect_team_members_data() -> Array[Dictionary]:
@@ -205,10 +240,12 @@ func _restore_game_state() -> bool:
 			return false
 	
 	# 等待场景加载完成
-	await get_tree().process_frame
-	
+	#await get_tree().process_frame
+	await get_tree().scene_changed
+
 	# 恢复游戏数据
 	var success = true
+	
 	success = success and _restore_player_team_data()# 恢复玩家队伍数据
 	success = success and _restore_world_map_data()# 恢复世界地图数据
 	success = success and _restore_world_events_data()# 恢复世界事件数据
@@ -222,20 +259,33 @@ func _restore_player_team_data() -> bool:
 		return true
 	
 	var team_data:Dictionary = current_save_data["player_team_data"]
-	#print(team_data)
-	# 恢复队伍位置
 	
+	# 查找玩家队伍
 	var player_team = _find_player_team()
 	
-	if player_team and team_data.has("team_grid_position"):
+	if player_team == null:
+		push_error("恢复队伍位置失败：找不到玩家队伍节点")
+		return false
+	
+	if team_data.has("team_grid_position"):
 		var pos = team_data["team_grid_position"]
 		var grid_position:Vector2i = Vector2i(pos["x"], pos["y"])
-		player_team.set_grid_position(grid_position)
+		
+		# 添加调试信息
+		print("[WorldSaveManager] 尝试恢复队伍位置到网格坐标: ", grid_position)
+		print("[WorldSaveManager] 队伍节点: ", player_team)
+		print("[WorldSaveManager] 队伍节点类型: ", player_team.get_class())
+		
+		# 检查队伍节点是否有set_grid_position方法
+		if player_team.has_method("set_grid_position"):
+			player_team.set_grid_position(grid_position)
+			print("[WorldSaveManager] 成功调用set_grid_position方法")
+			# return true
+		else:
+			push_error("队伍节点没有set_grid_position方法")
+			return false
+	
 	# 恢复队伍成员
-	# if team_data.has("members"):
-	# 	#print(team_data["members"])
-	# 	var team_data_members : Array[Dictionary] = team_data["members"]
-	# 	return _restore_team_members(team_data_members)
 	if team_data.has("members"):
 		var team_data_members = team_data["members"]
 		if team_data_members is Array:
@@ -272,35 +322,12 @@ func _restore_team_members(members_data: Array[Dictionary]) -> bool:
 				GameState.player_characters.append(unit_data)
 				restored_count += 1
 				# 这里需要根据您的队伍管理系统实现具体的添加逻辑
-				print("成功恢复角色数据: ", unit_data.character_name)
+				print("[WorldSaveManager] 成功恢复角色数据: ", unit_data.character_name)
 			else:
 				push_warning("恢复角色数据失败: ", member_data.get("character_name", "未知角色"))
 		else:
 			push_error("UnitData类没有实现restore_from_data方法")
-
-	
-	
-	# var player_team:BaseTeam = _find_player_team()
-	# if player_team and player_team.has_method("get_members"):
-	# 	#var current_members = player_team.get_members()
-	# 	var current_members:Array[UnitData] = GameState.player_characters
-	# 	for member_data in members_data:
-	# 		var character_id = member_data.get("character_id", "")
-	# 		if character_id.is_empty():
-	# 			continue
-			
-	# 		# 查找对应的成员
-	# 		var target_member:UnitData = null
-	# 		for member:UnitData in current_members:
-	# 			if member.has_method("get_character_id") and member.get_character_id() == character_id:
-	# 				target_member = member
-	# 				break
-			
-	# 		if target_member and target_member.has_method("restore_from_data"):
-	# 			if target_member.restore_from_data(member_data):
-	# 				restored_count += 1
-	
-	print("成功恢复 " + str(restored_count) + " 个队伍成员的数据")
+	print("[WorldSaveManager] 成功恢复 " + str(restored_count) + " 个队伍成员的数据")
 	return restored_count > 0
 
 # 恢复世界地图数据
@@ -336,7 +363,7 @@ func _save_to_file(file_path: String, data: Dictionary) -> bool:
 	if file:
 		file.store_string(JSON.stringify(data, "\t"))
 		file.close()
-		print("世界存档已保存到：" + file_path)
+		print("[WorldSaveManager] 世界存档已保存到：" + file_path)
 		return true
 	else:
 		push_error("无法创建存档文件：" + file_path)
