@@ -10,4 +10,4 @@ texture_region_size = Vector2i(64, 64)
 
 [resource]
 tile_size = Vector2i(64, 64)
-sources/3 = SubResource("TileSetAtlasSource_mgwor")
+sources/0 = SubResource("TileSetAtlasSource_mgwor")

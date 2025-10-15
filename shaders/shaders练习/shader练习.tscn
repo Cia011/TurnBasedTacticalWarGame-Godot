@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://m51711yyla6g"]
+
+[ext_resource type="Shader" uid="uid://bayi7e7c14t70" path="res://shaders/shaders练习/shader练习.gdshader" id="1_gcufx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_foqs8"]
+shader = ExtResource("1_gcufx")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_gcufx"]
+
+[node name="Shader练习" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_foqs8")
+scale = Vector2(100, 100)
+texture = SubResource("CanvasTexture_gcufx")

@@ -17,6 +17,7 @@ func start_action(target_grid_position: Vector2i, on_action_finished: Callable):
 	super.start_action(target_grid_position, on_action_finished)
 	# 检查目标是否有效
 	if not is_valid_action_grid(target_grid_position):
+		PopManager.pop_lable(unit.position,str("目标不合法"),Color.DARK_ORANGE)
 		finish_action()
 		return
 	if unit.get_action_points()<cost:

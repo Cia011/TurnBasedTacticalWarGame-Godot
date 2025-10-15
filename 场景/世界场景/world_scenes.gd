@@ -2,11 +2,14 @@ extends Node2D
 @onready var data_layer: TileMapLayer = $DataLayer
 @onready var dec_layer: TileMapLayer = $DecLayer
 @onready var highlight_layer: TileMapLayer = $HighlightLayer
+
+
 signal on_ready()
+
 func _ready() -> void:
 	WorldGridManager.virulize_layer = highlight_layer
 	
-	#初始化 事件容器
+	# 初始化事件容器
 	WorldEventManager.event_container = $EventContainer
 
 	var battle_event = BattleEvent.new()
@@ -20,10 +23,8 @@ func _ready() -> void:
 	town_event.name = "城镇"
 	town_event.description = "城镇"
 	town_event.icon = preload("res://素材/图标/战斗图标/战斗图标.png")
-	town_event.grid_position = Vector2i(-1,-1)
+	town_event.grid_position = Vector2i(2,2)
 	WorldEventManager.register_event(town_event)
-	
-	#$Baseteam.set_grid_position(Vector2i(-1,0))
-	#var battle_event_ui_scene = WorldEventManager.BATTLE_EVENT_UI.instantiate()
-	#battle_event_ui_scene.set_up(battle_event)
+
 	on_ready.emit()
+	GameState.scenes_ready.emit(self.name)

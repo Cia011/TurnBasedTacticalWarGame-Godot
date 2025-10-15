@@ -151,6 +151,10 @@ func _collect_save_data() -> Dictionary:
 	
 	return save_data
 
+
+
+
+
 # 收集玩家队伍数据
 func _collect_player_team_data() -> Dictionary:
 	var team_data = {}
@@ -206,6 +210,8 @@ func _collect_world_map_data() -> Dictionary:
 	
 	# 这里需要根据您的网格系统实现具体的收集逻辑
 	# 示例：收集网格数据、探索区域等
+	var grids:Dictionary[Vector2i,WorldGrid] = WorldGridManager.get_grid_data_dict()
+	map_data["grids"] = grids
 	
 	return map_data
 

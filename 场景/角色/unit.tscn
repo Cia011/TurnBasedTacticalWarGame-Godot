@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://clh336tpojrec"]
+[gd_scene load_steps=18 format=3 uid="uid://clh336tpojrec"]
 
 [ext_resource type="Script" uid="uid://tnkufuwwfm5k" path="res://场景/角色/unit.gd" id="1_23877"]
 [ext_resource type="Texture2D" uid="uid://uxo4vhkdv271" path="res://素材/角色/Sprite-0010.png" id="1_cddf8"]
+[ext_resource type="Shader" uid="uid://sqsovmkyrsaq" path="res://shaders/描边shader.gdshader" id="2_udull"]
 [ext_resource type="Script" uid="uid://dutife1puiymm" path="res://场景/角色/行动or技能/action_manager.gd" id="3_4h3ag"]
 [ext_resource type="Script" uid="uid://clfxsuyhxydf0" path="res://场景/角色/行动or技能/MoveAction.gd" id="3_dnxxf"]
 [ext_resource type="Texture2D" uid="uid://enb4xxna56gy" path="res://素材/图标/iton/剑.png" id="3_jlerf"]
@@ -9,6 +10,13 @@
 [ext_resource type="Script" uid="uid://x2ddn38tff04" path="res://场景/角色/行动or技能/MagicAttackAction.gd" id="8_udull"]
 [ext_resource type="Script" uid="uid://d2so0yiata0kp" path="res://场景/角色/HealthUI/health_ui.gd" id="9_jlerf"]
 [ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="10_udull"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_etk83"]
+resource_local_to_scene = true
+shader = ExtResource("2_udull")
+shader_parameter/outline_width = 1.0
+shader_parameter/outline_color = Color(0, 1, 1, 0)
+shader_parameter/show_line = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_udull"]
 border_width_left = 1
@@ -132,6 +140,7 @@ script = ExtResource("1_23877")
 [node name="图像" type="Node2D" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="图像"]
+material = SubResource("ShaderMaterial_etk83")
 position = Vector2(0, -7)
 texture = ExtResource("1_cddf8")
 

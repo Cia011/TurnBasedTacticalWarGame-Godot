@@ -25,6 +25,7 @@ func set_next_turn_unit():
 	if BattleUnitManager.battle_end == true:
 		return
 	pre_unit = current_unit
+	
 	current_unit = null
 	while (current_unit == null):
 		for unit in BattleUnitManager.units:
@@ -39,10 +40,12 @@ func set_next_turn_unit():
 func select_unit(unit:Unit)->void:
 	if current_unit == unit:
 		return
+	if pre_unit:
+		pre_unit.end_turn()
 	current_unit = unit
 	print("select_unit" + str(unit))
-	unit.start_turn()
+	current_unit.start_turn()
 	signal_change_unit.emit(unit)
-	if unit.is_teammate == true:
+	if current_unit.is_teammate == true:
 		BattleActionManager.set_default_action()
 	

@@ -9,11 +9,11 @@ var grid_position : Vector2i
 var move_cost : int = 1
 
 #角色
-var unit:Unit
-var is_obstacle : bool = false
+# var unit:Unit
+# var is_obstacle : bool = false
+# func is_occupied_by_unit():
+# 	return unit != null
 
-func is_occupied_by_unit():
-	return unit != null
 
 #离开----由大地图队伍触发
 func exit_grid():

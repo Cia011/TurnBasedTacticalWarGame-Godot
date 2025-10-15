@@ -4,7 +4,9 @@ class_name Unit
 
 @onready var action_manager: ActionsManager = $ActionsManager
 @onready var health_ui: Node = $HealthUI
-
+#--------------shader---------------------
+var shader_material: ShaderMaterial
+#---------------------------------------
 var data_manager: DataManager
 var buff_manager: BuffManager
 
@@ -30,12 +32,18 @@ func get_action_points()->int:
 func set_action_points(num:int):
 	current_action_points = num
 	current_action_points_changed.emit(num)
-	
+
+#回合开始执行
 func start_turn():
 	current_action_points = unit_data.get_final_stat("action_points")
-	if is_teammate == false:
-		start_enemy_turn()
 	
+	shader_material.set_shader_parameter("show_line", true)
+	if is_teammate == false:
+		shader_material.set_shader_parameter("outline_color", Color.BROWN)
+		start_enemy_turn()
+func end_turn():
+	shader_material.set_shader_parameter("show_line", false)
+
 func start_enemy_turn():
 	await AI.take_turn()
 	#await AI.turn_completed
@@ -63,7 +71,8 @@ func _ready() -> void:
 		
 		AI = AggressiveEnemyAI.new(self)
 		add_child(AI)
-	
+	#--------------shader---------------------
+	shader_material = $"图像/Sprite2D".material
 
 #由角色生成器来控制生成角色的位置,目前角色生成器为战斗场景根节点
 func set_grid_position(grid_position:Vector2i)->void:

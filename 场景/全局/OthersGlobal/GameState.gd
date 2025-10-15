@@ -14,8 +14,8 @@ var is_battleing = false
 
 #var is_open_UI : bool = false
 
-
-#背包部分
+#-------------------------------------
+#----------------背包部分--------------
 var all_backpacks : Array[BaseBackpack]
 
 var on_mouse_slot_item : BaseItem
@@ -32,8 +32,9 @@ func add_backpack(backpack:BaseBackpack):
 	all_backpacks.append(backpack)
 func remove_backpack(backpack:BaseBackpack):
 	all_backpacks.erase(backpack)
-
-
+#------------------------------------------
+#///////////////////////////
+signal scenes_ready(scenes_name:String)
 
 # 初始化示例角色
 func _ready():
