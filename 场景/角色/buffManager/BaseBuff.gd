@@ -1,5 +1,6 @@
-extends RefCounted
-class_name BaseBuff
+@abstract
+## buff只存在与战斗中
+class_name BaseBuff extends RefCounted
 
 enum BuffType { BUFF, DEBUFF, NEUTRAL }
 

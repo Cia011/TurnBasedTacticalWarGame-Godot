@@ -13,6 +13,8 @@ var ui_nodes:Dictionary[String,Node]
 func is_mouse_over_on_UI()->bool:
 	return false
 
+func close_all_open_ui()->void:
+	open_ui_nodes.clear()
 func have_ui_opening()->bool:
 	return not open_ui_nodes.is_empty()
 
@@ -29,7 +31,7 @@ func close_ui(ui_node: Node)->bool:
 
 func get_opening_ui(ui_name: String)->Node:
 	for ui_node in open_ui_nodes:
-		if ui_node.name == ui_name:
+		if ui_node and ui_node.name == ui_name:
 			return ui_node
 	return null
 #登记/注册 UI

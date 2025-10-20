@@ -1,5 +1,4 @@
-class_name BaseEquipment
-extends BaseItem
+class_name BaseEquipment extends BaseItem 
 @export_category("装备属性")
 
 @export_category("基础属性加成")
@@ -8,7 +7,6 @@ extends BaseItem
 @export var strength:int = 0			#力量-影响攻击伤害
 @export var constitution:int = 0		#体质-影响负重,生命值
 @export var intelligence:int = 0		#智力-影响蓝量,魔法攻击伤害
-
 @export var action_points : int = 0		#行动力,回合可使用行动力数量
 
 #@export var max_health: int = 100		#最大生命值

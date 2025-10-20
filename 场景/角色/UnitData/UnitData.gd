@@ -84,7 +84,6 @@ func _init() -> void:
 	_is_initialized = true
 	data_manager.unit_data_change.connect(_on_stats_changed)
 	
-	
 	 # 创建 BuffManager
 	buff_manager = BuffManager.new(self)
 func get_character_id()->String:
@@ -184,7 +183,6 @@ func get_serializable_data() -> Dictionary:
 		"character_background_story": character_background_story,
 		"texture_path": texture.resource_path if texture else "",
 		"equipment_data": _serialize_equipment(),
-		"buff_data": _serialize_buffs(),
 		"skill_data": _serialize_skills(),
 		"statistics": _serialize_statistics()
 	}
@@ -220,9 +218,6 @@ func restore_from_data(data: Dictionary) -> bool:
 	# 恢复装备
 	_restore_equipment(data.get("equipment_data", {}))
 	
-	# 恢复buff
-	#_restore_buffs(data.get("buff_data", []))
-	
 	# 恢复技能
 	#_restore_skills(data.get("skill_data", []))
 	
@@ -243,30 +238,7 @@ func restore_from_data(data: Dictionary) -> bool:
 
 # 序列化装备数据
 func _serialize_equipment() -> Dictionary:
-	var equipment_data = {}
-	for i in range(equipments.items.size()):
-		var item = equipments.items[i]
-		if item:
-			equipment_data[str(i)] = item.get_properties()
-	return equipment_data
-
-# 序列化buff数据
-func _serialize_buffs() -> Array[Dictionary]:
-	var buffs_data = []
-	for buff_id in buffs:
-		var buff = buffs[buff_id]
-		if buff:
-			buffs_data.append({
-				"buff_id": buff_id,
-				"buff_type": buff.get_class(),
-				"duration": buff.duration if buff.has_property("duration") else 0,
-				"stacks": buff.stacks if buff.has_property("stacks") else 1,
-				"properties": buff.get_properties() if buff.has_method("get_properties") else {}
-		})
-	# 修复：返回空数组而不是[{}]
-	if buffs_data.is_empty():
-		return [{}]
-	return buffs_data
+	return equipments.get_serializable_data()
 
 # 序列化技能数据
 func _serialize_skills() -> Array[Dictionary]:
@@ -290,35 +262,10 @@ func _serialize_statistics() -> Dictionary:
 
 # 恢复装备数据
 func _restore_equipment(equipment_data: Dictionary) -> void:
-	# 清空当前装备
-	for i in range(equipments.items.size()):
-		equipments.items[i] = null
-	print("[unitdata] 清空装备")
-	# 恢复装备
-	for slot_index_str in equipment_data:
-		var slot_data = equipment_data[slot_index_str]
-		var slot_index = int(slot_index_str)
-		
-		# 根据装备数据创建装备对象
-		if slot_data and slot_data.has("item_type"):
-			# 这里需要根据您的装备系统实现具体的装备创建逻辑
-			var item = _create_item_by_type(slot_data)
-			if item:
-				#equipments.items[slot_index] = item
-				equipments.set_item(slot_index,item)
-	# 更新装备加成
+	# 清空当前装备 并恢复装备数据
+	equipments.restore_from_data(equipment_data)
+	#更新数据
 	_update_equipment_bonus()
-
-# 恢复buff数据
-func _restore_buffs(buffs_data: Array[Dictionary]) -> void:
-	# 清除所有现有buff
-	buff_manager.clear_all_buffs()
-	
-	# 恢复buff数据
-	for buff_data in buffs_data:
-		var buff = _create_buff_by_data(buff_data)
-		if buff:
-			buff_manager.add_buff(buff)
 
 # 恢复技能数据
 func _restore_skills(skills_data: Array[Dictionary]) -> void:
@@ -366,10 +313,5 @@ func _create_buff_by_data(buff_data: Dictionary) -> BaseBuff:
 		if buff.has_method("set_properties"):
 			buff.set_properties(properties)
 		return buff
-	
-	# 默认返回基础buff
-	var buff = BaseBuff.new()
-	buff.id = buff_id
-	buff.duration = duration
-	buff.stacks = stacks
-	return buff
+	# 默认返回基础null
+	return null

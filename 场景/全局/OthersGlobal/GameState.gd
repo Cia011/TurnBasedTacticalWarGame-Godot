@@ -52,6 +52,7 @@ func _ready():
 	
 	var equpment1 = BaseEquipment.new()
 	equpment1.item_name = "小刀"
+	equpment1.id = "1234"
 	equpment1.texture = preload("res://素材/角色/Sprite-0010.png")
 	equpment1.item_type = "武器"
 	equpment1.defense = 100
@@ -60,15 +61,13 @@ func _ready():
 	var attack_buff = AttackBuff.new()
 	player_char2.buff_manager.add_buff(attack_buff)
 	print(player_char2.get_final_stat("defense"))
-	
-	#player_characters.append(player_char2)
 	register_unit(player_char2)
 	
 	var enemy_char = UnitData.new()
 	enemy_char.character_name = "敌人"
 	enemy_char.texture = preload("res://素材/角色/Sprite-0010.png")
 	enemy_characters.append(enemy_char)
-	
+	print("[gamestate] : ready end")
 	
 
 func register_unit(unit:UnitData) -> void:
@@ -78,42 +77,21 @@ func unregister_unit(unit:UnitData) -> void:
 	player_characters.erase(unit)
 	signal_player_characters_change.emit()
 	
-	
-	## 创建示例敌人
-	#var enemy_char = UnitData.new()
-	#enemy_char.character_name = "Goblin"
-	#enemy_char.level = 1
-	#enemy_char.max_health = 50
-	#enemy_char.current_health = 50
-	#enemy_char.attack = 8
-	#enemy_char.defense = 3
-	#enemy_char.speed = 7
-	#enemy_char.move_range = 4
-	#enemy_char.texture = preload("res://assets/characters/goblin.png")
-	#
-	#enemy_characters.append(enemy_char)
-# 准备战斗数据
-func prepare_battle(player_chars: Array[UnitData], enemy_chars: Array[UnitData], battle_type: String = "normal"):
-	current_battle_info = {
-		"player_characters": [],
-		"enemy_characters": [],
-		"battle_type": battle_type,
-		"battle_environment": "forest", # 或其他环境类型
-		"turn_order": []
-	}
-	# 保存角色状态副本
-	for char_data in player_chars:
-		current_battle_info["player_characters"].append(char_data.save_state())
-	for char_data in enemy_chars:
-		current_battle_info["enemy_characters"].append(char_data.save_state())
 
 
 func change_scene_to(scene:String):
+	UiManager.close_all_open_ui()
+	if scene!= "world" :
+		print("[GameState]","实时备份")
+		WorldSaveManager.save_game_currrnt()
 	match scene:
 		"battle":
+			is_battleing = true
 			get_tree().change_scene_to_file("res://场景/战斗场景/根节点/battle_map.tscn")
 		"world":
-			get_tree().change_scene_to_file("res://场景/世界场景/WorldScenes.tscn")
+			is_battleing = false
+			WorldSaveManager.load_game_current()
+			#get_tree().change_scene_to_file("res://场景/世界场景/WorldScenes.tscn")
 
 
 # 重置游戏状态

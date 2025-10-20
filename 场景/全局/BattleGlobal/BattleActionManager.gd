@@ -7,6 +7,8 @@ var selected_action : BaseAction
 func _unhandled_input(event: InputEvent) -> void:
 	if is_performing_action:
 		return
+	if GameState.is_battleing == false:
+		return
 	if event.is_action_pressed("left_mouse_clik"):
 		try_perform_selected_action()
 

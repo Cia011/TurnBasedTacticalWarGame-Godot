@@ -215,3 +215,38 @@ func get_item(index)->BaseItem:
 		return items[index]
 	else:
 		return null
+func get_serializable_data()->Dictionary:
+	var data = {}
+	for index in range(items.size()):
+		if items[index]:
+			data[str(index)] = items[index].get_properties()
+	return data
+
+func restore_from_data(equipment_data: Dictionary):
+	#清空
+	for index in range(items.size()):
+		items[index] = null
+	# 创建
+	for index in equipment_data.keys():
+		var slot_data = equipment_data[index]
+		var item = _create_item_by_type(slot_data)
+		if item:
+			set_item(int(index),item)
+		
+
+
+# 根据装备数据创建装备
+func _create_item_by_type(item_data: Dictionary) -> BaseItem:
+	# 这里需要根据您的装备系统实现具体的装备创建逻辑
+	var item_type:String = item_data.get("item_type", "")
+	match item_type:
+		"武器", "防具", "饰品":
+			# 如果是装备类型，创建BaseEquipment
+			return BaseEquipment.create_from_data(item_data)
+		"任意", "消耗品", "材料":
+			# 如果是普通物品，创建BaseItem
+			return BaseItem.create_from_data(item_data)
+		_:
+			# 默认创建BaseItem
+			push_warning("未知物品类型: " + item_type + ", 创建基础物品")
+			return BaseItem.create_from_data(item_data)

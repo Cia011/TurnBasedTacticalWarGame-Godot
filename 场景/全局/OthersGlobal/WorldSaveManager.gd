@@ -3,6 +3,7 @@ extends Node
 # 存档相关常量
 const SAVE_DIRECTORY = "user://world_saves/"
 const SAVE_FILE_PREFIX = "world_save_"
+const CURRENT_SAVE_FILE_PREFIX = "current_save"
 const SAVE_FILE_EXTENSION = ".json"
 const MAX_SAVE_SLOTS = 10
 
@@ -51,6 +52,17 @@ func save_game(slot_index: int = 0) -> bool:
 	# 保存到文件
 	var file_path = SAVE_DIRECTORY + SAVE_FILE_PREFIX + str(slot_index) + SAVE_FILE_EXTENSION
 	return _save_to_file(file_path, current_save_data)
+# 实时存档
+func save_game_currrnt() -> bool:
+	if not can_save_in_current_scene():
+		push_error("无法在当前场景存档：只能在世界地图场景存档")
+		return false
+	# 收集存档数据
+	current_save_data = _collect_save_data()
+	# 保存到文件
+	var file_path = SAVE_DIRECTORY + CURRENT_SAVE_FILE_PREFIX + SAVE_FILE_EXTENSION
+	return _save_to_file(file_path, current_save_data)
+
 
 # 加载游戏
 func load_game(slot_index: int = 0) -> bool:
@@ -66,7 +78,14 @@ func load_game(slot_index: int = 0) -> bool:
 	
 	# 恢复游戏状态
 	return await _restore_game_state()
-
+# 实时加载
+func load_game_current() -> bool:
+	var file_path = SAVE_DIRECTORY + CURRENT_SAVE_FILE_PREFIX + SAVE_FILE_EXTENSION
+	current_save_data = _load_from_file(file_path)
+	if current_save_data == null:
+		return false
+	# 恢复游戏状态
+	return await _restore_game_state()
 # 删除存档
 func delete_save(slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= MAX_SAVE_SLOTS:
@@ -234,6 +253,10 @@ func _restore_game_state() -> bool:
 	if current_save_data == null:
 		return false
 	
+
+	#关闭UI
+	UiManager.close_all_open_ui()
+
 	# 加载场景
 	if current_save_data.has("current_scene_path"):
 		var error = get_tree().change_scene_to_file(current_save_data["current_scene_path"])
@@ -243,13 +266,17 @@ func _restore_game_state() -> bool:
 	
 	# 等待场景加载完成
 	#await get_tree().process_frame
-	await get_tree().scene_changed
+	# await get_tree().scene_changed
+	var scenes_name = await GameState.scenes_ready
+	# print(scenes_name)
+	# await get_tree().create_timer(1).timeout
 
-	# 恢复游戏数据
+	print("[WorldSaveManager] 场景加载完成，当前场景: ", get_tree().current_scene.name)
+
 	var success = true
-	
-	success = success and _restore_player_team_data()# 恢复玩家队伍数据
 	success = success and _restore_world_map_data()# 恢复世界地图数据
+	success = success and _restore_player_team_data()# 恢复玩家队伍数据
+	
 	success = success and _restore_world_events_data()# 恢复世界事件数据
 	success = success and _restore_game_progress_data()# 恢复游戏进度数据
 	
@@ -269,23 +296,6 @@ func _restore_player_team_data() -> bool:
 		push_error("恢复队伍位置失败：找不到玩家队伍节点")
 		return false
 	
-	# if team_data.has("team_grid_position"):
-	# 	var pos = team_data["team_grid_position"]
-	# 	var grid_position:Vector2i = Vector2i(pos["x"], pos["y"])
-		
-	# 	# 添加调试信息
-	# 	print("[WorldSaveManager] 尝试恢复队伍位置到网格坐标: ", grid_position)
-	# 	print("[WorldSaveManager] 队伍节点: ", player_team)
-	# 	print("[WorldSaveManager] 队伍节点类型: ", player_team.get_class())
-		
-	# 	# 检查队伍节点是否有set_grid_position方法
-	# 	if player_team.has_method("set_grid_position"):
-	# 		player_team.set_grid_position(grid_position)
-	# 		print("[WorldSaveManager] 成功调用set_grid_position方法")
-	# 		# return true
-	# 	else:
-	# 		push_error("队伍节点没有set_grid_position方法")
-	# 		return false
 	if team_data.has("team_grid_position"):
 		player_team.restore_from_data(team_data["team_grid_position"])
 
@@ -326,7 +336,7 @@ func _restore_team_members(members_data: Array[Dictionary]) -> bool:
 			var success = unit_data.restore_from_data(member_data)
 			if success:
 				# 将恢复的UnitData添加到队伍中
-				GameState.player_characters.append(unit_data)
+				GameState.register_unit(unit_data)
 				restored_count += 1
 				# 这里需要根据您的队伍管理系统实现具体的添加逻辑
 				print("[WorldSaveManager] 成功恢复角色数据: ", unit_data.character_name)

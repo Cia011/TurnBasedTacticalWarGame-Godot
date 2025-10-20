@@ -7,6 +7,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_4hg2c")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -47,5 +49,5 @@ text = "保存新存档"
 layout_mode = 2
 text = "关闭"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/BottomSaveButton" to="." method="_on_bottom_save_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]

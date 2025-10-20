@@ -36,7 +36,7 @@ func get_serializable_data() -> Dictionary:
 func restore_from_data(data:Dictionary):
 	if data.has("grid_position_x") and data.has("grid_position_y"):
 		grid_position = Vector2i(data["grid_position_x"], data["grid_position_y"])
-		set_grid_position(grid_position)
+		set_grid_position(Vector2i(data["grid_position_x"], data["grid_position_y"]))
 
 func get_path_and_try_move(mouse_grid_position:Vector2i):
 	if not path.is_empty():

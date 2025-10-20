@@ -1,5 +1,4 @@
-extends Resource
-class_name BaseItem
+class_name BaseItem extends Resource
 @export_category("物品信息")
 @export var id: String = ""  # 物品唯一ID
 @export var item_name: String = ""  # 物品名称
@@ -8,6 +7,7 @@ class_name BaseItem
 @export var number : int = 1 #当前堆叠数量
 @export var description: String = ""  # 物品描述
 @export var item_type: String = "任意"
+@export var item_label : Array = ["通用"]
 func get_properties()->Dictionary:
 	var properties:Dictionary ={
 		"id":id,
@@ -17,7 +17,8 @@ func get_properties()->Dictionary:
 		"max_stack":max_stack,
 		"number":number,
 		"description":description,
-		"item_type":item_type
+		"item_type":item_type,
+		"item_label":item_label
 	}
 	return properties
 
@@ -29,14 +30,14 @@ func has_property(property:String)->bool:
 
 func restore_from_data(data: Dictionary)->bool:
 	# 恢复基本属性
-	#print("恢复基本属性"+str(data))
+	# print("恢复基本属性"+str(data))
 	id = data.get("id", id)
 	item_name = data.get("item_name", item_name)
 	max_stack = data.get("max_stack", max_stack)
 	number = data.get("number", number)
 	description = data.get("description", description)
 	item_type = data.get("item_type", item_type)
-	
+	item_label = data.get("item_label", item_label)
 	# 恢复纹理（从路径加载）
 	var texture_path = data.get("texture_path", "")
 	if texture_path and ResourceLoader.exists(texture_path):

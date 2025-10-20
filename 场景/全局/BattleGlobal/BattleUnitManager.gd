@@ -28,11 +28,15 @@ func unregister_unit(unit:Unit) -> void:
 	if our_side.is_empty():
 		battle_end = true
 		print("-----战斗失败-----")
+		show_final_ui("战斗失败","战斗失败")
 	#胜利
 	elif enemy_side.is_empty():
 		print("-----战斗胜利-----")
 		battle_end = true
-	
+		show_final_ui("战斗胜利","战斗胜利")
+func show_final_ui(title:String,text:String):
+	var FinalUI = UiManager.get_ui("FinalUI")
+	FinalUI.set_up(title,text)
 func unit_die(unit:Unit):
 	unregister_unit(unit)
 	BattleGridManager.set_grid_occupied(unit.grid_position, null)

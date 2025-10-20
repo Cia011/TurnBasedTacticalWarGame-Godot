@@ -37,6 +37,7 @@ func _on_continue_game():
 	
 	# 获取最新存档槽位索引
 	var latest_slot_index = WorldSaveManager.get_latest_save_slot_index()
+	#print("latest_slot_index为:",latest_slot_index)
 	if latest_slot_index == -1:
 		print("[主菜单] 没有找到存档")
 		return
