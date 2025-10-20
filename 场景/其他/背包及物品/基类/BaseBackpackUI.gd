@@ -7,7 +7,6 @@ const SLOT = preload("res://场景/其他/背包及物品/基类/slot.tscn")
 
 func _ready() -> void:
 	
-	UiManager.open_ui(self)
 	GameState.add_backpack(背包系统)
 	
 	背包系统.item_change.connect(Callable(self,"_item_change"))
@@ -38,29 +37,6 @@ func update_slot(indexs):
 
 func _item_change(indexs):
 	update_slot(indexs)
-
-#func _on_gui_input(event:InputEvent,index):
-	#if event is InputEventMouseButton and event.pressed:
-		##print(index)
-		#accept_event()#标记事件
-		#
-		##判断类别
-		##if (背包系统.get_item(0)):
-			##if(背包系统.get_item(0).item_type != 槽位容器.get_child(index).slot_type):
-				##return
-		#
-		#var e = event as InputEventMouseButton
-		#if e.button_index == MOUSE_BUTTON_LEFT:
-			#背包系统.swap_item(-1,index)
-		#elif e.button_index == MOUSE_BUTTON_RIGHT:
-			#if GameState.get_mouse_slot_item() != null:#手上有物品
-				#if 背包系统.get_item(index):#目标格子有物品
-					#if 背包系统.surplus_stack(index)>0 and 背包系统.name_is_same(-1,index):
-						#背包系统.add_item_number(index,1) #目标物品加1
-						#背包系统.reduce_item_number(-1,1) #鼠标物品减1
-				#else:#目标格子没有物品
-					#背包系统.set_item(index,GameState.get_mouse_slot_item(),1)
-					#背包系统.reduce_item_number(-1,1)
 
 func _on_gui_input(event: InputEvent, index: int):
 	if not _is_valid_mouse_click(event):
@@ -124,8 +100,5 @@ func _can_stack_items(source_item, target_item, index: int) -> bool:
 func _place_single_item(index: int, mouse_item):
 	背包系统.set_item(index, mouse_item, 1)
 	背包系统.reduce_item_number(-1, 1)
-func _on_exit_pressed() -> void:
-	UiManager.close_ui(self)
-	queue_free()
-	#visible = false
+
 	

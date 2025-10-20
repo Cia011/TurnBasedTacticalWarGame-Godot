@@ -26,6 +26,8 @@ shadow_size = 2
 custom_minimum_size = Vector2(50, 80)
 offset_right = 199.0
 offset_bottom = 490.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 0
 theme = SubResource("Theme_bs2lt")
 script = ExtResource("2_s6kyb")
@@ -114,13 +116,3 @@ layout_mode = 2
 
 [node name="属性显示标签" parent="VBoxContainer/ScrollContainer/MarginContainer/属性显示容器" instance=ExtResource("4_n4vi2")]
 layout_mode = 2
-
-[node name="exit" type="Button" parent="."]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 0
-text = "X"
-flat = true
-
-[connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]

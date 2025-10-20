@@ -1,12 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://dgjelx7d704m7"]
+[gd_scene load_steps=11 format=3 uid="uid://dgjelx7d704m7"]
 
 [ext_resource type="Script" uid="uid://dfkn2saa3mi4o" path="res://场景/UI/世界场景UI/world_ui.gd" id="1_bejdh"]
 [ext_resource type="PackedScene" uid="uid://bqra1odgxe84k" path="res://场景/UI/世界场景UI/角色侧边栏/unit_ui_card_container.tscn" id="2_6pjut"]
 [ext_resource type="Script" uid="uid://c6tv4vx4c6hxf" path="res://场景/UI/世界场景UI/ui.gd" id="2_73p2x"]
 [ext_resource type="PackedScene" uid="uid://it0bb32jpmev" path="res://场景/UI/世界场景UI/角色属性栏/AttributePanel.tscn" id="3_3wcqf"]
+[ext_resource type="StyleBox" uid="uid://ca4qiie1i6rtq" path="res://资源/Style/Panel/圆角黑边橙背景.tres" id="5_73p2x"]
 [ext_resource type="PackedScene" uid="uid://dwtyhaagerol4" path="res://场景/UI/世界场景UI/TopMenu/top_menu.tscn" id="5_o600o"]
 [ext_resource type="Script" uid="uid://csu1kf63jw80o" path="res://场景/其他/背包及物品/背包/bag_manager.gd" id="6_75pj8"]
 [ext_resource type="PackedScene" uid="uid://chmlxd2wgy1sw" path="res://场景/其他/背包及物品/杂项/0.tscn" id="7_alykx"]
+[ext_resource type="PackedScene" uid="uid://bwa55npykaej7" path="res://场景/其他/背包及物品/实现/bag_ui.tscn" id="7_x1m8d"]
 [ext_resource type="PackedScene" uid="uid://cqp2ekkvi1swq" path="res://场景/UI/世界场景UI/PopupMenu/PopupMenu.tscn" id="9_x1m8d"]
 
 [node name="WorldUI" type="CanvasLayer"]
@@ -23,33 +25,13 @@ mouse_filter = 2
 script = ExtResource("2_73p2x")
 metadata/_edit_lock_ = true
 
-[node name="UnitUICardContainer" parent="UI" instance=ExtResource("2_6pjut")]
-layout_mode = 1
-offset_top = -241.0
-offset_right = 70.0
-offset_bottom = 241.0
-size_flags_horizontal = 0
-size_flags_vertical = 4
-metadata/_edit_lock_ = true
-
-[node name="AttributePanel" parent="UI" instance=ExtResource("3_3wcqf")]
-visible = false
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 83.0
-offset_top = -250.0
-offset_right = 301.0
-offset_bottom = 240.0
-grow_vertical = 2
-
 [node name="TopMenu" parent="UI" instance=ExtResource("5_o600o")]
 layout_mode = 1
 offset_bottom = 40.0
 metadata/_edit_lock_ = true
 
 [node name="BagManager" type="Control" parent="UI"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -60,21 +42,55 @@ mouse_filter = 2
 script = ExtResource("6_75pj8")
 metadata/_edit_lock_ = true
 
-[node name="0" parent="UI/BagManager" instance=ExtResource("7_alykx")]
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/BagManager"]
+[node name="MarginContainer" type="MarginContainer" parent="UI/BagManager"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -380.0
-offset_top = -223.5
-offset_bottom = 223.5
+offset_left = -967.0
+offset_top = -277.0
+offset_right = -182.0
+offset_bottom = 296.0
 grow_horizontal = 0
 grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="UI/BagManager/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("5_73p2x")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/BagManager/MarginContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/BagManager/MarginContainer/Panel/MarginContainer"]
+layout_mode = 2
 mouse_filter = 2
+
+[node name="UnitUICardContainer" parent="UI/BagManager/MarginContainer/Panel/MarginContainer/HBoxContainer" instance=ExtResource("2_6pjut")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
+
+[node name="BagUI" parent="UI/BagManager/MarginContainer/Panel/MarginContainer/HBoxContainer" instance=ExtResource("7_x1m8d")]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="AttributePanel" parent="UI/BagManager/MarginContainer/Panel/MarginContainer/HBoxContainer" instance=ExtResource("3_3wcqf")]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="0" parent="UI/BagManager" instance=ExtResource("7_alykx")]
 
 [node name="PopupMenu" parent="UI" instance=ExtResource("9_x1m8d")]
 layout_mode = 0

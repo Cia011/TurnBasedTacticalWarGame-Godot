@@ -1,6 +1,6 @@
 extends Control
 @onready var 鼠标槽: Node2D = $"0"
-@onready var 背包容器节点: HBoxContainer = $HBoxContainer
+#@onready var 背包容器节点: HBoxContainer = $HBoxContainer
 
 func _ready() -> void:
 	
@@ -18,3 +18,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		GameState.all_backpacks[0].add_item(GameState.get_mouse_slot_item())
 		GameState.set_mouse_slot_item(null)
+func open():
+	UiManager.open_ui(self)
+	visible = true
+func closs():
+	UiManager.close_ui(self)
+	visible = false

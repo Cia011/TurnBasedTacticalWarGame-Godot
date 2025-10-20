@@ -58,10 +58,10 @@ func _ready():
 	equpment1.defense = 100
 	player_char2.equipments.add_item(equpment1)
 	
-	var attack_buff = AttackBuff.new()
-	player_char2.buff_manager.add_buff(attack_buff)
-	print(player_char2.get_final_stat("defense"))
-	register_unit(player_char2)
+	#var attack_buff = AttackBuff.new()
+	#player_char2.buff_manager.add_buff(attack_buff)
+	#print(player_char2.get_final_stat("defense"))
+	#register_unit(player_char2)
 	
 	var enemy_char = UnitData.new()
 	enemy_char.character_name = "敌人"
