@@ -19,17 +19,24 @@ func _unhandled_input(event: InputEvent) -> void:
 	#在UI界面时忽视队伍的移动
 	if UiManager.have_ui_opening():
 		return
-	
-	
 	if event.is_action_pressed("left_mouse_clik"):
-		
 		get_path_and_try_move(WorldGridManager.get_mouse_grid_position())
 
 #加载存档时恢复队伍位置
-func set_grid_position(grid_position:Vector2i):
-	print("[Baseteam] set_grid_position"+str(grid_position))
-	position = WorldGridManager.get_world_position(grid_position)
-	
+func set_grid_position(g_position:Vector2i):
+	print("[Baseteam] set_grid_position"+str(g_position))
+	position = WorldGridManager.get_world_position(g_position)
+
+func get_serializable_data() -> Dictionary:
+	var data = {}
+	data["grid_position_x"] = grid_position.x
+	data["grid_position_y"] = grid_position.y
+	return data
+
+func restore_from_data(data:Dictionary):
+	if data.has("grid_position_x") and data.has("grid_position_y"):
+		grid_position = Vector2i(data["grid_position_x"], data["grid_position_y"])
+		set_grid_position(grid_position)
 
 func get_path_and_try_move(mouse_grid_position:Vector2i):
 	if not path.is_empty():

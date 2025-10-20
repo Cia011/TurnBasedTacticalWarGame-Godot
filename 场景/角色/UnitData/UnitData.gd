@@ -247,12 +247,7 @@ func _serialize_equipment() -> Dictionary:
 	for i in range(equipments.items.size()):
 		var item = equipments.items[i]
 		if item:
-			equipment_data[str(i)] = {
-				"item_type": item.item_type,
-				"item_name": item.item_name,
-				"properties": item.get_properties() if item.has_method("get_properties") else {},
-				"durability": item.durability if item.has_property("durability") else 100
-			}
+			equipment_data[str(i)] = item.get_properties()
 	return equipment_data
 
 # 序列化buff数据
@@ -298,7 +293,7 @@ func _restore_equipment(equipment_data: Dictionary) -> void:
 	# 清空当前装备
 	for i in range(equipments.items.size()):
 		equipments.items[i] = null
-	
+	print("[unitdata] 清空装备")
 	# 恢复装备
 	for slot_index_str in equipment_data:
 		var slot_data = equipment_data[slot_index_str]
@@ -309,8 +304,8 @@ func _restore_equipment(equipment_data: Dictionary) -> void:
 			# 这里需要根据您的装备系统实现具体的装备创建逻辑
 			var item = _create_item_by_type(slot_data)
 			if item:
-				equipments.items[slot_index] = item
-	
+				#equipments.items[slot_index] = item
+				equipments.set_item(slot_index,item)
 	# 更新装备加成
 	_update_equipment_bonus()
 
@@ -339,14 +334,20 @@ func _restore_statistics(statistics: Dictionary) -> void:
 func _create_item_by_type(item_data: Dictionary) -> BaseItem:
 	# 这里需要根据您的装备系统实现具体的装备创建逻辑
 	var item = BaseItem.new()
-	item.item_type = item_data.get("item_type", "")
-	item.item_name = item_data.get("item_name", "")
+	var item_type:String = item_data.get("item_type", "")
+	match item_type:
+		"武器", "防具", "饰品":
+			# 如果是装备类型，创建BaseEquipment
+			return BaseEquipment.create_from_data(item_data)
+		"任意", "消耗品", "材料":
+			# 如果是普通物品，创建BaseItem
+			return BaseItem.create_from_data(item_data)
+		_:
+			# 默认创建BaseItem
+			push_warning("未知物品类型: " + item_type + ", 创建基础物品")
+			return BaseItem.create_from_data(item_data)
 	
-	# 设置装备属性
-	if item.has_method("set_properties"):
-		item.set_properties(item_data.get("properties", {}))
-	
-	return item
+	# return item
 
 # 根据buff数据创建buff
 func _create_buff_by_data(buff_data: Dictionary) -> BaseBuff:

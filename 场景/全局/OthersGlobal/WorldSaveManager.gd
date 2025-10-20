@@ -47,7 +47,7 @@ func save_game(slot_index: int = 0) -> bool:
 	
 	# 收集存档数据
 	current_save_data = _collect_save_data()
-	
+	 
 	# 保存到文件
 	var file_path = SAVE_DIRECTORY + SAVE_FILE_PREFIX + str(slot_index) + SAVE_FILE_EXTENSION
 	return _save_to_file(file_path, current_save_data)
@@ -162,11 +162,7 @@ func _collect_player_team_data() -> Dictionary:
 	# 获取玩家队伍
 	var player_team:BaseTeam = _find_player_team()
 	if player_team:
-		team_data["team_grid_position"] = {
-			"x": player_team.grid_position.x,
-			"y": player_team.grid_position.y
-		}
-		
+		team_data["team_grid_position"] = player_team.get_serializable_data()
 		# 收集队伍成员数据
 		team_data["members"] = _collect_team_members_data()
 	
@@ -273,24 +269,27 @@ func _restore_player_team_data() -> bool:
 		push_error("恢复队伍位置失败：找不到玩家队伍节点")
 		return false
 	
+	# if team_data.has("team_grid_position"):
+	# 	var pos = team_data["team_grid_position"]
+	# 	var grid_position:Vector2i = Vector2i(pos["x"], pos["y"])
+		
+	# 	# 添加调试信息
+	# 	print("[WorldSaveManager] 尝试恢复队伍位置到网格坐标: ", grid_position)
+	# 	print("[WorldSaveManager] 队伍节点: ", player_team)
+	# 	print("[WorldSaveManager] 队伍节点类型: ", player_team.get_class())
+		
+	# 	# 检查队伍节点是否有set_grid_position方法
+	# 	if player_team.has_method("set_grid_position"):
+	# 		player_team.set_grid_position(grid_position)
+	# 		print("[WorldSaveManager] 成功调用set_grid_position方法")
+	# 		# return true
+	# 	else:
+	# 		push_error("队伍节点没有set_grid_position方法")
+	# 		return false
 	if team_data.has("team_grid_position"):
-		var pos = team_data["team_grid_position"]
-		var grid_position:Vector2i = Vector2i(pos["x"], pos["y"])
-		
-		# 添加调试信息
-		print("[WorldSaveManager] 尝试恢复队伍位置到网格坐标: ", grid_position)
-		print("[WorldSaveManager] 队伍节点: ", player_team)
-		print("[WorldSaveManager] 队伍节点类型: ", player_team.get_class())
-		
-		# 检查队伍节点是否有set_grid_position方法
-		if player_team.has_method("set_grid_position"):
-			player_team.set_grid_position(grid_position)
-			print("[WorldSaveManager] 成功调用set_grid_position方法")
-			# return true
-		else:
-			push_error("队伍节点没有set_grid_position方法")
-			return false
-	
+		player_team.restore_from_data(team_data["team_grid_position"])
+
+
 	# 恢复队伍成员
 	if team_data.has("members"):
 		var team_data_members = team_data["members"]
@@ -302,6 +301,7 @@ func _restore_player_team_data() -> bool:
 					valid_members_data.append(member_data)
 			
 			if not valid_members_data.is_empty():
+				# 恢复有效成员数据
 				return _restore_team_members(valid_members_data)
 			else:
 				push_warning("队伍成员数据格式不正确，没有有效的字典数据")
@@ -322,6 +322,7 @@ func _restore_team_members(members_data: Array[Dictionary]) -> bool:
 	for member_data in members_data:
 		var unit_data = UnitData.new()
 		if unit_data.has_method("restore_from_data"):
+			# 恢复角色数据,具体逻辑在 unit_data.restore_from_data()
 			var success = unit_data.restore_from_data(member_data)
 			if success:
 				# 将恢复的UnitData添加到队伍中
@@ -385,3 +386,9 @@ func _load_from_file(file_path: String) -> Dictionary:
 	else:
 		push_error("无法读取存档文件：" + file_path)
 		return {}
+
+
+
+
+
+#--------------------世界初始化相关操作--------------------------
