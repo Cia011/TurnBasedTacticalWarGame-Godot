@@ -22,8 +22,11 @@ func apply_effect() -> void:
 func remove_effect() -> void:
 	#pass
 	#移除图标
+	remove_event_icon()
+func remove_event_icon():
 	if event_icon_node:
 		event_icon_node.queue_free()
+
 
 # 每回合开始时的效果
 func on_turn_start() -> void:

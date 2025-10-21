@@ -20,6 +20,7 @@ func initialize():
 
 func update_grid_data_dict():
 	var used_cells := get_used_cells()
+	grid_data_dict.clear()
 	for cell in used_cells:
 		grid_data_dict[cell] = WorldGrid.new()
 		grid_data_dict[cell].grid_position = cell
@@ -37,6 +38,7 @@ func generate_random_map():
 		for y in range(height):
 			var noiseValue = Noise1.get_noise_2d(x, y)
 			var random = getRandom(noiseValue)
+			#set_cell( 绘制坐标_grid_position,图集ID_TileSetID ,图集坐标_ )
 			set_cell(Vector2i(x, y), 0, Vector2i(1,0))
 	print("[DataLayer] 随机地图生成完成，图块数量: ", get_used_cells().size())
 

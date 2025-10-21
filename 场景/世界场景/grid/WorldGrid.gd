@@ -14,7 +14,6 @@ var move_cost : int = 1
 # func is_occupied_by_unit():
 # 	return unit != null
 
-
 #离开----由大地图队伍触发
 func exit_grid():
 	print("[WorldGrid] "+"离开" + str(grid_position))
@@ -24,5 +23,4 @@ func enter_grid():
 	print("[WorldGrid] "+"进入" + str(grid_position))
 	#尝试触发事件
 	WorldEventManager.trigger_event(grid_position)
-	
 	

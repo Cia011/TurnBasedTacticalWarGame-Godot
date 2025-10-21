@@ -35,3 +35,16 @@ func trigger_event(grid_position:Vector2i):
 		#若是突发事件,直接触发
 		if events[grid_position].is_emergency:
 			events[grid_position].apply_effect()
+func _serializ_event()->Array:
+	var event_data = []
+	for event in events.values():
+		event_data.append(event.serialize())
+	return event_data
+func _restore_event(event_data:Array):
+	for event in events.values():
+		event.remove_event_icon()
+	events.clear()
+	for data in event_data:
+		var event = BaseEvent.new()
+		event.deserialize(data)
+		register_event(event)

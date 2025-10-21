@@ -223,17 +223,59 @@ func _collect_team_members_data() -> Array[Dictionary]:
 func _collect_world_map_data() -> Dictionary:
 	var map_data = {}
 	
-	# 这里需要根据您的网格系统实现具体的收集逻辑
-	# 示例：收集网格数据、探索区域等
-	var grids:Dictionary[Vector2i,WorldGrid] = WorldGridManager.get_grid_data_dict()
-	map_data["grids"] = grids
+	# 获取世界地图的data_layer
+	var data_layer = WorldGridManager.data_layer
+	if data_layer == null:
+		push_warning("无法获取世界地图的data_layer")
+		return map_data
 	
+	# 收集所有使用的地块信息	
+	var tile_data_dict : Array
+	var used_cells:Array[Vector2i] = data_layer.get_used_cells()
+	
+	for cell:Vector2i in used_cells:
+		# var cell_data = {}
+		var cell_data : Array = []
+		#				0			1				2				3				4				5
+		# cell_data [source_id,atlas_coords_x,atlas_coords_y,alternative_tile,grid_position_x,grid_position_y]
+		# 获取图集ID（源ID）
+		var source_id : int= data_layer.get_cell_source_id(cell)
+		cell_data.append(source_id)
+		
+		# 获取图集坐标
+		var atlas_coords = data_layer.get_cell_atlas_coords(cell)
+		if atlas_coords != Vector2i(-1, -1):  # -1表示没有图块
+			cell_data.append(atlas_coords.x)
+			cell_data.append(atlas_coords.y)
+		
+		# 获取替代图块（如果有）
+		var alternative_tile = data_layer.get_cell_alternative_tile(cell)
+		cell_data.append(alternative_tile)
+		
+		# 存储grid_position坐标
+		cell_data.append(cell.x)
+		cell_data.append(cell.y)
+		
+		# 将单元格数据存储到字典中，使用字符串格式的坐标作为键
+		var cell_key = "%d,%d" % [cell.x, cell.y]
+		# tile_data_dict[cell_key] = cell_data
+		tile_data_dict.append(cell_data)
+		
+	# 存储地图尺寸信息
+	map_data["map_width"] = data_layer.get_used_rect().size.x
+	map_data["map_height"] = data_layer.get_used_rect().size.y
+	
+	# 存储所有地块数据
+	map_data["tile_data"] = tile_data_dict
+	
+	
+	print("[WorldSaveManager] 世界地图数据收集完成，地块数量: ", tile_data_dict.size())
 	return map_data
 
 # 收集世界事件数据
-func _collect_world_events_data() -> Dictionary:
-	var events_data = {}
-	
+func _collect_world_events_data() -> Array:
+	var events_data:Array = []
+	events_data = WorldEventManager._serializ_event()
 	# 这里需要根据您的事件系统实现具体的收集逻辑
 	# 示例：收集活跃事件、已完成事件等
 	
@@ -274,9 +316,9 @@ func _restore_game_state() -> bool:
 	print("[WorldSaveManager] 场景加载完成，当前场景: ", get_tree().current_scene.name)
 
 	var success = true
-	success = success and _restore_world_map_data()# 恢复世界地图数据
-	success = success and _restore_player_team_data()# 恢复玩家队伍数据
 	
+	success = success and _restore_player_team_data()# 恢复玩家队伍数据
+	success = success and _restore_world_map_data()# 恢复世界地图数据
 	success = success and _restore_world_events_data()# 恢复世界事件数据
 	success = success and _restore_game_progress_data()# 恢复游戏进度数据
 	
@@ -352,7 +394,47 @@ func _restore_world_map_data() -> bool:
 	if not current_save_data.has("world_map_data"):
 		return true
 	
-	# 这里需要根据您的网格系统实现具体的恢复逻辑
+	var map_data = current_save_data["world_map_data"]
+	
+	# 获取世界地图的data_layer
+	var data_layer = WorldGridManager.data_layer
+	if data_layer == null:
+		push_error("恢复世界地图数据失败：无法获取data_layer")
+		return false
+	
+	# 清除现有地图
+	data_layer.clear()
+	
+	# 恢复地块数据
+	if map_data.has("tile_data"):
+		var tile_data_array = map_data["tile_data"]
+		
+		for cell_data in tile_data_array:
+			# 解析数组格式的地块数据
+			# cell_data [source_id, atlas_coords_x, atlas_coords_y, alternative_tile, grid_position_x, grid_position_y]
+			if cell_data is Array and cell_data.size() >= 6:
+				var source_id = cell_data[0]  # 图集ID
+				var atlas_coords_x = cell_data[1]  # 图集坐标X
+				var atlas_coords_y = cell_data[2]  # 图集坐标Y
+				var alternative_tile = cell_data[3]  # 替代图块
+				var grid_position_x = cell_data[4]  # 网格位置X
+				var grid_position_y = cell_data[5]  # 网格位置Y
+				
+				var atlas_coords = Vector2i(atlas_coords_x, atlas_coords_y)
+				var grid_position = Vector2i(grid_position_x, grid_position_y)
+				
+				# 设置图块
+				data_layer.set_cell(grid_position, source_id, atlas_coords, alternative_tile)
+			else:
+				push_warning("地块数据格式不正确: ", cell_data)
+		
+		print("[WorldSaveManager] 世界地图地块恢复完成，恢复地块数量: ", tile_data_array.size())
+	
+	# 恢复网格数据
+	data_layer.update_grid_data_dict()
+	
+	# 重新初始化A*寻路系统
+	data_layer.initialize()
 	
 	return true
 
@@ -361,7 +443,8 @@ func _restore_world_events_data() -> bool:
 	if not current_save_data.has("world_events_data"):
 		return true
 	
-	# 这里需要根据您的事件系统实现具体的恢复逻辑
+	var events_data:Array = current_save_data["world_events_data"]
+	WorldEventManager._restore_event(events_data)				
 	
 	return true
 
@@ -378,7 +461,8 @@ func _restore_game_progress_data() -> bool:
 func _save_to_file(file_path: String, data: Dictionary) -> bool:
 	var file = FileAccess.open(file_path, FileAccess.WRITE)
 	if file:
-		file.store_string(JSON.stringify(data, "\t"))
+		# 使用更紧凑的JSON格式，数组元素在同一行显示
+		file.store_string(JSON.stringify(data, ""))
 		file.close()
 		print("[WorldSaveManager] 世界存档已保存到：" + file_path)
 		return true
