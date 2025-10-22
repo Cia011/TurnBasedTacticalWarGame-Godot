@@ -24,3 +24,11 @@ func enter_grid():
 	#尝试触发事件
 	WorldEventManager.trigger_event(grid_position)
 	
+# # 序列化网格数据
+# func serialize() -> Dictionary:
+# 	var data = {}
+# 	data["grid_position"] = grid_position
+# 	return data
+# # 恢复网格数据
+# func deserialize(data:Dictionary):
+# 	grid_position = data["grid_position"]

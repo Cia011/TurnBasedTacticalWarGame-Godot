@@ -1,8 +1,12 @@
-extends BaseEvent
-class_name BattleEvent
+
+class_name BattleEvent extends BaseEvent
 #@export var battle_event_ui_scenes : PackedScene
 
 const BATTLE_EVENT_UI = preload("res://场景/UI/世界场景UI/事件触发UI/战斗触发UI/battle_event_ui.tscn")
+
+func _init():
+	type = "battle"
+
 func apply_effect() -> void:
 	printt("apply_effect")
 	trigger_event()

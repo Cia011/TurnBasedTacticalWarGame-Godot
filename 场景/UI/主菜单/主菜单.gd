@@ -34,7 +34,7 @@ func on_menu_button_pressed(button_name:String):
 # 继续游戏逻辑
 func _on_continue_game():
 	print("[主菜单] 执行继续游戏")
-	
+	GameState.is_new_game = false
 	# 获取最新存档槽位索引
 	var latest_slot_index = WorldSaveManager.get_latest_save_slot_index()
 	#print("latest_slot_index为:",latest_slot_index)

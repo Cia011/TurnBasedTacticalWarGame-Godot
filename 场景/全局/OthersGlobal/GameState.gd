@@ -1,5 +1,5 @@
 extends Node
-
+var is_new_game : bool = true
 # 玩家队伍
 signal signal_player_characters_change
 var player_characters: Array[UnitData] = []

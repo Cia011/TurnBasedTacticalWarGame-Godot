@@ -27,16 +27,16 @@ func set_grid_position(g_position:Vector2i):
 	print("[Baseteam] set_grid_position"+str(g_position))
 	position = WorldGridManager.get_world_position(g_position)
 
-func get_serializable_data() -> Dictionary:
+## 序列化队伍数据
+func serialize() -> Dictionary:
 	var data = {}
-	data["grid_position_x"] = grid_position.x
-	data["grid_position_y"] = grid_position.y
+	data["grid_position"] = grid_position
 	return data
-
-func restore_from_data(data:Dictionary):
-	if data.has("grid_position_x") and data.has("grid_position_y"):
-		grid_position = Vector2i(data["grid_position_x"], data["grid_position_y"])
-		set_grid_position(Vector2i(data["grid_position_x"], data["grid_position_y"]))
+## 从序列化数据恢复队伍位置
+func deserialize(data:Dictionary):
+	if data.has("grid_position"):
+		print("[Baseteam] deserialize grid_position"+str(ToolBox.string_to_vector2i(data["grid_position"])))	
+		set_grid_position(ToolBox.string_to_vector2i(data["grid_position"]))
 
 func get_path_and_try_move(mouse_grid_position:Vector2i):
 	if not path.is_empty():

@@ -1,13 +1,19 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://dh5h2daf6y3wn"]
 
-[ext_resource type="Texture2D" uid="uid://dipyhrvtevs77" path="res://素材/地块/world/大地图地块.png" id="1_rxtc0"]
+[ext_resource type="Texture2D" uid="uid://dipyhrvtevs77" path="res://素材/地块/world/地形地块.png" id="1_rxtc0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mgwor"]
 texture = ExtResource("1_rxtc0")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 1:0/0 = 0
+2:0/0 = 0
 
 [resource]
 tile_size = Vector2i(64, 64)
+custom_data_layer_0/name = "name"
+custom_data_layer_0/type = 4
+custom_data_layer_1/name = "type"
+custom_data_layer_1/type = 4
 sources/0 = SubResource("TileSetAtlasSource_mgwor")
+tile_proxies/coords_level = [[0, Vector2i(0, 0)], [2, Vector2i(0, 0)], [0, Vector2i(1, 0)], [2, Vector2i(1, 0)], [1, Vector2i(0, 0)], [2, Vector2i(2, 0)]]

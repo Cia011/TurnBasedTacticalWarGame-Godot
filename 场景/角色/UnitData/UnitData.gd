@@ -167,7 +167,7 @@ func on_turn_end():
 	buff_manager.on_turn_end()
 
 # 获取可序列化的数据
-func get_serializable_data() -> Dictionary:
+func serialize() -> Dictionary:
 	var data = {
 		"character_id": character_id,
 		"character_name": character_name,
@@ -189,10 +189,10 @@ func get_serializable_data() -> Dictionary:
 	return data
 
 # 从序列化数据恢复
-func restore_from_data(data: Dictionary) -> bool:
+func deserialize(data: Dictionary) -> bool:
 	# 数据验证
 	if not data.has("character_id"):
-		push_warning("UnitData: restore_from_data called with invalid data (missing character_id)")
+		push_warning("UnitData: deserialize called with invalid data (missing character_id)")
 		return false
 	
 	character_id = data.get("character_id", character_id)

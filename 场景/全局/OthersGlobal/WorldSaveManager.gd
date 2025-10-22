@@ -181,7 +181,7 @@ func _collect_player_team_data() -> Dictionary:
 	# 获取玩家队伍
 	var player_team:BaseTeam = _find_player_team()
 	if player_team:
-		team_data["team_grid_position"] = player_team.get_serializable_data()
+		team_data["team_grid_position"] = player_team.serialize()
 		# 收集队伍成员数据
 		team_data["members"] = _collect_team_members_data()
 	
@@ -214,8 +214,8 @@ func _collect_team_members_data() -> Array[Dictionary]:
 	var members_data:Array[Dictionary] = []
 	var members:Array[UnitData] = GameState.player_characters
 	for member:UnitData in members:
-		if member.has_method("get_serializable_data"):
-			var member_data = member.get_serializable_data()
+		if member.has_method("serialize"):
+			var member_data = member.serialize()
 			members_data.append(member_data)
 	return members_data
 
@@ -229,47 +229,8 @@ func _collect_world_map_data() -> Dictionary:
 		push_warning("无法获取世界地图的data_layer")
 		return map_data
 	
-	# 收集所有使用的地块信息	
-	var tile_data_dict : Array
-	var used_cells:Array[Vector2i] = data_layer.get_used_cells()
+	map_data = data_layer.serialize()
 	
-	for cell:Vector2i in used_cells:
-		# var cell_data = {}
-		var cell_data : Array = []
-		#				0			1				2				3				4				5
-		# cell_data [source_id,atlas_coords_x,atlas_coords_y,alternative_tile,grid_position_x,grid_position_y]
-		# 获取图集ID（源ID）
-		var source_id : int= data_layer.get_cell_source_id(cell)
-		cell_data.append(source_id)
-		
-		# 获取图集坐标
-		var atlas_coords = data_layer.get_cell_atlas_coords(cell)
-		if atlas_coords != Vector2i(-1, -1):  # -1表示没有图块
-			cell_data.append(atlas_coords.x)
-			cell_data.append(atlas_coords.y)
-		
-		# 获取替代图块（如果有）
-		var alternative_tile = data_layer.get_cell_alternative_tile(cell)
-		cell_data.append(alternative_tile)
-		
-		# 存储grid_position坐标
-		cell_data.append(cell.x)
-		cell_data.append(cell.y)
-		
-		# 将单元格数据存储到字典中，使用字符串格式的坐标作为键
-		var cell_key = "%d,%d" % [cell.x, cell.y]
-		# tile_data_dict[cell_key] = cell_data
-		tile_data_dict.append(cell_data)
-		
-	# 存储地图尺寸信息
-	map_data["map_width"] = data_layer.get_used_rect().size.x
-	map_data["map_height"] = data_layer.get_used_rect().size.y
-	
-	# 存储所有地块数据
-	map_data["tile_data"] = tile_data_dict
-	
-	
-	print("[WorldSaveManager] 世界地图数据收集完成，地块数量: ", tile_data_dict.size())
 	return map_data
 
 # 收集世界事件数据
@@ -339,9 +300,7 @@ func _restore_player_team_data() -> bool:
 		return false
 	
 	if team_data.has("team_grid_position"):
-		player_team.restore_from_data(team_data["team_grid_position"])
-
-
+		player_team.deserialize(team_data["team_grid_position"])
 	# 恢复队伍成员
 	if team_data.has("members"):
 		var team_data_members = team_data["members"]
@@ -373,9 +332,9 @@ func _restore_team_members(members_data: Array[Dictionary]) -> bool:
 
 	for member_data in members_data:
 		var unit_data = UnitData.new()
-		if unit_data.has_method("restore_from_data"):
+		if unit_data.has_method("deserialize"):
 			# 恢复角色数据,具体逻辑在 unit_data.restore_from_data()
-			var success = unit_data.restore_from_data(member_data)
+			var success = unit_data.deserialize(member_data)
 			if success:
 				# 将恢复的UnitData添加到队伍中
 				GameState.register_unit(unit_data)
@@ -385,7 +344,7 @@ func _restore_team_members(members_data: Array[Dictionary]) -> bool:
 			else:
 				push_warning("恢复角色数据失败: ", member_data.get("character_name", "未知角色"))
 		else:
-			push_error("UnitData类没有实现restore_from_data方法")
+			push_error("UnitData类没有实现deserialize方法")
 	print("[WorldSaveManager] 成功恢复 " + str(restored_count) + " 个队伍成员的数据")
 	return restored_count > 0
 
@@ -401,40 +360,7 @@ func _restore_world_map_data() -> bool:
 	if data_layer == null:
 		push_error("恢复世界地图数据失败：无法获取data_layer")
 		return false
-	
-	# 清除现有地图
-	data_layer.clear()
-	
-	# 恢复地块数据
-	if map_data.has("tile_data"):
-		var tile_data_array = map_data["tile_data"]
-		
-		for cell_data in tile_data_array:
-			# 解析数组格式的地块数据
-			# cell_data [source_id, atlas_coords_x, atlas_coords_y, alternative_tile, grid_position_x, grid_position_y]
-			if cell_data is Array and cell_data.size() >= 6:
-				var source_id = cell_data[0]  # 图集ID
-				var atlas_coords_x = cell_data[1]  # 图集坐标X
-				var atlas_coords_y = cell_data[2]  # 图集坐标Y
-				var alternative_tile = cell_data[3]  # 替代图块
-				var grid_position_x = cell_data[4]  # 网格位置X
-				var grid_position_y = cell_data[5]  # 网格位置Y
-				
-				var atlas_coords = Vector2i(atlas_coords_x, atlas_coords_y)
-				var grid_position = Vector2i(grid_position_x, grid_position_y)
-				
-				# 设置图块
-				data_layer.set_cell(grid_position, source_id, atlas_coords, alternative_tile)
-			else:
-				push_warning("地块数据格式不正确: ", cell_data)
-		
-		print("[WorldSaveManager] 世界地图地块恢复完成，恢复地块数量: ", tile_data_array.size())
-	
-	# 恢复网格数据
-	data_layer.update_grid_data_dict()
-	
-	# 重新初始化A*寻路系统
-	data_layer.initialize()
+	data_layer.deserialize(map_data)
 	
 	return true
 
