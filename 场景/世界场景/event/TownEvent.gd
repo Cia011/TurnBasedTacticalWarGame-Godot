@@ -14,4 +14,6 @@ func apply_effect() -> void:
 
 func deserialize(data:Dictionary)->void:
 	super.deserialize(data)
+	# 事件触发后，将事件触发点的网格设置为城镇地块
 	WorldGridManager.set_grid(grid_position,0,Vector2i(0,0))
+	

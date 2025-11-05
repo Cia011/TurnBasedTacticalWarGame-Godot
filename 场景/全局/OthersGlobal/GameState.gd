@@ -41,32 +41,36 @@ func _ready():
 	#is_open_UI = true
 	
 	# 创建示例玩家角色
-	var player_char = UnitData.new()
-	player_char.character_name = "第一个角色"
-	player_char.texture = preload("res://素材/角色/Sprite-0010.png")
+	var player_char = create_unit_data({
+		"character_name": "第一个角色",
+		"texture_path": "res://素材/角色/Sprite-0010.png",
+	})
 	register_unit(player_char)
+	var player_char2 = create_unit_data({
+		"character_name": "第二个角色",
+		"texture_path": "res://素材/角色/Sprite-0010.png",
+	})
+	register_unit(player_char2)
+		
+	var equpment1 = BaseEquipment.create_from_data({
+		"item_name": "小刀",
+		"id": "1234",
+		"texture_path": "res://素材/角色/Sprite-0010.png",
+		"item_type": "武器",
+		"defense": 100,
+	})
+	player_char2.equipments.add_item(equpment1)		
+
 	
-	var player_char2 = UnitData.new()
-	player_char2.character_name = "第二个角色"
-	player_char2.texture = preload("res://素材/角色/Sprite-0010.png")
-	
-	var equpment1 = BaseEquipment.new()
-	equpment1.item_name = "小刀"
-	equpment1.id = "1234"
-	equpment1.texture = preload("res://素材/角色/Sprite-0010.png")
-	equpment1.item_type = "武器"
-	equpment1.defense = 100
-	player_char2.equipments.add_item(equpment1)
-	
-	#var attack_buff = AttackBuff.new()
-	#player_char2.buff_manager.add_buff(attack_buff)
-	#print(player_char2.get_final_stat("defense"))
-	#register_unit(player_char2)
-	
-	var enemy_char = UnitData.new()
-	enemy_char.character_name = "敌人"
-	enemy_char.texture = preload("res://素材/角色/Sprite-0010.png")
-	enemy_characters.append(enemy_char)
+	# var enemy_char = UnitData.new()
+	# enemy_char.character_name = "敌人"
+	# enemy_char.texture = preload("res://素材/角色/Sprite-0010.png")
+	# enemy_characters.append(enemy_char)
+	var enemy_char2 = create_unit_data({
+		"character_name": "敌人2",
+		"texture_path": "res://素材/角色/Sprite-0010.png",
+	})
+	register_enemy_unit(enemy_char2)
 	print("[gamestate] : ready end")
 	
 
@@ -76,7 +80,8 @@ func register_unit(unit:UnitData) -> void:
 func unregister_unit(unit:UnitData) -> void:
 	player_characters.erase(unit)
 	signal_player_characters_change.emit()
-	
+func register_enemy_unit(unit:UnitData) -> void:
+	enemy_characters.append(unit)
 
 
 func change_scene_to(scene:String):
@@ -106,3 +111,9 @@ func reset_game_state():
 	
 	# 重置其他游戏状态变量
 	# 根据您的项目结构添加其他需要重置的变量
+
+
+## 角色数据创建工厂
+func create_unit_data(data:Dictionary)->UnitData:
+	var unit = UnitData.create_from_data(data)
+	return unit

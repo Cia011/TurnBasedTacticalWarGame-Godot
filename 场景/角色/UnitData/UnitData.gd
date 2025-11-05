@@ -191,9 +191,9 @@ func serialize() -> Dictionary:
 # 从序列化数据恢复
 func deserialize(data: Dictionary) -> bool:
 	# 数据验证
-	if not data.has("character_id"):
-		push_warning("UnitData: deserialize called with invalid data (missing character_id)")
-		return false
+	# if not data.has("character_id"):
+	# 	push_warning("UnitData: deserialize called with invalid data (missing character_id)")
+	# 	return false
 	
 	character_id = data.get("character_id", character_id)
 	character_name = data.get("character_name", character_name)
@@ -235,6 +235,15 @@ func deserialize(data: Dictionary) -> bool:
 		data_manager.unit_data_change.emit(base_stats)
 	
 	return true
+static func create_from_data(data: Dictionary) -> UnitData:
+	var unit = UnitData.new()
+	if unit.deserialize(data):
+		return unit
+	else:
+		return null
+
+
+
 
 # 序列化装备数据
 func _serialize_equipment() -> Dictionary:

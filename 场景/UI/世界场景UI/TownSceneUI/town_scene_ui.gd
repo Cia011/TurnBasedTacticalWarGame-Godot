@@ -14,6 +14,18 @@ var current_interface:String = "城镇主页"
 var can_recruit:bool = true #可以招募角色,有酒馆,人才市场等场所
 var can_recruit_units:Array[UnitData]
 
+## 实例时传入可招募的单位数据 商店商品数据 任务数据
+func _init(data:Dictionary) -> void:
+	can_recruit_units = data["can_recruit_units"]
+	# 更新招募界面
+	update_recruit_units()
+
+func update_recruit_units():
+	# 更新可招募单位
+	招募界面.update(can_recruit_units)
+
+
+
 func _ready() -> void:
 	#注册此UI
 	enter_interface()
