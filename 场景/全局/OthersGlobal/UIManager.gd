@@ -58,18 +58,3 @@ func get_ui(ui_name: String)->Node:
 		return ui_nodes[ui_name]
 	return null
 	
-
-
-#-----------------背包部分-------------------------
-#队伍背包场景
-#const BAG_UI_SCENE = preload("res://场景/其他/背包及物品/实现/bag_ui.tscn")
-
-func open_team_backpack():
-	if get_opening_ui("BagManager"):
-		var bag_manager = get_ui("BagManager") as Node
-		bag_manager.closs()
-	else:
-		var bag_manager = get_ui("BagManager") as Node
-		bag_manager.open()
-	
-	

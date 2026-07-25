@@ -36,34 +36,19 @@ func trigger_event(grid_position:Vector2i):
 		#若是突发事件,直接触发
 		if events[grid_position].is_emergency:
 			events[grid_position].apply_effect()
-## 序列化事件
-func _serializ_event()->Array:
-	var event_data = []
-	for event:BaseEvent in events.values():
-		event_data.append(event.serialize())
-	return event_data
-## 恢复事件
-func _restore_event(event_data:Array):
-	for event in events.values():
-		event.remove_event_icon()
-	events.clear()
-	for data in event_data:
-		create_event(data)
 
 ## 事件的创建也由事件管理器负责
 ## 创建事件 根据事件数据创建事件对象 并注册事件 最后返回事件对象
-func create_event(event_data:Dictionary)->BaseEvent:
-	## 判断事件类型 根据事件类型创建事件对象
-	var event = create_event_by_type(event_data["type"])
-	event.deserialize(event_data)
-	register_event(event)
-	return event
+#func create_event(event_data:Dictionary)->BaseEvent:
+	### 判断事件类型 根据事件类型创建事件对象
+	#var event = create_event_by_type(event_data["type"])
+	#event.deserialize(event_data)
+	#register_event(event)
+	#return event
 
-#根据事件类型创建事件对象 并返回事件对象
-func create_event_by_type(event_type:String)->BaseEvent:
-	match event_type:
-		"town":
-			return TownEvent.new()
-		"battle":
-			return BattleEvent.new()
-	return null
+##根据事件类型创建事件对象 并返回事件对象
+#func create_event_by_type(event_type:String)->BaseEvent:
+	#match event_type:
+		#"battle":
+			#return BattleEvent.new()
+	#return null

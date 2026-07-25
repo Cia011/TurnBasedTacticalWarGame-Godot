@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://clh336tpojrec"]
+[gd_scene format=3 uid="uid://clh336tpojrec"]
 
 [ext_resource type="Script" uid="uid://tnkufuwwfm5k" path="res://场景/角色/unit.gd" id="1_23877"]
 [ext_resource type="Texture2D" uid="uid://uxo4vhkdv271" path="res://素材/角色/Sprite-0010.png" id="1_cddf8"]
@@ -134,34 +134,34 @@ _data = {
 &"attack": SubResource("Animation_udull")
 }
 
-[node name="Unit" type="Node2D"]
+[node name="Unit" type="Node2D" unique_id=1739780072]
 script = ExtResource("1_23877")
 
-[node name="图像" type="Node2D" parent="."]
+[node name="图像" type="Node2D" parent="." unique_id=769748846]
 
-[node name="Sprite2D" type="Sprite2D" parent="图像"]
+[node name="Sprite2D" type="Sprite2D" parent="图像" unique_id=1290843865]
 material = SubResource("ShaderMaterial_etk83")
 position = Vector2(0, -7)
 texture = ExtResource("1_cddf8")
 
-[node name="weapon" type="Sprite2D" parent="图像"]
+[node name="weapon" type="Sprite2D" parent="图像" unique_id=159339258]
 position = Vector2(-3, -3)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_jlerf")
 offset = Vector2(0, -10)
 
-[node name="ActionsManager" type="Node" parent="."]
+[node name="ActionsManager" type="Node" parent="." unique_id=2135025564]
 script = ExtResource("3_4h3ag")
 metadata/_custom_type_script = "uid://dutife1puiymm"
 
-[node name="MoveAction" type="Node" parent="ActionsManager"]
+[node name="MoveAction" type="Node" parent="ActionsManager" unique_id=86627545]
 script = ExtResource("3_dnxxf")
 action_id = "MoveAction"
 action_name = "Move"
 grid_color = Color(0, 1, 0, 1)
 metadata/_custom_type_script = "uid://clfxsuyhxydf0"
 
-[node name="AttackAction" type="Node" parent="ActionsManager"]
+[node name="AttackAction" type="Node" parent="ActionsManager" unique_id=1860802973]
 script = ExtResource("6_vc45t")
 action_id = "AttackAction"
 action_name = "Attack"
@@ -169,16 +169,16 @@ grid_color = Color(1, 0, 0, 1)
 action_icon = ExtResource("3_jlerf")
 metadata/_custom_type_script = "uid://b3h4l7n7dmhmu"
 
-[node name="MagicAttackAction" type="Node" parent="ActionsManager"]
+[node name="MagicAttackAction" type="Node" parent="ActionsManager" unique_id=482871094]
 script = ExtResource("8_udull")
 action_id = "MagicAttackAction"
 action_name = "MagicAttack"
 metadata/_custom_type_script = "uid://x2ddn38tff04"
 
-[node name="HealthUI" type="Node2D" parent="."]
+[node name="HealthUI" type="Node2D" parent="." unique_id=302092760]
 script = ExtResource("9_jlerf")
 
-[node name="ProgressBar" type="ProgressBar" parent="HealthUI"]
+[node name="ProgressBar" type="ProgressBar" parent="HealthUI" unique_id=1244208779]
 offset_left = -7.0
 offset_top = -23.0
 offset_right = 6.0
@@ -189,7 +189,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_jlerf")
 value = 50.0
 show_percentage = false
 
-[node name="Label" type="Label" parent="HealthUI"]
+[node name="Label" type="Label" parent="HealthUI" unique_id=1018146427]
 offset_left = -5.0
 offset_top = -23.0
 offset_right = 23.0
@@ -199,7 +199,5 @@ label_settings = SubResource("LabelSettings_jlerf")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_hf7qr")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=927513954]
+libraries/ = SubResource("AnimationLibrary_hf7qr")

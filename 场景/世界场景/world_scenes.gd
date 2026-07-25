@@ -19,25 +19,25 @@ func _ready() -> void:
 	#battle_event.grid_position = Vector2i(1,1)
 	#WorldEventManager.register_event(battle_event) 
 	
-	var battle_event_data  = {
-		"type" : "battle",
-		"name":"战斗事件",
-		"description":"非常艰难",
-		"icon_path" : "res://素材/图标/战斗图标/战斗图标.png",
-		"grid_position" : str(Vector2i(1,1))
-		}
-	WorldEventManager.create_event(battle_event_data)
-
-
-
-	var town_event_data = {
-		"type" : "town",
-		"name":"城镇",
-		"description":"城镇",
-		"icon_path" : "res://素材/图标/战斗图标/战斗图标.png",
-		"grid_position" : str(Vector2i(2,2))
-	}
-	WorldEventManager.create_event(town_event_data)
+	#var battle_event_data  = {
+		#"type" : "battle",
+		#"name":"战斗事件",
+		#"description":"非常艰难",
+		#"icon_path" : "res://素材/图标/战斗图标/战斗图标.png",
+		#"grid_position" : str(Vector2i(1,1))
+		#}
+	#WorldEventManager.create_event(battle_event_data)
+#
+#
+#
+	#var town_event_data = {
+		#"type" : "town",
+		#"name":"城镇",
+		#"description":"城镇",
+		#"icon_path" : "res://素材/图标/战斗图标/战斗图标.png",
+		#"grid_position" : str(Vector2i(2,2))
+	#}
+	#WorldEventManager.create_event(town_event_data)
 	#var town_event = TownEvent.new()
 	#town_event.name = "城镇"
 	#town_event.description = "城镇"

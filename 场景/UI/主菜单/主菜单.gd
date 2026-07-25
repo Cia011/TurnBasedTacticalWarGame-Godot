@@ -11,11 +11,8 @@ func _ready() -> void:
 func _update_continue_button():
 	var continue_button = _find_button_by_name("继续游戏")
 	if continue_button:
-		continue_button.disabled = not WorldSaveManager.has_save_data()
-		if continue_button.disabled:
-			continue_button.text = "继续游戏 (无存档)"
-		else:
-			continue_button.text = "继续游戏"
+		continue_button.disabled = true
+		continue_button.text = "继续游戏 (未实现)"
 
 func _find_button_by_name(button_name: String) -> Control:
 	for button in v_box_container.get_children():
@@ -31,24 +28,9 @@ func on_menu_button_pressed(button_name:String):
 		"新建游戏":
 			_on_new_game()
 
-# 继续游戏逻辑
+# 继续游戏逻辑（暂未实现）
 func _on_continue_game():
-	print("[主菜单] 执行继续游戏")
-	GameState.is_new_game = false
-	# 获取最新存档槽位索引
-	var latest_slot_index = WorldSaveManager.get_latest_save_slot_index()
-	#print("latest_slot_index为:",latest_slot_index)
-	if latest_slot_index == -1:
-		print("[主菜单] 没有找到存档")
-		return
-	
-	print("[主菜单] 加载最新存档，槽位: ", latest_slot_index)
-	
-	# 加载存档
-	if await WorldSaveManager.load_game(latest_slot_index):
-		print("[主菜单] 存档加载成功")
-	else:
-		print("[主菜单] 存档加载失败")
+	print("[主菜单] 继续游戏功能暂未实现")
 
 # 新建游戏逻辑
 func _on_new_game():

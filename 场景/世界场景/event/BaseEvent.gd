@@ -39,26 +39,3 @@ func on_turn_end() -> void:
 # 触发时效果
 func on_trigger():
 	pass
-
-func serialize() -> Dictionary:
-	return {
-		"id": id,
-		"name": name,
-		"duration": duration,
-		"description": description,
-		"grid_position": grid_position,
-		"type": type,
-		"icon_path": icon.resource_path if icon else "",
-		"is_emergency": is_emergency,
-	}
-func deserialize(data: Dictionary) -> void:
-	id = data.get("id", id)
-	name = data.get("name", name)
-	duration = data.get("duration", duration)
-	description = data.get("description", description)
-	grid_position = ToolBox.string_to_vector2i(data.get("grid_position", grid_position))
-	type = data.get("type", type)
-	icon = load(data.get("icon_path", "")) 
-	# print("资源路径存在吗?",ResourceLoader.exists(data.get("icon_path", "")))
-	# if data.get("icon_path", "") else null
-	is_emergency = data.get("is_emergency", is_emergency)

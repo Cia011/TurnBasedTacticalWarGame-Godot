@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://xs8cmm83ohdt"]
+[gd_scene format=3 uid="uid://xs8cmm83ohdt"]
 
 [ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="1_i7ssk"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xbqji"]
 font = ExtResource("1_i7ssk")
 
-[node name="Control" type="Control"]
+[node name="Control" type="Control" unique_id=1306372087]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=775673762]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0

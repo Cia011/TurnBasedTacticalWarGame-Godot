@@ -29,11 +29,9 @@
 场景/
 ├── 全局/                      # 自动加载全局管理器
 │   ├── OthersGlobal/          # 通用全局系统
-│   │   ├── GameState.gd       # 游戏状态管理（角色、战斗状态、背包）
-│   │   ├── Enums.gd           # 全局枚举（物品类型、槽位类型）
+│   │   ├── GameState.gd       # 游戏状态管理（角色、战斗状态）
 │   │   ├── UiManager.gd       # UI 界面统一管理
-│   │   ├── PopManager.gd      # 弹窗管理
-│   │   └── WorldSaveManager.gd # 存档系统
+│   │   └── PopManager.gd      # 弹窗管理
 │   ├── WorldGlobal/           # 世界场景全局系统
 │   │   ├── WorldGridManager.gd # 世界地图网格管理
 │   │   └── WorldEventManager.gd # 世界事件总线
@@ -69,13 +67,12 @@
 ### 单位系统
 - **UnitData**: 角色数据（名称、属性、装备）
 - **BaseEquipment**: 装备系统（武器、盔甲、靴子、饰品）
-- **BaseBackpack**: 背包系统（支持多个背包）
 
 ### 场景切换
 ```
 世界场景 (WorldScenes) ↔ 战斗场景 (battle_map)
     ↓                          ↓
- GameState.change_scene_to()  WorldSaveManager.save_game_currrnt()
+ GameState.change_scene_to()  (存档系统已移除)
 ```
 
 ---
@@ -127,9 +124,7 @@
 | `input-handling` | 输入系统设计 |
 | `animation-system` | 动画系统实现 |
 | `tween-animation` | 补间动画 |
-| `inventory-system` | 背包物品系统 |
 | `dialogue-system` | 对话系统 |
-| `save-load` | 存档系统 |
 | `ai-navigation` | AI 导航和行为树 |
 | `ability-system` | 技能和 Buff/Debuff |
 
@@ -207,12 +202,10 @@
 | 名称 | 路径 | 用途 |
 |------|------|------|
 | `GameState` | `res://场景/全局/OthersGlobal/GameState.gd` | 游戏全局状态、角色管理 |
-| `Enums` | `res://场景/全局/OthersGlobal/Enums.gd` | 全局枚举定义 |
 | `UiManager` | `res://场景/全局/OthersGlobal/UiManager.gd` | UI 界面管理 |
 | `PopManager` | `res://场景/全局/OthersGlobal/PopManager.gd` | 弹窗管理 |
 | `WorldGridManager` | `res://场景/全局/WorldGlobal/WorldGridManager.gd` | 世界网格 |
 | `WorldEventManager` | `res://场景/全局/WorldGlobal/WorldEventManager.gd` | 世界事件 |
-| `WorldSaveManager` | `res://场景/全局/OthersGlobal/WorldSaveManager.gd` | 存档系统 |
 | `BattleGridManager` | `res://场景/全局/BattleGlobal/BattleGridManager.gd` | 战斗网格与寻路 |
 | `BattleActionManager` | `res://场景/全局/BattleGlobal/BattleActionManager.gd` | 战斗行动 |
 | `BattleTurnManager` | `res://场景/全局/BattleGlobal/BattleTurnManager.gd` | 回合管理 |

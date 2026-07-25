@@ -14,25 +14,6 @@ var is_battleing = false
 
 #var is_open_UI : bool = false
 
-#-------------------------------------
-#----------------背包部分--------------
-var all_backpacks : Array[BaseBackpack]
-
-var on_mouse_slot_item : BaseItem
-#此信号0接受
-signal signal_mouse_slot_change(item:BaseItem)
-func set_mouse_slot_item(item:BaseItem):
-	on_mouse_slot_item = item
-	signal_mouse_slot_change.emit(item)
-func get_mouse_slot_item()->BaseItem:
-	signal_mouse_slot_change.emit(on_mouse_slot_item)
-	return on_mouse_slot_item
-#add/remove
-func add_backpack(backpack:BaseBackpack):
-	all_backpacks.append(backpack)
-func remove_backpack(backpack:BaseBackpack):
-	all_backpacks.erase(backpack)
-#------------------------------------------
 #///////////////////////////
 signal scenes_ready(scenes_name:String)
 
@@ -52,15 +33,6 @@ func _ready():
 	})
 	register_unit(player_char2)
 		
-	var equpment1 = BaseEquipment.create_from_data({
-		"item_name": "小刀",
-		"id": "1234",
-		"texture_path": "res://素材/角色/Sprite-0010.png",
-		"item_type": "武器",
-		"defense": 100,
-	})
-	player_char2.equipments.add_item(equpment1)		
-
 	
 	# var enemy_char = UnitData.new()
 	# enemy_char.character_name = "敌人"
@@ -86,17 +58,12 @@ func register_enemy_unit(unit:UnitData) -> void:
 
 func change_scene_to(scene:String):
 	UiManager.close_all_open_ui()
-	if scene!= "world" :
-		print("[GameState]","实时备份")
-		WorldSaveManager.save_game_currrnt()
 	match scene:
 		"battle":
 			is_battleing = true
 			get_tree().change_scene_to_file("res://场景/战斗场景/根节点/battle_map.tscn")
 		"world":
 			is_battleing = false
-			WorldSaveManager.load_game_current()
-			#get_tree().change_scene_to_file("res://场景/世界场景/WorldScenes.tscn")
 
 
 # 重置游戏状态
@@ -115,5 +82,5 @@ func reset_game_state():
 
 ## 角色数据创建工厂
 func create_unit_data(data:Dictionary)->UnitData:
-	var unit = UnitData.create_from_data(data)
+	var unit = UnitData.new()
 	return unit

@@ -57,8 +57,7 @@ func _on_stats_changed(new_stats: Dictionary):
 #
 @export var character_background_story:String
 var character_id : String
- #装备和物品
-var equipments: BaseBackpack
+
 
 var buffs: Dictionary = {}  # id -> BaseBuff
 
@@ -74,10 +73,6 @@ func _init() -> void:
 	var random_component = randi() % 10000
 	character_id = str(int(time*10000)+random_component)
 	
-	equipments = BaseBackpack.new()
-	equipments.items.resize(10)
-	
-	equipments.item_change.connect(_on_equipment_change)
 	
 	data_manager = DataManager.new()
 	data_manager.initialize(get_states())
@@ -88,14 +83,7 @@ func _init() -> void:
 	buff_manager = BuffManager.new(self)
 func get_character_id()->String:
 	return character_id
-func add_equipment(item:BaseItem)->bool:
-	for index in equipments_types.size():
-		var type:String = equipments_types[index]
-		if type == item.item_type:
-			if equipments.get_item(index) == null:
-				equipments.set_item(index,item)
-				return true
-	return false
+
 # 同步基础属性到 DataManager
 func _sync_base_stat(stat_name: String, value):
 	if _is_initialized and data_manager:
@@ -126,28 +114,6 @@ func get_states() -> Dictionary:
 func get_base_stats() -> Dictionary:
 	return get_states()
 
-func _on_equipment_change(indexs):
-	# 重新计算装备加成
-	_update_equipment_bonus()
-	# 标记战斗属性需要更新（如果有战斗实例）
-	stats_changed.emit()
-func _update_equipment_bonus():
-	# 清除之前的装备加成
-	for stat in data_manager.基本加成:
-		data_manager.基本加成[stat] = 0
-	
-	# 计算所有装备的加成
-	for item in equipments.items:
-		if item and item is BaseItem:
-			_apply_equipment_bonus(item)
-	
-func _apply_equipment_bonus(item: BaseItem):
-	# 假设BaseItem有get_properties方法返回属性加成
-	var properties = item.get_properties()
-	if properties == null:return
-	for stat_name in properties:
-		if data_manager.基本加成.has(stat_name):
-			data_manager.基本加成[stat_name] += properties[stat_name]
 # 获取最终属性（包含装备和buff）
 func get_final_stat(stat_name: String) -> int:
 	return data_manager.get_stat(stat_name)
@@ -165,162 +131,6 @@ func on_turn_start():
 	buff_manager.on_turn_start()
 func on_turn_end():
 	buff_manager.on_turn_end()
-
-# 获取可序列化的数据
-func serialize() -> Dictionary:
-	var data = {
-		"character_id": character_id,
-		"character_name": character_name,
-		"level": level,
-		"defense": defense,
-		"agility": agility,
-		"strength": strength,
-		"constitution": constitution,
-		"intelligence": intelligence,
-		"action_points": action_points,
-		"max_health": max_health,
-		"current_health": current_health,
-		"character_background_story": character_background_story,
-		"texture_path": texture.resource_path if texture else "",
-		"equipment_data": _serialize_equipment(),
-		"skill_data": _serialize_skills(),
-		"statistics": _serialize_statistics()
-	}
-	return data
-
-# 从序列化数据恢复
-func deserialize(data: Dictionary) -> bool:
-	# 数据验证
-	# if not data.has("character_id"):
-	# 	push_warning("UnitData: deserialize called with invalid data (missing character_id)")
-	# 	return false
 	
-	character_id = data.get("character_id", character_id)
-	character_name = data.get("character_name", character_name)
-	level = data.get("level", level)
-	defense = data.get("defense", defense)
-	agility = data.get("agility", agility)
-	strength = data.get("strength", strength)
-	constitution = data.get("constitution", constitution)
-	intelligence = data.get("intelligence", intelligence)
-	action_points = data.get("action_points", action_points)
-	max_health = data.get("max_health", max_health)
-	current_health = data.get("current_health", current_health)
-	character_background_story = data.get("character_background_story", character_background_story)
-	
-	# 恢复纹理
-	var texture_path = data.get("texture_path", "")
-	if texture_path and ResourceLoader.exists(texture_path):
-		texture = load(texture_path)
-	else:
-		texture = null
-	
-	# 恢复装备
-	_restore_equipment(data.get("equipment_data", {}))
-	
-	# 恢复技能
-	#_restore_skills(data.get("skill_data", []))
-	
-	# 恢复统计信息
-	#_restore_statistics(data.get("statistics", {}))
-	
-	# 同步基础属性到DataManager
-	if _is_initialized and data_manager:
-		var base_stats = get_states()
-		for stat_name in base_stats:
-			if data_manager.基本数据.has(stat_name):
-				data_manager.基本数据[stat_name] = base_stats[stat_name]
-		
-		# 触发重新计算
-		data_manager.unit_data_change.emit(base_stats)
-	
-	return true
-static func create_from_data(data: Dictionary) -> UnitData:
-	var unit = UnitData.new()
-	if unit.deserialize(data):
-		return unit
-	else:
-		return null
-
-
-
-
-# 序列化装备数据
-func _serialize_equipment() -> Dictionary:
-	return equipments.get_serializable_data()
-
-# 序列化技能数据
-func _serialize_skills() -> Array[Dictionary]:
-	var skills_data = []
-	# 这里需要根据您的技能系统实现具体的序列化逻辑
-	if skills_data.is_empty():
-		return [{}]
-	return skills_data
-
-# 序列化统计信息
-func _serialize_statistics() -> Dictionary:
-	var stats = {
-		"battles_fought": 0,
-		"enemies_defeated": 0,
-		"damage_dealt": 0,
-		"damage_taken": 0,
-		"healing_done": 0
-	}
-	# 这里需要根据您的统计系统实现具体的序列化逻辑
-	return stats
-
-# 恢复装备数据
-func _restore_equipment(equipment_data: Dictionary) -> void:
-	# 清空当前装备 并恢复装备数据
-	equipments.restore_from_data(equipment_data)
-	#更新数据
-	_update_equipment_bonus()
-
-# 恢复技能数据
-func _restore_skills(skills_data: Array[Dictionary]) -> void:
-	# 这里需要根据您的技能系统实现具体的恢复逻辑
-	pass
-
-# 恢复统计信息
-func _restore_statistics(statistics: Dictionary) -> void:
-	# 这里需要根据您的统计系统实现具体的恢复逻辑
-	pass
-
-# 根据装备数据创建装备
-func _create_item_by_type(item_data: Dictionary) -> BaseItem:
-	# 这里需要根据您的装备系统实现具体的装备创建逻辑
-	var item = BaseItem.new()
-	var item_type:String = item_data.get("item_type", "")
-	match item_type:
-		"武器", "防具", "饰品":
-			# 如果是装备类型，创建BaseEquipment
-			return BaseEquipment.create_from_data(item_data)
-		"任意", "消耗品", "材料":
-			# 如果是普通物品，创建BaseItem
-			return BaseItem.create_from_data(item_data)
-		_:
-			# 默认创建BaseItem
-			push_warning("未知物品类型: " + item_type + ", 创建基础物品")
-			return BaseItem.create_from_data(item_data)
-	
-	# return item
-
-# 根据buff数据创建buff
-func _create_buff_by_data(buff_data: Dictionary) -> BaseBuff:
-	var buff_type = buff_data.get("buff_type", "")
-	var buff_id = buff_data.get("buff_id", "")
-	var duration = buff_data.get("duration", 0)
-	var stacks = buff_data.get("stacks", 1)
-	var properties = buff_data.get("properties", {})
-	
-	# 根据buff类型创建buff对象
-	if buff_type == "AttackBuff":
-		var buff = AttackBuff.new()
-		buff.id = buff_id
-		buff.duration = duration
-		buff.stacks = stacks
-		if buff.has_method("set_properties"):
-			buff.set_properties(properties)
-		return buff
-	# 默认返回基础null
-	return null
+func create_from_data(data:Dictionary) -> UnitData:
+	return UnitData.new()
