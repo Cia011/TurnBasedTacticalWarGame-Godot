@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bwa55npykaej7"]
+[gd_scene format=3 uid="uid://bwa55npykaej7"]
 
 [ext_resource type="Script" uid="uid://6ndgohqwkyqm" path="res://场景/其他/背包及物品/基类/BaseBackpackUI.gd" id="1_ogqkc"]
 [ext_resource type="Resource" uid="uid://cdg0psx5y4gf6" path="res://场景/其他/背包及物品/实现/基本背包.tres" id="2_bm38n"]
@@ -17,7 +17,7 @@ corner_radius_bottom_left = 20
 shadow_size = 2
 shadow_offset = Vector2(1, 0)
 
-[node name="BagUI" type="MarginContainer" node_paths=PackedStringArray("槽位容器")]
+[node name="BagUI" type="MarginContainer" unique_id=2063333677 node_paths=PackedStringArray("槽位容器")]
 custom_minimum_size = Vector2(364, 0)
 offset_left = 243.0
 offset_top = 80.0
@@ -33,20 +33,20 @@ script = ExtResource("1_ogqkc")
 "槽位容器" = NodePath("HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer/BaseBagUI")
 "背包系统" = ExtResource("2_bm38n")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1716921750]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8ma3s")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1891808622]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1149928441]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="标题" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="标题" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=1878372779]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 10
@@ -54,30 +54,30 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/标题"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/标题" unique_id=854874092]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "背包"
 
-[node name="EquipmentBar" parent="HBoxContainer/VBoxContainer" instance=ExtResource("3_idguo")]
+[node name="EquipmentBar" parent="HBoxContainer/VBoxContainer" unique_id=263538389 instance=ExtResource("3_idguo")]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer" unique_id=674681596]
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 4.0
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer" unique_id=560734894]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="BaseBagUI" type="GridContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer"]
+[node name="BaseBagUI" type="GridContainer" parent="HBoxContainer/VBoxContainer/ScrollContainer/MarginContainer" unique_id=642972733]
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2

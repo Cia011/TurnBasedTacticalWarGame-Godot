@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://dh5h2daf6y3wn"]
+[gd_resource type="TileSet" format=3 uid="uid://dh5h2daf6y3wn"]
 
 [ext_resource type="Texture2D" uid="uid://dipyhrvtevs77" path="res://素材/地块/world/地形地块.png" id="1_rxtc0"]
 

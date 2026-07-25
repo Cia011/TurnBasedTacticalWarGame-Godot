@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b5x4haen4p082"]
+[gd_resource type="TileSet" format=3 uid="uid://b5x4haen4p082"]
 
 [ext_resource type="Texture2D" uid="uid://cl8w2dneqim7v" path="res://素材/地块/battle/overworld_tileset_grass.png" id="1_ww7hy"]
 

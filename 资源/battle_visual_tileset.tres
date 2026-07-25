@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bspraxy67dv08"]
+[gd_resource type="TileSet" format=3 uid="uid://bspraxy67dv08"]
 
 [ext_resource type="Texture2D" uid="uid://bedq06dyxm80v" path="res://素材/grid_visual.png" id="1_vvf4v"]
 

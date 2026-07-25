@@ -20,7 +20,6 @@ func set_up(size:int):
 		槽位容器.add_child(new_slot)
 		new_slot.name = str(index)
 		
-		
 		update_slot([index])
 		if not 槽位容器.get_child(index):continue
 		if not 槽位容器.get_child(index).is_usable:continue#若设置不可用则不进行信号连接

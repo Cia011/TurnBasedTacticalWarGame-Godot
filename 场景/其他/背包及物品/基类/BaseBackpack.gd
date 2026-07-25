@@ -14,40 +14,20 @@ func 唯一化(index):
 # 验证索引有效性
 func is_valid_index(index: int) -> bool:
 	return index == -1 or (index >= 0 and index < items.size())
+# 获取以使用物品格总数
 func get_item_count() -> int:
 	var count = 0
 	for item in items:
 		if item:
 			count += 1
 	return count
-
+# 获取背包总容量
 func get_total_capacity() -> int:
 	return items.size()
-
+# 判断背包是否已满
 func is_full() -> bool:
 	return get_item_count() >= get_total_capacity()
 #交换索引上的物品
-#func swap_item(index,target_index):
-	##交换鼠标与槽里的物品
-	#if index == -1:
-		#var mouse_slot_item = GameState.get_mouse_slot_item()
-		#GameState.set_mouse_slot_item(items[target_index])
-#
-		#items[target_index] = mouse_slot_item
-#
-	#else:
-		#var item = items[index]
-		#var target_item = items[target_index]
-		#if (item is BaseItem and target_item is BaseItem):
-			#if item.item_name == target_item.item_name and item.max_stack > 1:
-				#target_item.number += item.number
-				#remove_item(index)
-		#else:
-			#items[target_index] = item
-			#items[index] = target_item
-	#item_change.emit([index,target_index])
-
-# 改进的交换方法
 func swap_item(source_index: int, target_index: int) -> void:
 	print("swap")
 	
@@ -78,8 +58,6 @@ func swap_item(source_index: int, target_index: int) -> void:
 	items[target_index] = source_item
 	
 	item_change.emit([source_index, target_index])
-
-
 #移除索引上的物品
 func remove_item(index):
 	if index == -1:
@@ -113,14 +91,6 @@ func set_item(index:int,item:BaseItem,number:int = -1):
 			items[index].number = number
 	item_change.emit([index])
 
-#func add_item(item,number:int = -1):
-	#
-	#for index in range(0,items.size()):
-		#if items[index] == null:
-			#set_item(index,item,number)
-			#
-			#break
-		#
 # 改进的添加物品方法
 func add_item(item: BaseItem, number: int = -1) -> bool:
 	if not item:
