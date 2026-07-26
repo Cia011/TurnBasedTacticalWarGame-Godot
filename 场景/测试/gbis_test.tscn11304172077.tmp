@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://lp7esfabrfpc"]
+
+[ext_resource type="Script" uid="uid://dfjp1j4jawdnv" path="res://场景/测试/gbis_test.gd" id="1"]
+
+[node name="GBISTest" type="Control" unique_id=1908920097]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")

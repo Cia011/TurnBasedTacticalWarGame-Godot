@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="EquipmentSlotRepository" format=3]
+
+[ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/model/slot/equipment_slot_data.gd" id="1_v2ldv"]
+[ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/repository/equipment_slot_repository.gd" id="2_fql2m"]
+
+[resource]
+script = ExtResource("2_fql2m")

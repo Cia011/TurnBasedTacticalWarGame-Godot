@@ -64,8 +64,6 @@ var buffs: Dictionary = {}  # id -> BaseBuff
 var data_manager : DataManager
 var buff_manager: BuffManager
 
-var equipments_types : Array[String] = [	"武器","头盔","护甲","靴子","武器",
-										"戒指","项链","腰带","手套","戒指"]
 
 var _is_initialized :bool= false
 func _init() -> void:

@@ -68,7 +68,6 @@ func _ready() -> void:
 	health_ui.set_up(get_stat("max_health"),get_stat("current_health"),is_teammate)
 	
 	if is_teammate == false:
-		
 		AI = AggressiveEnemyAI.new(self)
 		add_child(AI)
 	#--------------shader---------------------

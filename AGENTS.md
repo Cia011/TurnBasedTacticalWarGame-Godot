@@ -201,6 +201,7 @@
 
 | 名称 | 路径 | 用途 |
 |------|------|------|
+| `GBIS` | `res://addons/grid_base_inventory_system/core/grid_base_inventory_system.gd` | 网格背包系统核心（名称必须为 GBIS） |
 | `GameState` | `res://场景/全局/OthersGlobal/GameState.gd` | 游戏全局状态、角色管理 |
 | `UiManager` | `res://场景/全局/OthersGlobal/UiManager.gd` | UI 界面管理 |
 | `PopManager` | `res://场景/全局/OthersGlobal/PopManager.gd` | 弹窗管理 |
@@ -218,3 +219,66 @@
 
 - **CodeEditorSwitch**: 外部代码编辑器切换
 - **Godot MCP**: MCP 服务器插件（用于 Trae IDE 连接）
+
+---
+
+## GBIS 网格背包系统
+
+### 插件概述
+- **插件路径**: `res://addons/grid_base_inventory_system/`
+- **插件类型**: 运行时框架（非编辑器插件）
+- **核心类**: `grid_base_inventory_system.gd`（自动加载名为 `GBIS`）
+
+### 架构说明
+采用类 MVC 设计，分离展示层和数据层：
+- **Model**: `core/model/item/` — 物品数据类（ItemData, ConsumableData, EquipmentData, StackableData）
+- **Service**: `core/service/` — 业务逻辑（InventoryService, ShopService, EquipmentSlotService）
+- **View**: `core/view/` — UI 展示（InventoryView, ShopView, ItemView）
+
+### 输入配置
+
+| 输入名称 | 默认按键 | 功能 |
+|----------|---------|------|
+| `inv_click` | 鼠标左键 | 点击物品 |
+| `inv_use` | 鼠标右键 | 使用物品 |
+| `inv_quick_move` | Shift + 鼠标右键 | 快速移动物品 |
+| `inv_split` | 鼠标中键 | 分割物品 |
+
+### 使用方法
+
+**添加物品到背包:**
+```gdscript
+var my_item = preload("res://path/to/your_item.tres")
+GBIS.add_item("Inventory", my_item)
+```
+
+**配置背包间快速移动关系:**
+```gdscript
+GBIS.add_quick_move_relation("Inventory", "Equipment Slot")
+```
+
+**监听物品信息显示:**
+```gdscript
+GBIS.sig_item_focused.connect(your_display_method)
+GBIS.sig_item_focus_lost.connect(your_clear_method)
+```
+
+**保存/加载:**
+```gdscript
+GBIS.save()    # 保存背包和装备槽
+await GBIS.load()  # 加载背包和装备槽
+```
+
+### 物品类型
+
+| 类型 | 说明 |
+|------|------|
+| `ItemData` | 基础物品类 |
+| `ConsumableData` | 消耗品（可使用） |
+| `EquipmentData` | 装备（可装备到槽位） |
+| `StackableData` | 可堆叠物品 |
+
+### 资源文件
+
+- **插件文档**: `res://addons/grid_base_inventory_system/readme.md`
+- **示例场景**: `res://addons/grid_base_inventory_system/GBIS_demos/`（如需要可参考）
