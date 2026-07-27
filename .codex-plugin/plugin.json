@@ -1,0 +1,21 @@
+{
+  "name": "godot-tactical-srpg",
+  "version": "1.0.0",
+  "displayName": "战旗项目重构 - Godot 4.7 Tactical SRPG",
+  "description": "Codex plugin for a Godot 4.7 turn-based tactical SRPG project. Provides GodotPrompter skills and MCP connectivity to the Godot editor.",
+  "author": "Project team",
+  "category": "Game Development",
+  "policy": {
+    "installation": "AVAILABLE",
+    "authentication": "ON_INSTALL"
+  },
+  "skills": {
+    "source": "file",
+    "path": "./"
+  },
+  "mcpServers": {
+    "godot-editor": {
+      "url": "http://localhost:9080/mcp"
+    }
+  }
+}

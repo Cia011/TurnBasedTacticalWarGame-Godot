@@ -282,3 +282,55 @@ await GBIS.load()  # 加载背包和装备槽
 
 - **插件文档**: `res://addons/grid_base_inventory_system/readme.md`
 - **示例场景**: `res://addons/grid_base_inventory_system/GBIS_demos/`（如需要可参考）
+---
+
+## Codex 配置
+
+### 技能 (Skills)
+
+本项目使用 **GodotPrompter** 技能库。所有 Godot 开发技能已从 `.trae/skills/` 安装到 Codex 技能目录中，可直接使用。
+
+在开发时，系统会自动根据任务匹配合适的技能（如 `state-machine`、`event-bus`、`scene-organization` 等），在实现前请确保相关技能已加载。
+
+完整技能列表参见 `.trae/skills/using-godot-prompter/SKILL.md`。
+
+### MCP (Model Context Protocol)
+
+**Godot MCP Native** 插件已安装在 `res://addons/godot_mcp/`，在 Godot 编辑器中启动后会自动运行 MCP 服务器。
+
+**连接方式（二选一）:**
+
+1. **HTTP 模式（推荐）** — 已配置 `http://localhost:9080/mcp`
+   - 在 Codex 桌面应用中配置 MCP 服务器：
+     - 设置 → MCP Servers → 添加 `godot-editor`
+     - URL: `http://localhost:9080/mcp`
+   - 或在 `~/.codex/config.toml` 中添加：
+     ```toml
+     [mcp_servers.godot_editor]
+     url = "http://localhost:9080/mcp"
+     ```
+   - 确保 **Godot 编辑器正在运行**且已打开本项目
+
+2. **STDIO 模式** — 通过命令行启动 Godot MCP：
+   ```bash
+   Godot_v4.7-dev1_win64.exe --path . --mcp-server
+   ```
+   适用于无编辑器的 CI/CD 场景
+
+**可用的 MCP 工具（部分）:**
+| 类别 | 工具数 | 说明 |
+|------|--------|------|
+| 节点工具 | 9+11 | 创建/修改/管理场景节点 |
+| 脚本工具 | 7+8 | 编辑/创建/分析 GDScript |
+| 场景工具 | 4+4 | 操作场景结构 |
+| 编辑器工具 | 4+12 | 编辑器控制 |
+| 调试工具 | 3+68 | 调试/断点/分析器 |
+| 项目工具 | 3+23 | 项目设置/资源管理 |
+
+**Vibe Coding 模式**: MCP 支持 Vibe Coding 模式（在插件设置中启用），可防止 AI 操作打断编辑器焦点。
+
+### 项目本地配置
+
+- `.codex-plugin/plugin.json` — 项目 Codex 插件清单
+- `.mcp.json` — 项目级 MCP 服务器配置（兼容标准 MCP 发现格式）
+- `.codex/` — 项目级 Codex 配置目录

@@ -30,6 +30,7 @@ BattleTurnManager="*res://场景/全局/BattleGlobal/BattleTurnManager.gd"
 BattleUnitManager="*res://场景/全局/BattleGlobal/BattleUnitManager.gd"
 BattleEventBus="*res://场景/全局/BattleGlobal/BattleEventBus.gd"
 GBIS="*res://addons/grid_base_inventory_system/core/grid_base_inventory_system.gd"
+MCPRuntimeProbe="*res://addons/godot_mcp/runtime/mcp_runtime_probe.gd"
 
 [display]
 

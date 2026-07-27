@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "godot-editor": {
+      "url": "http://localhost:9080/mcp",
+      "description": "Godot 4.7 Editor MCP - connect when the Godot editor is running with the project open"
+    }
+  }
+}
