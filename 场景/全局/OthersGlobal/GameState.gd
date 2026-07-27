@@ -43,6 +43,16 @@ func _ready():
 		"texture_path": "res://素材/角色/Sprite-0010.png",
 	})
 	register_enemy_unit(enemy_char2)
+	var enemy_char3 = create_unit_data({
+		"character_name": "敌人2",
+		"texture_path": "res://素材/角色/Sprite-0010.png",
+	})
+	register_enemy_unit(enemy_char3)
+	var enemy_char4 = create_unit_data({
+		"character_name": "敌人2",
+		"texture_path": "res://素材/角色/Sprite-0010.png",
+	})
+	register_enemy_unit(enemy_char4)
 	print("[gamestate] : ready end")
 	
 
@@ -82,5 +92,7 @@ func reset_game_state():
 
 ## 角色数据创建工厂
 func create_unit_data(data:Dictionary)->UnitData:
-	var unit = UnitData.new()
+	#var unit = UnitData.create_from_data(data)
+	var unit =UnitData.new()
+	unit.character_name = data["character_name"]
 	return unit

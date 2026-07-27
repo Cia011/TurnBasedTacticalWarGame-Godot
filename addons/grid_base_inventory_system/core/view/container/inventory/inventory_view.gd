@@ -107,7 +107,7 @@ func _ready() -> void:
 		stack_num_font = get_theme_font("font")
 	
 	call_deferred("refresh")
-
+	
 ## 监听添加物品
 func _on_item_added(inv_name:String, item_data: ItemData, grids: Array[Vector2i]) -> void:
 	if not inv_name == container_name:

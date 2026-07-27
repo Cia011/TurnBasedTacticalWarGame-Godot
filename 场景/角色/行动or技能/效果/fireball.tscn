@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bvbosfmrbrhw3"]
+[gd_scene format=3 uid="uid://bvbosfmrbrhw3"]
 
 [ext_resource type="Script" uid="uid://ds03mt2dtbfl" path="res://场景/角色/行动or技能/效果/fireball.gd" id="1_2t6w2"]
 
@@ -33,10 +33,10 @@ color_ramp = SubResource("GradientTexture1D_icx4y")
 turbulence_enabled = true
 turbulence_noise_strength = 20.0
 
-[node name="Fireball" type="Node2D"]
+[node name="Fireball" type="Node2D" unique_id=1417942067]
 script = ExtResource("1_2t6w2")
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=587529993]
 amount = 30
 lifetime = 0.3
 process_material = SubResource("ParticleProcessMaterial_2t6w2")

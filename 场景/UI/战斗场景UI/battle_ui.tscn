@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://x461qtefu8ca"]
+[gd_scene load_steps=11 format=3 uid="uid://x461qtefu8ca"]
 
 [ext_resource type="Script" uid="uid://b6pyw642curpn" path="res://场景/UI/战斗场景UI/UnitActionUI/unit_action_ui.gd" id="1_nruvc"]
 [ext_resource type="PackedScene" uid="uid://cd718qgnqs328" path="res://场景/UI/战斗场景UI/UnitActionUI/action_card_ui.tscn" id="2_nruvc"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://b8j6ututjp8w0" path="res://场景/UI/战斗场景UI/UnitActionUI/结束回合按钮.gd" id="5_y5x0i"]
 [ext_resource type="LabelSettings" uid="uid://bkvctkykfn31e" path="res://资源/Style/LabelSettings/白字黑边.tres" id="6_s08gc"]
 [ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="7_s08gc"]
+[ext_resource type="PackedScene" uid="uid://battle_order_ui" path="res://场景/UI/战斗场景UI/BattleOrderUI/battle_order_ui.tscn" id="8_battle_order"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ie373"]
 font = ExtResource("7_s08gc")
@@ -16,6 +17,8 @@ outline_size = 5
 outline_color = Color(0, 0, 0, 1)
 
 [node name="BattleUI" type="CanvasLayer"]
+
+[node name="BattleOrderUI" parent="." instance=ExtResource("8_battle_order")]
 
 [node name="UnitActionUI" type="MarginContainer" parent="."]
 anchors_preset = 15

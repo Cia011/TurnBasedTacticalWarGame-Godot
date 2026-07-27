@@ -2,6 +2,10 @@ extends Node
 
 var units:Array[Unit]
 
+# 角色注册/注销信号
+signal unit_registered(unit)
+signal unit_unregistered(unit)
+
 #判断胜利条件
 var our_side:Array[Unit]
 var enemy_side:Array[Unit]
@@ -17,6 +21,7 @@ func register_unit(unit:Unit) -> void:
 
 	unit.unit_die.connect(unit_die)
 	print(units)
+	unit_registered.emit(unit)
 
 func unregister_unit(unit:Unit) -> void:
 	units.erase(unit)
@@ -24,6 +29,7 @@ func unregister_unit(unit:Unit) -> void:
 		our_side.erase(unit)
 	else:
 		enemy_side.erase(unit)
+	unit_unregistered.emit(unit)
 	#失败
 	if our_side.is_empty():
 		battle_end = true

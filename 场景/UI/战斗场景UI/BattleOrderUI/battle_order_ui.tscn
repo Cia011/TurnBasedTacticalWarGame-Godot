@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://cj3bhf6a7lvaa"]
+
+[ext_resource type="Script" uid="uid://dfw280y4i067a" path="res://场景/UI/战斗场景UI/BattleOrderUI/battle_order_ui.gd" id="1"]
+
+[node name="BattleOrderUI" type="Control" unique_id=783163839 node_paths=PackedStringArray("order_container", "info_label")]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -648.0
+offset_bottom = -648.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1")
+order_container = NodePath("OrderPanel/InnerContainer/MainContainer/OrderContainer")
+info_label = NodePath("OrderPanel/InnerContainer/MainContainer/InfoLabel")
+
+[node name="OrderPanel" type="Panel" parent="." unique_id=1035550029]
+custom_minimum_size = Vector2(800, 45)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 800.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="InnerContainer" type="MarginContainer" parent="OrderPanel" unique_id=36064553]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 10
+
+[node name="MainContainer" type="HBoxContainer" parent="OrderPanel/InnerContainer" unique_id=213733077]
+layout_mode = 2
+
+[node name="InfoLabel" type="Label" parent="OrderPanel/InnerContainer/MainContainer" unique_id=149018384]
+custom_minimum_size = Vector2(80, 25)
+layout_mode = 2
+text = "战斗顺序"
+
+[node name="OrderContainer" type="HBoxContainer" parent="OrderPanel/InnerContainer/MainContainer" unique_id=918179325]
+layout_mode = 2
+size_flags_horizontal = 3

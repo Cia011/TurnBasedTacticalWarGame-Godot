@@ -1,13 +1,44 @@
-[gd_resource type="Resource" script_class="ContainerRepository" format=3]
+[gd_resource type="Resource" script_class="ContainerRepository" format=3 uid="uid://ddagaqjn5r52x"]
 
-[ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/model/container/container_data.gd" id="1_2rihp"]
-[ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/model/item/item_data.gd" id="2_c32pk"]
-[ext_resource type="Texture2D" path="res://素材/图标/iton/剑.png" id="3_sels7"]
-[ext_resource type="Texture2D" path="res://素材/图标/slot/slot.png" id="4_jknxf"]
-[ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/model/item/consumable_data.gd" id="5_vylbe"]
-[ext_resource type="Texture2D" path="res://素材/图标/slot/盔甲slot.png" id="6_eemdc"]
-[ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/model/item/equipment_data.gd" id="7_61wgs"]
-[ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/repository/container_repository.gd" id="8_totqh"]
+[ext_resource type="Script" uid="uid://3a8er1gtaua3" path="res://addons/grid_base_inventory_system/core/model/container/container_data.gd" id="1_2rihp"]
+[ext_resource type="Script" uid="uid://c5uqs7o5b2w68" path="res://addons/grid_base_inventory_system/core/model/item/item_data.gd" id="2_c32pk"]
+[ext_resource type="Texture2D" uid="uid://enb4xxna56gy" path="res://素材/图标/iton/剑.png" id="3_sels7"]
+[ext_resource type="Texture2D" uid="uid://113aqj7j3u3y" path="res://素材/图标/slot/slot.png" id="4_jknxf"]
+[ext_resource type="Script" uid="uid://x8lw6iyk5rf5" path="res://addons/grid_base_inventory_system/core/model/item/consumable_data.gd" id="5_vylbe"]
+[ext_resource type="Texture2D" uid="uid://l4jnj07b7px7" path="res://素材/图标/slot/盔甲slot.png" id="6_eemdc"]
+[ext_resource type="Script" uid="uid://c81d67advvltj" path="res://addons/grid_base_inventory_system/core/model/item/equipment_data.gd" id="7_61wgs"]
+[ext_resource type="Script" uid="uid://buv85ki5jyttc" path="res://addons/grid_base_inventory_system/core/repository/container_repository.gd" id="8_totqh"]
+
+[sub_resource type="Resource" id="Resource_vylbe"]
+script = ExtResource("7_61wgs")
+item_name = "铁甲"
+type = "盔甲"
+icon = ExtResource("6_eemdc")
+
+[sub_resource type="Resource" id="Resource_eemdc"]
+script = ExtResource("1_2rihp")
+columns = 4
+rows = 3
+container_name = "SecondaryInventory"
+avilable_types = Array[String](["ANY"])
+items = Array[ExtResource("2_c32pk")]([SubResource("Resource_vylbe")])
+item_grids_map = Dictionary[ExtResource("2_c32pk"), Array]({
+SubResource("Resource_vylbe"): Array[Vector2i]([Vector2i(2, 0)])
+})
+grid_item_map = Dictionary[Vector2i, ExtResource("2_c32pk")]({
+Vector2i(0, 0): null,
+Vector2i(0, 1): null,
+Vector2i(0, 2): null,
+Vector2i(1, 0): null,
+Vector2i(1, 1): null,
+Vector2i(1, 2): null,
+Vector2i(2, 0): SubResource("Resource_vylbe"),
+Vector2i(2, 1): null,
+Vector2i(2, 2): null,
+Vector2i(3, 0): null,
+Vector2i(3, 1): null,
+Vector2i(3, 2): null
+})
 
 [sub_resource type="Resource" id="Resource_2rihp"]
 script = ExtResource("2_c32pk")
@@ -68,37 +99,6 @@ Vector2i(5, 0): null,
 Vector2i(5, 1): null,
 Vector2i(5, 2): null,
 Vector2i(5, 3): null
-})
-
-[sub_resource type="Resource" id="Resource_vylbe"]
-script = ExtResource("7_61wgs")
-item_name = "铁甲"
-type = "盔甲"
-icon = ExtResource("6_eemdc")
-
-[sub_resource type="Resource" id="Resource_eemdc"]
-script = ExtResource("1_2rihp")
-columns = 4
-rows = 3
-container_name = "SecondaryInventory"
-avilable_types = Array[String](["ANY"])
-items = Array[ExtResource("2_c32pk")]([SubResource("Resource_vylbe")])
-item_grids_map = Dictionary[ExtResource("2_c32pk"), Array]({
-SubResource("Resource_vylbe"): Array[Vector2i]([Vector2i(2, 0)])
-})
-grid_item_map = Dictionary[Vector2i, ExtResource("2_c32pk")]({
-Vector2i(0, 0): null,
-Vector2i(0, 1): null,
-Vector2i(0, 2): null,
-Vector2i(1, 0): null,
-Vector2i(1, 1): null,
-Vector2i(1, 2): null,
-Vector2i(2, 0): SubResource("Resource_vylbe"),
-Vector2i(2, 1): null,
-Vector2i(2, 2): null,
-Vector2i(3, 0): null,
-Vector2i(3, 1): null,
-Vector2i(3, 2): null
 })
 
 [resource]

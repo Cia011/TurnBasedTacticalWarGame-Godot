@@ -17,18 +17,19 @@ config/icon="res://素材/icon.svg"
 
 [autoload]
 
-GBIS="*res://addons/grid_base_inventory_system/core/grid_base_inventory_system.gd"
 GameState="*res://场景/全局/OthersGlobal/GameState.gd"
+Enums="*res://场景/全局/OthersGlobal/Enums.gd"
 UiManager="*res://场景/全局/OthersGlobal/UIManager.gd"
 PopManager="*res://场景/全局/OthersGlobal/PopManager.gd"
 WorldGridManager="*res://场景/全局/WorldGlobal/WorldGridManager.gd"
 WorldEventManager="*res://场景/全局/WorldGlobal/WorldEventManager.gd"
+WorldSaveManager="*res://场景/全局/OthersGlobal/WorldSaveManager.gd"
 BattleGridManager="*res://场景/全局/BattleGlobal/BattleGridManager.gd"
 BattleActionManager="*res://场景/全局/BattleGlobal/BattleActionManager.gd"
 BattleTurnManager="*res://场景/全局/BattleGlobal/BattleTurnManager.gd"
 BattleUnitManager="*res://场景/全局/BattleGlobal/BattleUnitManager.gd"
 BattleEventBus="*res://场景/全局/BattleGlobal/BattleEventBus.gd"
-MCPRuntimeProbe="*res://addons/godot_mcp/runtime/mcp_runtime_probe.gd"
+GBIS="*res://addons/grid_base_inventory_system/core/grid_base_inventory_system.gd"
 
 [display]
 

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dfjp1j4jawdnv" path="res://场景/测试/gbis_test.gd" id="1"]
 [ext_resource type="Script" uid="uid://b3x4mwtjmm4tp" path="res://addons/grid_base_inventory_system/core/view/container/inventory/inventory_view.gd" id="2_bd2oq"]
+[ext_resource type="Script" uid="uid://gqt6pq4lt0gw" path="res://addons/grid_base_inventory_system/core/view/container/shop/shop_view.gd" id="3_dh3mv"]
 
 [node name="GBISTest" type="Control" unique_id=1908920097]
 layout_mode = 3
@@ -24,21 +25,15 @@ text = "GBIS 背包系统测试"
 layout_mode = 2
 alignment = 1
 
-[node name="Panel" type="Panel" parent="MainContainer/InventoryContainer" unique_id=1787252340]
+[node name="MainBackpack" type="VBoxContainer" parent="MainContainer/InventoryContainer" unique_id=1419458968]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MainBackpack" type="VBoxContainer" parent="MainContainer/InventoryContainer/Panel" unique_id=1419458968]
-layout_mode = 0
-offset_right = 48.0
-offset_bottom = 27.0
-size_flags_horizontal = 3
-
-[node name="MainBackpackLabel" type="Label" parent="MainContainer/InventoryContainer/Panel/MainBackpack" unique_id=1057644328]
+[node name="MainBackpackLabel" type="Label" parent="MainContainer/InventoryContainer/MainBackpack" unique_id=1057644328]
 layout_mode = 2
 text = "主背包"
 
-[node name="MainInventory" type="Control" parent="MainContainer/InventoryContainer/Panel/MainBackpack" unique_id=1406339523]
+[node name="MainInventory" type="Control" parent="MainContainer/InventoryContainer/MainBackpack" unique_id=1406339523]
 custom_minimum_size = Vector2(384, 256)
 layout_mode = 2
 script = ExtResource("2_bd2oq")
@@ -105,3 +100,26 @@ text = "加载"
 [node name="HintLabel" type="Label" parent="MainContainer" unique_id=1598031410]
 layout_mode = 2
 text = "操作提示: 左键点击选中/移动物品 | 右键使用物品 | Shift+右键快速移动到另一个背包 | 悬停查看物品信息"
+
+[node name="ShopView" type="Control" parent="." unique_id=1323096853]
+anchors_preset = 0
+offset_left = 820.0
+offset_top = 65.0
+offset_right = 1140.0
+offset_bottom = 385.0
+script = ExtResource("3_dh3mv")
+container_columns = 10
+container_rows = 10
+metadata/_custom_type_script = "uid://gqt6pq4lt0gw"
+
+[node name="InventoryView" type="Control" parent="." unique_id=837500886]
+anchors_preset = 0
+offset_left = 591.0
+offset_top = 440.0
+offset_right = 783.0
+offset_bottom = 568.0
+script = ExtResource("2_bd2oq")
+container_name = "TestInventory"
+container_columns = 6
+container_rows = 4
+metadata/_custom_type_script = "uid://b3x4mwtjmm4tp"

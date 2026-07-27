@@ -94,7 +94,7 @@ func _sync_base_stat(stat_name: String, value):
 
 
 ## 视觉表现
-@export var texture: Texture2D
+@export var texture: Texture2D = preload("res://素材/角色/Sprite-0010.png")
 
 func get_states() -> Dictionary:
 	return {
@@ -130,5 +130,7 @@ func on_turn_start():
 func on_turn_end():
 	buff_manager.on_turn_end()
 	
-func create_from_data(data:Dictionary) -> UnitData:
-	return UnitData.new()
+#static func create_from_data(data:Dictionary) -> UnitData:
+	#var unitdata =  UnitData.new()
+	#unitdata.character_name = data[character_name]
+	#return unitdata

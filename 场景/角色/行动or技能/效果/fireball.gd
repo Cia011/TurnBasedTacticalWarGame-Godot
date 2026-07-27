@@ -4,7 +4,7 @@ extends Node2D
 signal arrived_at_target
 const BANG = preload("res://场景/角色/行动or技能/效果/bang.tscn")
 # 火球属性
-var speed: float = 100
+var speed: float = 200
 var start_position: Vector2
 var target_position: Vector2
 var progress: float = 0.0

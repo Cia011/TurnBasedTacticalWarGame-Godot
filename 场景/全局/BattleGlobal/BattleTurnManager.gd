@@ -42,9 +42,11 @@ func select_unit(unit:Unit)->void:
 		return
 	if pre_unit:
 		pre_unit.end_turn()
+		signal_turn_end.emit(pre_unit)
 	current_unit = unit
 	print("select_unit" + str(unit))
 	current_unit.start_turn()
+	signal_turn_start.emit(current_unit)
 	signal_change_unit.emit(unit)
 	if current_unit.is_teammate == true:
 		BattleActionManager.set_default_action()
