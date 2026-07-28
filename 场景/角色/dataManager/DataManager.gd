@@ -1,106 +1,108 @@
-extends Node
+﻿extends Node
 class_name DataManager
 
-#signal unit_data_change(stat_name:String,new_value)
-signal unit_data_change(new_stats:Dictionary)
+## 属性数据管理器
+## 三层架构：base_stats (基础) → flat_bonuses (装备) → modifiers (buff修饰)
+## 最终值 = (base + flat) * mult_product + final_bonus
 
-var 基本数据: Dictionary = {}
+signal stat_changed(changed_stats: Dictionary)
 
-var 基本加成: Dictionary = {}
-var 修饰器: Dictionary = {}  # 存储所有修饰符
+var base_stats: Dictionary = {}      # 基础属性（等级、力量、敏捷等）
+var flat_bonuses: Dictionary = {}    # 装备/被动提供的数值加成
+var final_bonuses: Dictionary = {}   # 最终数值修正（如受伤扣血、临时光环）
+var modifiers: Dictionary = {}       # 修饰符列表（buff 提供的 flat + multiplier）
 
-var 最终加成:Dictionary={}
 
 func initialize(initial_stats: Dictionary):
-	#基本数据 = initial_stats.duplicate()#复制副本
-	基本数据 = initial_stats
-	# 初始化加成和修饰符字典
+	base_stats = initial_stats.duplicate()
+	for stat in base_stats:
+		flat_bonuses[stat] = 0
+		final_bonuses[stat] = 0
+		modifiers[stat] = []
 
-	for stat in 基本数据:
-		基本加成[stat] = 0
-		最终加成[stat] = 0
-		修饰器[stat] = []
 
 # 获取最终属性值
 func get_stat(stat_name: String) -> int:
-	if not 基本数据.has(stat_name):
+	if not base_stats.has(stat_name):
 		return 0
-	if 基本数据[stat_name] is String:
+	var raw = base_stats.get(stat_name, 0)
+	if raw is String:
 		return 0
-	var base_value = 基本数据[stat_name] + 基本加成[stat_name]
-	var final_value = float(base_value)
-	
-	
-	var 加算修饰器 : Dictionary = {}
-	var 乘算修饰器 :  Dictionary = {}
-	# 应用所有修饰符
-	for 修饰符 in 修饰器[stat_name]:
-		加算修饰器.get_or_add(stat_name,0)
-		加算修饰器[stat_name] += 修饰符.flat_bonus
-		
-		乘算修饰器.get_or_add(stat_name,1)
-		乘算修饰器[stat_name] *= 修饰符.multiplier
-		
-		final_value += 加算修饰器[stat_name]
-		final_value = 乘算修饰器[stat_name] * final_value
-		#final_value = 修饰符.apply(final_value)
-	#print("最终加成"+str(最终加成["current_health"]))
-	#print(final_value)
-	final_value += 最终加成[stat_name]
-	
-	return int(final_value)
 
-# 添加基础加成（来自装备等）
-func add_base_bonus(stat_name: String, amount: int):
-	if 基本加成.has(stat_name):
-		基本加成[stat_name] += amount
-	unit_data_change.emit({stat_name:get_stat(stat_name)})
+	# 基础值 + 装备 flat 加成
+	var value = float(raw + flat_bonuses.get(stat_name, 0))
 
-# 移除基础加成
-func remove_base_bonus(stat_name: String, amount: int):
-	if 基本加成.has(stat_name):
-		基本加成[stat_name] -= amount
-	unit_data_change.emit({stat_name:get_stat(stat_name)})
+	# 汇总所有 modifier 的 flat 和 multiplier
+	var total_flat: int = 0
+	var total_mult: float = 1.0
+	for mod in modifiers.get(stat_name, []):
+		total_flat += mod.flat_bonus
+		total_mult *= mod.multiplier
 
-#最终加成---旨在处理受伤行为
+	# 先加 flat，再乘 multiplier 链
+	value = (value + total_flat) * total_mult
+
+	# 最终修正（受伤/治疗等即时效果）
+	value += final_bonuses.get(stat_name, 0)
+
+	return int(value)
+
+
+# ---- 装备 / 被动 flat 加成 ----
+
+func add_flat_bonus(stat_name: String, amount: int):
+	if flat_bonuses.has(stat_name):
+		flat_bonuses[stat_name] += amount
+	stat_changed.emit({stat_name: get_stat(stat_name)})
+
+
+func remove_flat_bonus(stat_name: String, amount: int):
+	if flat_bonuses.has(stat_name):
+		flat_bonuses[stat_name] -= amount
+	stat_changed.emit({stat_name: get_stat(stat_name)})
+
+
+# ---- 最终修正（即时生效，如扣血） ----
+
 func add_final_bonus(stat_name: String, amount: int):
-	if 最终加成.has(stat_name):
-		最终加成[stat_name] += amount
-	unit_data_change.emit({stat_name:get_stat(stat_name)})
-	print(str(stat_name)+":"+str(get_stat(stat_name)))
-func remove_final_bonus(stat_name: String, amount: int):
-	if 最终加成.has(stat_name):
-		最终加成[stat_name] -= amount
-	unit_data_change.emit({stat_name:get_stat(stat_name)})
-	print(str(stat_name)+":"+str(get_stat(stat_name)))
-	
-	
-# 添加修饰符（来自Buff等）
-func add_modifier(stat_name: String, flat_bonus: int = 0, multiplier: float = 1.0):
-	if not 修饰器.has(stat_name):
-		修饰器[stat_name] = []
-	
-	var modifier = 修饰符类.new(flat_bonus, multiplier)
-	修饰器[stat_name].append(modifier)
-	unit_data_change.emit({stat_name:get_stat(stat_name)})
-	
-# 移除修饰符
-func remove_modifier(stat_name: String, flat_bonus: int = 0, multiplier: float = 1.0):
-	if 修饰器.has(stat_name):
-		for i in range(修饰器[stat_name].size() - 1, -1, -1):
-			var modifier = 修饰器[stat_name][i]
-			if modifier.flat_bonus == flat_bonus and modifier.multiplier == multiplier:
-				修饰器[stat_name].remove_at(i)
-	unit_data_change.emit({stat_name:get_stat(stat_name)})
+	if final_bonuses.has(stat_name):
+		final_bonuses[stat_name] += amount
+	stat_changed.emit({stat_name: get_stat(stat_name)})
 
-# 修饰符类
-class 修饰符类:
+
+func remove_final_bonus(stat_name: String, amount: int):
+	if final_bonuses.has(stat_name):
+		final_bonuses[stat_name] -= amount
+	stat_changed.emit({stat_name: get_stat(stat_name)})
+
+
+# ---- 修饰符（buff） ----
+
+func add_modifier(stat_name: String, flat_bonus: int = 0, multiplier: float = 1.0):
+	if not modifiers.has(stat_name):
+		modifiers[stat_name] = []
+	var mod = StatModifier.new(flat_bonus, multiplier)
+	modifiers[stat_name].append(mod)
+	stat_changed.emit({stat_name: get_stat(stat_name)})
+
+
+func remove_modifier(stat_name: String, flat_bonus: int = 0, multiplier: float = 1.0):
+	if modifiers.has(stat_name):
+		var list = modifiers[stat_name]
+		for i in range(list.size() - 1, -1, -1):
+			if list[i].flat_bonus == flat_bonus and list[i].multiplier == multiplier:
+				list.remove_at(i)
+	stat_changed.emit({stat_name: get_stat(stat_name)})
+
+
+# 修饰符数据结构
+class StatModifier:
 	var flat_bonus: int
 	var multiplier: float
-	
+
 	func _init(flat: int = 0, mult: float = 1.0):
 		flat_bonus = flat
 		multiplier = mult
-	
+
 	func apply(base_value: float) -> float:
 		return (base_value + flat_bonus) * multiplier

@@ -1,53 +1,78 @@
-[gd_scene format=3 uid="uid://cj3bhf6a7lvaa"]
+[gd_scene format=3 uid="uid://duqwl55aj6ado"]
 
 [ext_resource type="Script" uid="uid://dfw280y4i067a" path="res://场景/UI/战斗场景UI/BattleOrderUI/battle_order_ui.gd" id="1"]
+[ext_resource type="StyleBox" uid="uid://ca4qiie1i6rtq" path="res://资源/Style/Panel/圆角黑边橙背景.tres" id="2"]
+[ext_resource type="LabelSettings" uid="uid://bkvctkykfn31e" path="res://资源/Style/LabelSettings/白字黑边.tres" id="3"]
+[ext_resource type="PackedScene" path="res://场景/UI/战斗场景UI/BattleOrderUI/order_unit_icon.tscn" id="4"]
 
-[node name="BattleOrderUI" type="Control" unique_id=783163839 node_paths=PackedStringArray("order_container", "info_label")]
+[node name="BattleOrderUI" type="Control" unique_id=1558830259 node_paths=PackedStringArray("order_container", "info_label", "turn_counter")]
 layout_mode = 3
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -648.0
-offset_bottom = -648.0
+offset_top = 24.0
+offset_bottom = 24.0
 grow_horizontal = 2
-grow_vertical = 0
 script = ExtResource("1")
-order_container = NodePath("OrderPanel/InnerContainer/MainContainer/OrderContainer")
-info_label = NodePath("OrderPanel/InnerContainer/MainContainer/InfoLabel")
+order_container = NodePath("Panel/Margin/VBox/Scroll/OrderContainer")
+info_label = NodePath("Panel/Margin/VBox/InfoBar/InfoLabel")
+turn_counter = NodePath("Panel/Margin/VBox/InfoBar/TurnCounter")
+unit_icon_scene = ExtResource("4")
 
-[node name="OrderPanel" type="Panel" parent="." unique_id=1035550029]
-custom_minimum_size = Vector2(800, 45)
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 800.0
-offset_bottom = 90.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="InnerContainer" type="MarginContainer" parent="OrderPanel" unique_id=36064553]
+[node name="Panel" type="PanelContainer" parent="." unique_id=1512110493]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 10
+theme_override_styles/panel = ExtResource("2")
 
-[node name="MainContainer" type="HBoxContainer" parent="OrderPanel/InnerContainer" unique_id=213733077]
+[node name="Margin" type="MarginContainer" parent="Panel" unique_id=1274996487]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin" unique_id=890974962]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="InfoBar" type="HBoxContainer" parent="Panel/Margin/VBox" unique_id=1656025799]
 layout_mode = 2
 
-[node name="InfoLabel" type="Label" parent="OrderPanel/InnerContainer/MainContainer" unique_id=149018384]
-custom_minimum_size = Vector2(80, 25)
+[node name="InfoLabel" type="Label" parent="Panel/Margin/VBox/InfoBar" unique_id=81879666]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "战斗顺序"
+label_settings = ExtResource("3")
+vertical_alignment = 1
 
-[node name="OrderContainer" type="HBoxContainer" parent="OrderPanel/InnerContainer/MainContainer" unique_id=918179325]
+[node name="Spacer" type="Control" parent="Panel/Margin/VBox/InfoBar" unique_id=1160292424]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="TurnCounter" type="Label" parent="Panel/Margin/VBox/InfoBar" unique_id=1518092317]
+layout_mode = 2
+text = "第 1 回合"
+label_settings = ExtResource("3")
+vertical_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/Margin/VBox" unique_id=289933685]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="OrderContainer" type="HBoxContainer" parent="Panel/Margin/VBox/Scroll" unique_id=884011894]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="SepContainer" type="VBoxContainer" parent="Panel/Margin/VBox/Scroll/OrderContainer" unique_id=1021230275]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Separator" type="VSeparator" parent="Panel/Margin/VBox/Scroll/OrderContainer/SepContainer" unique_id=2109025088]
+layout_mode = 2
+size_flags_vertical = 3

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://x461qtefu8ca"]
+[gd_scene format=3 uid="uid://dvsxt7xi4jkox"]
 
 [ext_resource type="Script" uid="uid://b6pyw642curpn" path="res://场景/UI/战斗场景UI/UnitActionUI/unit_action_ui.gd" id="1_nruvc"]
 [ext_resource type="PackedScene" uid="uid://cd718qgnqs328" path="res://场景/UI/战斗场景UI/UnitActionUI/action_card_ui.tscn" id="2_nruvc"]
@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://b8j6ututjp8w0" path="res://场景/UI/战斗场景UI/UnitActionUI/结束回合按钮.gd" id="5_y5x0i"]
 [ext_resource type="LabelSettings" uid="uid://bkvctkykfn31e" path="res://资源/Style/LabelSettings/白字黑边.tres" id="6_s08gc"]
 [ext_resource type="FontFile" uid="uid://4i4s7ycgbfby" path="res://素材/字体/SmileySans-Oblique.ttf" id="7_s08gc"]
-[ext_resource type="PackedScene" uid="uid://battle_order_ui" path="res://场景/UI/战斗场景UI/BattleOrderUI/battle_order_ui.tscn" id="8_battle_order"]
+[ext_resource type="PackedScene" uid="uid://duqwl55aj6ado" path="res://场景/UI/战斗场景UI/BattleOrderUI/battle_order_ui.tscn" id="8_battle_order"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ie373"]
 font = ExtResource("7_s08gc")
@@ -16,11 +16,12 @@ font_size = 17
 outline_size = 5
 outline_color = Color(0, 0, 0, 1)
 
-[node name="BattleUI" type="CanvasLayer"]
+[node name="BattleUI" type="CanvasLayer" unique_id=1216289668]
 
-[node name="BattleOrderUI" parent="." instance=ExtResource("8_battle_order")]
+[node name="BattleOrderUI" parent="." unique_id=1784923925 instance=ExtResource("8_battle_order")]
+visible = false
 
-[node name="UnitActionUI" type="MarginContainer" parent="."]
+[node name="UnitActionUI" type="MarginContainer" parent="." unique_id=1229707284]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -30,86 +31,86 @@ theme_override_constants/margin_bottom = 20
 script = ExtResource("1_nruvc")
 action_card_ui_scence = ExtResource("2_nruvc")
 
-[node name="MarginContainer2" type="MarginContainer" parent="UnitActionUI"]
+[node name="MarginContainer2" type="MarginContainer" parent="UnitActionUI" unique_id=696500036]
 custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 
-[node name="Panel" type="Panel" parent="UnitActionUI/MarginContainer2"]
+[node name="Panel" type="Panel" parent="UnitActionUI/MarginContainer2" unique_id=1254378258]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("3_mkr2q")
 
-[node name="MarginContainer" type="MarginContainer" parent="UnitActionUI/MarginContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="UnitActionUI/MarginContainer2" unique_id=1820625405]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer" unique_id=475802571]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2" unique_id=1629823518]
 layout_mode = 2
 
-[node name="ActionCardUI" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+[node name="ActionCardUI" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" unique_id=1645818185 instance=ExtResource("2_nruvc")]
 layout_mode = 2
 
-[node name="ActionCardUI2" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+[node name="ActionCardUI2" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" unique_id=1431662643 instance=ExtResource("2_nruvc")]
 layout_mode = 2
 
-[node name="ActionCardUI3" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+[node name="ActionCardUI3" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" unique_id=740925264 instance=ExtResource("2_nruvc")]
 layout_mode = 2
 
-[node name="ActionCardUI4" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+[node name="ActionCardUI4" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" unique_id=1122513131 instance=ExtResource("2_nruvc")]
 layout_mode = 2
 
-[node name="ActionCardUI5" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+[node name="ActionCardUI5" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" unique_id=1152579880 instance=ExtResource("2_nruvc")]
 layout_mode = 2
 
-[node name="ActionCardUI6" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+[node name="ActionCardUI6" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" unique_id=2130660234 instance=ExtResource("2_nruvc")]
 layout_mode = 2
 
-[node name="ActionCardUI7" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+[node name="ActionCardUI7" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" unique_id=550554949 instance=ExtResource("2_nruvc")]
 layout_mode = 2
 
-[node name="ActionCardUI8" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("2_nruvc")]
+[node name="ActionCardUI8" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer" unique_id=1602181482 instance=ExtResource("2_nruvc")]
 layout_mode = 2
 
-[node name="VSeparator" type="VSeparator" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2"]
+[node name="VSeparator" type="VSeparator" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2" unique_id=1602518945]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2" unique_id=1139075920]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/MarginContainer" unique_id=1298552193]
 layout_mode = 2
 
-[node name="上一页" type="Button" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/MarginContainer/VBoxContainer"]
+[node name="上一页" type="Button" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/MarginContainer/VBoxContainer" unique_id=1608139513]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_1v5pv")
 theme_override_font_sizes/font_size = 15
 text = "上一页"
 
-[node name="下一页" type="Button" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/MarginContainer/VBoxContainer"]
+[node name="下一页" type="Button" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/MarginContainer/VBoxContainer" unique_id=1356524319]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_1v5pv")
 theme_override_font_sizes/font_size = 15
 text = "下一页"
 
-[node name="VSeparator2" type="VSeparator" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2"]
+[node name="VSeparator2" type="VSeparator" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2" unique_id=1822419082]
 layout_mode = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2" unique_id=787822209]
 layout_mode = 2
 
-[node name="结束回合按钮" type="Button" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3"]
+[node name="结束回合按钮" type="Button" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3" unique_id=2023286045]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 script = ExtResource("5_y5x0i")
 
-[node name="Label" type="Label" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3/结束回合按钮"]
+[node name="Label" type="Label" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3/结束回合按钮" unique_id=74051145]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -122,11 +123,11 @@ label_settings = ExtResource("6_s08gc")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3"]
+[node name="MarginContainer" type="MarginContainer" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3" unique_id=940414878]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 
-[node name="行动点label" type="Label" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3/MarginContainer"]
+[node name="行动点label" type="Label" parent="UnitActionUI/MarginContainer2/MarginContainer/HBoxContainer2/HBoxContainer3/MarginContainer" unique_id=1626637289]
 layout_mode = 2
 size_flags_vertical = 1
 text = "10
@@ -136,4 +137,4 @@ horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
 
-[node name="FinalUI" parent="." instance=ExtResource("3_6xdit")]
+[node name="FinalUI" parent="." unique_id=1907616482 instance=ExtResource("3_6xdit")]

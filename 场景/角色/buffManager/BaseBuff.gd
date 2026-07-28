@@ -1,4 +1,4 @@
-@abstract
+﻿@abstract
 ## buff只存在与战斗中
 class_name BaseBuff extends RefCounted
 
@@ -28,12 +28,12 @@ func remove_effect() -> void:
 func on_turn_start() -> void:
 	pass
 
-# 每回合结束时的效果
+# 每回合结束时的效果（处理持续回合数递减）
 func on_turn_end() -> void:
 	if duration > 0:
 		duration -= 1
 	elif duration == 0:
-		target.Buff系统.remove_buff(id)
+		target.buff_manager.remove_buff(id)
 
 # 被攻击时的效果
 func on_attacked(damage: int, attacker: Unit) -> void:

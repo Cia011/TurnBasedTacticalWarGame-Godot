@@ -1,4 +1,4 @@
-extends Node2D
+﻿extends Node2D
 class_name Unit
 
 
@@ -55,7 +55,7 @@ func set_up(unit_data:UnitData,grid_position:Vector2i):
 
 	data_manager = unit_data.data_manager
 	buff_manager = unit_data.buff_manager
-	data_manager.unit_data_change.connect(unit_data_change)
+	data_manager.stat_changed.connect(unit_data_change)
 
 func _ready() -> void:
 	#角色创建时在BattleUnitManager内注册

@@ -1,198 +1,224 @@
-extends Control
+﻿extends Control
 
-# 战斗顺序UI - 显示所有角色的行动顺序
+# 战斗顺序UI - 显示所有角色的行动顺序及回合进度
 
-# 导出变量 - 引用场景中的节点
 @export var order_container: HBoxContainer
 @export var info_label: Label
+@export var turn_counter: Label
+@export var unit_icon_scene: PackedScene
 
-# 角色图标容器缓存 (Unit -> VBoxContainer)
-var unit_icon_containers: Dictionary = {}
+var _icon_map: Dictionary = {}  # Unit -> OrderUnitIcon
+var _tween: Tween
+var _turn_count: int = 1
 
-# 初始化
+
 func _ready():
-	# 连接信号
 	BattleTurnManager.signal_change_unit.connect(_on_unit_changed)
+	BattleTurnManager.signal_turn_start.connect(_on_turn_start)
 	BattleTurnManager.signal_turn_end.connect(_on_turn_end)
-	
-	# 角色注册/注销信号
+
 	BattleUnitManager.unit_registered.connect(_on_unit_registered)
 	BattleUnitManager.unit_unregistered.connect(_on_unit_unregistered)
-	
-	# 延迟一帧更新UI（等待单位注册完成）
-	call_deferred("_update_order")
 
-# 更新战斗顺序
-func _update_order():
+	call_deferred(&"_build_order")
+
+
+# ---------------------------------------------------------------------------
+#  初始化
+# ---------------------------------------------------------------------------
+
+func _build_order():
 	if not order_container:
 		return
-	
-	# 清空现有图标
-	for child in order_container.get_children():
-		child.queue_free()
-	unit_icon_containers.clear()
-	
-	# 获取单位列表并按敏捷排序（模拟行动顺序）
-	var sorted_units = BattleUnitManager.units.duplicate()
-	sorted_units.sort_custom(func(a: Unit, b: Unit) -> bool:
+	_clear_all_icons()
+
+	var sorted = _get_sorted_units()
+	for unit in sorted:
+		_create_icon(unit)
+
+	_update_all_progress()
+
+	if BattleTurnManager.current_unit:
+		_on_unit_changed(BattleTurnManager.current_unit)
+
+
+func _get_sorted_units() -> Array:
+	var all = BattleUnitManager.units.duplicate()
+	all.sort_custom(func(a: Unit, b: Unit) -> bool:
 		return a.unit_data.get_final_stat("agility") > b.unit_data.get_final_stat("agility")
 	)
-	
-	# 为每个单位创建图标
-	for unit in sorted_units:
-		_create_unit_icon(unit)
+	return all
 
-# 创建单位图标
-func _create_unit_icon(unit: Unit):
-	var icon_container = VBoxContainer.new()
-	icon_container.custom_minimum_size = Vector2(64, 75)
-	icon_container.layout_mode = 2
-	
-	# 创建头像按钮（作为图标）
-	var icon_button = Button.new()
-	icon_button.custom_minimum_size = Vector2(60, 60)
-	icon_button.layout_mode = 2
-	icon_button.flat = true
-	
-	# 设置头像纹理
-	if unit.unit_data.texture:
-		icon_button.icon = unit.unit_data.texture
-	else:
-		# 使用默认图标
-		var default_texture = _create_default_icon(unit.unit_data.character_name, unit.is_teammate)
-		if default_texture:
-			icon_button.icon = default_texture
-	
-	icon_container.add_child(icon_button)
-	
-	# 创建角色名称标签
-	var name_label = Label.new()
-	name_label.text = unit.unit_data.character_name
-	name_label.add_theme_font_size_override("font_size", 12)
-	name_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
-	name_label.layout_mode = 2
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.custom_minimum_size = Vector2(60, 15)
-	icon_container.add_child(name_label)
-	
-	# 保存引用（保存整个容器）
-	unit_icon_containers[unit] = icon_container
-	order_container.add_child(icon_container)
 
-# 创建默认图标
-func _create_default_icon(name: String, is_teammate: bool) -> Texture2D:
-	var image = Image.create(60, 60, false, Image.FORMAT_RGBA8)
-	
-	# 设置背景色
-	var bg_color = Color(0.3, 0.3, 0.3) if is_teammate else Color(0.5, 0.2, 0.2)
-	image.fill(bg_color)
-	
-	# 绘制边框
-	for i in range(60):
-		image.set_pixel(i, 0, Color(0.8, 0.6, 0.4))
-		image.set_pixel(i, 59, Color(0.6, 0.4, 0.2))
-		image.set_pixel(0, i, Color(0.8, 0.6, 0.4))
-		image.set_pixel(59, i, Color(0.6, 0.4, 0.2))
-	
-	return ImageTexture.create_from_image(image)
+# ---------------------------------------------------------------------------
+#  图标管理 — 先 add_child 再 set_up，确保 @onready 变量已解析
+# ---------------------------------------------------------------------------
 
-# 回合结束时将角色图标移到最后
-func _on_turn_end(unit: Unit):
-	if not order_container or not unit_icon_containers.has(unit):
+func _create_icon(unit: Unit):
+	if _icon_map.has(unit):
 		return
-	
-	# 获取角色的图标容器
-	var container = unit_icon_containers[unit]
-	
-	# 将容器移到最后
-	order_container.move_child(container, order_container.get_child_count() - 1)
 
-# 单位切换时更新UI
+	var icon: OrderUnitIcon = unit_icon_scene.instantiate()
+	icon.icon_clicked.connect(_on_icon_clicked)
+	icon.modulate.a = 0.0
+
+	_icon_map[unit] = icon
+	order_container.add_child(icon)
+	icon.set_up(unit)
+
+	# 淡入动画
+	var t = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	t.tween_property(icon, "modulate:a", 1.0, 0.25)
+
+	# 标记已经行动过的单位
+	if BattleTurnManager.current_unit and unit != BattleTurnManager.current_unit:
+		var val = BattleTurnManager.TurnManager.get(unit, 0.0)
+		if val < 100.0:
+			icon.set_acted(true)
+
+
+func _clear_all_icons():
+	for icon in _icon_map.values():
+		if is_instance_valid(icon):
+			icon.cleanup()
+	_icon_map.clear()
+	for child in order_container.get_children():
+		if child is OrderUnitIcon:
+			child.queue_free()
+
+
+func _remove_icon(unit: Unit):
+	if not _icon_map.has(unit):
+		return
+	var icon = _icon_map[unit]
+	_icon_map.erase(unit)
+	if is_instance_valid(icon):
+		var t = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		t.tween_property(icon, "modulate:a", 0.0, 0.2)
+		t.tween_callback(icon.cleanup)
+
+
+# ---------------------------------------------------------------------------
+#  排序
+# ---------------------------------------------------------------------------
+
+func _resort_by_agility():
+	if _icon_map.size() <= 1:
+		return
+	var sorted = _get_sorted_units().filter(func(u): return _icon_map.has(u))
+	for i in range(sorted.size()):
+		order_container.move_child(_icon_map[sorted[i]], i)
+
+
+# ---------------------------------------------------------------------------
+#  回合进度
+# ---------------------------------------------------------------------------
+
+func _update_all_progress():
+	var tm = BattleTurnManager.TurnManager
+	for unit in _icon_map:
+		var val = tm.get(unit, 0.0)
+		_icon_map[unit].set_turn_progress(clamp(val / 100.0, 0.0, 1.0))
+
+
+# ---------------------------------------------------------------------------
+#  信号处理
+# ---------------------------------------------------------------------------
+
+func _on_turn_start(unit: Unit):
+	for u in _icon_map:
+		if u != unit:
+			_icon_map[u].set_acted(true)
+
+
+func _on_turn_end(unit: Unit):
+	if not _icon_map.has(unit):
+		return
+	var icon = _icon_map[unit]
+
+	order_container.move_child(icon, order_container.get_child_count() - 1)
+
+	icon.set_acted(false)
+	icon.set_current(false)
+	icon.set_turn_progress(1.0)
+
+	var t = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	t.tween_method(_animate_turn_progress.bind(unit), 1.0, 0.0, 0.3)
+
+
+func _animate_turn_progress(value: float, unit: Unit):
+	if _icon_map.has(unit):
+		_icon_map[unit].set_turn_progress(value)
+
+
 func _on_unit_changed(unit: Unit):
 	if not order_container:
 		return
-	
-	# 重置所有图标样式
-	for u in unit_icon_containers:
-		var container = unit_icon_containers[u]
-		var button = container.get_child(0) as Button
-		if button:
-			button.scale = Vector2(1, 1)
-			button.modulate = Color(1, 1, 1)
-	
-	# 高亮当前单位
-	if unit_icon_containers.has(unit):
-		var container = unit_icon_containers[unit]
-		var current_button = container.get_child(0) as Button
-		if current_button:
-			current_button.scale = Vector2(1.15, 1.15)
-			current_button.modulate = Color(1.0, 0.85, 0.3)
-		
-		# 更新信息标签
-		if info_label:
-			info_label.text = "%s 的回合" % unit.unit_data.character_name
 
-# 手动更新顺序（可以从外部调用）
-func refresh_order():
-	_update_order()
-	if BattleTurnManager.current_unit:
-		_on_unit_changed(BattleTurnManager.current_unit)
+	for u in _icon_map:
+		_icon_map[u].set_current(false)
+		_icon_map[u].set_acted(false)
 
-# 角色注册时添加到UI列表
+	if _icon_map.has(unit):
+		var icon = _icon_map[unit]
+		icon.set_current(true)
+
+		var scroll = order_container.get_parent()
+		if scroll is ScrollContainer:
+			var icon_pos = icon.position.x
+			var icon_end = icon_pos + icon.size.x
+			var scroll_w = scroll.size.x
+			var cur = scroll.scroll_horizontal
+			if icon_pos < cur or icon_end > cur + scroll_w:
+				scroll.ensure_control_visible(icon)
+
+	if info_label:
+		info_label.text = "%s 的回合" % unit.unit_data.character_name
+
+
+# ---------------------------------------------------------------------------
+#  单位注册 / 注销
+# ---------------------------------------------------------------------------
+
 func _on_unit_registered(unit: Unit):
 	if not order_container:
 		return
-	
-	# 创建角色图标
-	_create_unit_icon(unit)
-	
-	# 重新排序（按敏捷）
-	_resort_units()
-	
-	# 更新当前单位高亮
+	_create_icon(unit)
+	_resort_by_agility()
 	if BattleTurnManager.current_unit:
 		_on_unit_changed(BattleTurnManager.current_unit)
 
-# 角色注销时从UI列表移除
+
 func _on_unit_unregistered(unit: Unit):
-	if not order_container:
-		return
-	
-	# 检查是否有该角色的图标
-	if unit_icon_containers.has(unit):
-		var container = unit_icon_containers[unit]
-		container.queue_free()
-		unit_icon_containers.erase(unit)
-	
-	# 更新当前单位高亮
+	_remove_icon(unit)
+
+
+# ---------------------------------------------------------------------------
+#  交互
+# ---------------------------------------------------------------------------
+
+func _on_icon_clicked(unit: Unit):
+	print("BattleOrder: 点击 %s" % unit.unit_data.character_name)
+
+
+# ---------------------------------------------------------------------------
+#  外部接口
+# ---------------------------------------------------------------------------
+
+func refresh_order():
+	_build_order()
 	if BattleTurnManager.current_unit:
 		_on_unit_changed(BattleTurnManager.current_unit)
+	_update_all_progress()
 
-# 按敏捷重新排序角色图标
-func _resort_units():
-	if not order_container:
+
+func refresh_progress():
+	_update_all_progress()
+
+
+func _process(_delta: float):
+	if not is_visible_in_tree():
 		return
-	
-	# 获取当前所有子节点
-	var children = order_container.get_children()
-	if children.size() <= 1:
-		return
-	
-	# 获取单位列表
-	var units_list = []
-	for child in children:
-		# 从子节点找到对应的单位
-		for u in unit_icon_containers:
-			if unit_icon_containers[u] == child:
-				units_list.append(u)
-				break
-	
-	# 按敏捷排序
-	units_list.sort_custom(func(a: Unit, b: Unit) -> bool:
-		return a.unit_data.get_final_stat("agility") > b.unit_data.get_final_stat("agility")
-	)
-	
-	# 按新顺序重新排列子节点
-	for i in range(units_list.size()):
-		var container = unit_icon_containers[units_list[i]]
-		order_container.move_child(container, i)
+	var tm = BattleTurnManager.TurnManager
+	for unit in _icon_map:
+		_icon_map[unit].set_turn_progress(clamp(tm.get(unit, 0.0) / 100.0, 0.0, 1.0))

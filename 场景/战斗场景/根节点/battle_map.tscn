@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://bt5b5xt5gx46k" path="res://场景/战斗场景/data_layer.gd" id="2_eph8p"]
 [ext_resource type="TileSet" uid="uid://bspraxy67dv08" path="res://资源/battle_visual_tileset.tres" id="3_kpap2"]
 [ext_resource type="Texture2D" uid="uid://dffl8e2dxnhua" path="res://素材/高亮16.png" id="5_25x27"]
-[ext_resource type="PackedScene" uid="uid://x461qtefu8ca" path="res://场景/UI/战斗场景UI/battle_ui.tscn" id="7_br5yv"]
+[ext_resource type="PackedScene" uid="uid://dvsxt7xi4jkox" path="res://场景/UI/战斗场景UI/battle_ui.tscn" id="7_br5yv"]
 [ext_resource type="PackedScene" uid="uid://cr1nh36270tbi" path="res://场景/其他/相机/场景相机.tscn" id="8_bxgn6"]
 [ext_resource type="Script" uid="uid://dock1ldmaugca" path="res://场景/战斗场景/special_effects.gd" id="8_kpap2"]
 [ext_resource type="PackedScene" uid="uid://0y655he2i4pq" path="res://场景/战斗场景/gridIndeicator/grid_indeicator.tscn" id="9_25x27"]
