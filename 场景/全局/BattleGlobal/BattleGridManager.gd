@@ -84,7 +84,10 @@ func D_get_all_path(start: Vector2i, max_cost: float = INF)-> Dictionary:
 func visulize_grids(grids : Array[Vector2i],color:Color = Color.WHITE)->void:
 	highlight_layer.clear()
 	highlight_layer.modulate = color
-	highlight_layer.set_cells_terrain_connect(grids,0,0)
+	#highlight_layer.set_cells_terrain_connect(grids,0,0)
+	for grid in grids:
+		highlight_layer.set_cell(grid,0,Vector2i(0,0))
+	
 
 #判断目标格子是否是合法的(在grid_data_dict中注册的)
 func is_valid_grid(grid_position : Vector2i) -> bool:

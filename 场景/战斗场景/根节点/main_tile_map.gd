@@ -23,6 +23,7 @@ func initialize():
 	for cell in used_cells:
 		grid_data_dict[cell] = BattleGrid.new()
 		grid_data_dict[cell].grid_position = cell
+	print(used_cells)
 func Initialize_BattleGridManager(data_layer : TileMapLayer,dec_layer : TileMapLayer,highlight_layer : TileMapLayer):
 	BattleGridManager.MainTileMap = self
 	BattleGridManager.highlight_layer = highlight_layer

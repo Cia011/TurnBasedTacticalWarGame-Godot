@@ -1,15 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://0y655he2i4pq"]
+[gd_scene format=3 uid="uid://0y655he2i4pq"]
 
 [ext_resource type="Script" uid="uid://dw17efp0k41b8" path="res://场景/战斗场景/gridIndeicator/grid_indeicator.gd" id="1_tfsbr"]
-[ext_resource type="Texture2D" uid="uid://dffl8e2dxnhua" path="res://素材/高亮16.png" id="2_xhxl5"]
+[ext_resource type="Texture2D" uid="uid://dx373bmg7yp3b" path="res://素材/地块/battle/hightlight.png" id="2_v4opb"]
 
-[node name="GridIndeicator" type="Node2D"]
+[node name="GridIndeicator" type="Node2D" unique_id=412052214]
 script = ExtResource("1_tfsbr")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_xhxl5")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1951860291]
+texture = ExtResource("2_v4opb")
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=486593772]
 offset_left = 10.0
 offset_top = -13.0
 offset_right = 50.0

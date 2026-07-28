@@ -1,7 +1,7 @@
 extends Node2D
-@onready var data_layer: TileMapLayer = $MainTileMap/DataLayer
+#@onready var data_layer: TileMapLayer = $MainTileMap/DataLayer
 @onready var dec_layer: TileMapLayer = $MainTileMap/DecLayer
-@onready var highlight_layer: TileMapLayer = $MainTileMap/HighlightLayer
+#@onready var highlight_layer: TileMapLayer = $MainTileMap/HighlightLayer
 
 @onready var team_position_1: Node2D = $TeamPosition1
 @onready var team_position_2: Node2D = $TeamPosition2

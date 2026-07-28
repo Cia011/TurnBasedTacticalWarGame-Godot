@@ -27,32 +27,28 @@ func _ready():
 		"texture_path": "res://素材/角色/Sprite-0010.png",
 	})
 	register_unit(player_char)
-	var player_char2 = create_unit_data({
-		"character_name": "第二个角色",
-		"texture_path": "res://素材/角色/Sprite-0010.png",
-	})
-	register_unit(player_char2)
+	#var player_char2 = create_unit_data({
+		#"character_name": "第二个角色",
+		#"texture_path": "res://素材/角色/Sprite-0010.png",
+	#})
+	#register_unit(player_char2)
 		
 	
-	# var enemy_char = UnitData.new()
-	# enemy_char.character_name = "敌人"
-	# enemy_char.texture = preload("res://素材/角色/Sprite-0010.png")
-	# enemy_characters.append(enemy_char)
-	var enemy_char2 = create_unit_data({
-		"character_name": "敌人2",
-		"texture_path": "res://素材/角色/Sprite-0010.png",
-	})
-	register_enemy_unit(enemy_char2)
-	var enemy_char3 = create_unit_data({
-		"character_name": "敌人2",
-		"texture_path": "res://素材/角色/Sprite-0010.png",
-	})
-	register_enemy_unit(enemy_char3)
-	var enemy_char4 = create_unit_data({
-		"character_name": "敌人2",
-		"texture_path": "res://素材/角色/Sprite-0010.png",
-	})
-	register_enemy_unit(enemy_char4)
+	#var enemy_char2 = create_unit_data({
+		#"character_name": "敌人2",
+		#"texture_path": "res://素材/角色/Sprite-0010.png",
+	#})
+	#register_enemy_unit(enemy_char2)
+	#var enemy_char3 = create_unit_data({
+		#"character_name": "敌人2",
+		#"texture_path": "res://素材/角色/Sprite-0010.png",
+	#})
+	#register_enemy_unit(enemy_char3)
+	#var enemy_char4 = create_unit_data({
+		#"character_name": "敌人2",
+		#"texture_path": "res://素材/角色/Sprite-0010.png",
+	#})
+	#register_enemy_unit(enemy_char4)
 	print("[gamestate] : ready end")
 	
 
