@@ -1,17 +1,18 @@
 extends Node2D
-@onready var data_layer: TileMapLayer = $DataLayer
-@onready var dec_layer: TileMapLayer = $DecLayer
-@onready var highlight_layer: TileMapLayer = $HighlightLayer
+@onready var data_layer: TileMapLayer = $MainTileMap/DataLayer
+@onready var dec_layer: TileMapLayer = $MainTileMap/DecLayer
+@onready var highlight_layer: TileMapLayer = $MainTileMap/HighlightLayer
 
 @onready var team_position_1: Node2D = $TeamPosition1
 @onready var team_position_2: Node2D = $TeamPosition2
+
 class PositionAndID extends RefCounted:
 	var position: Vector2i
 	var id: int
-
 	func _init(p: Vector2i, i: int):
 		position = p
 		id = i
+
 var team_positions_0 : Array[PositionAndID] #敌
 var team_positions_1 : Array[PositionAndID] #友
 
@@ -19,8 +20,6 @@ var team_positions_1 : Array[PositionAndID] #友
 const UNIT = preload("res://场景/角色/unit.tscn")
 
 func _ready() -> void:
-	#BattleGridManager.data_layer = data_layer
-	BattleGridManager.virulize_layer = highlight_layer
 	GameState.is_battleing = true
 	
 	var used_cells := dec_layer.get_used_cells()

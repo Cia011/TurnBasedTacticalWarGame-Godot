@@ -1,8 +1,8 @@
 extends Node
-
+var MainTileMap : TileMapLayer
 var data_layer : TileMapLayer	#在battle地图里的data_layer节点赋值
-var virulize_layer : TileMapLayer	#在战斗地图根节点BattleMap赋值
-
+var highlight_layer : TileMapLayer	#在战斗地图根节点BattleMap赋值
+var a_star : AStarGrid2D
 
 #不想要使用全局坐标了,因为TileMapLayer节点是固定在(0,0)上的
 func get_world_position(grid_position:Vector2i) -> Vector2:
@@ -20,7 +20,7 @@ func get_mouse_grid_position()-> Vector2i:
 	return get_grid_position(get_mouse_world_position())
 #获取地块数据集
 func get_grid_data_dict()->Dictionary[Vector2i,BattleGrid]:
-	return data_layer.grid_data_dict
+	return MainTileMap.grid_data_dict
 #获取指定地块数据
 func get_grid_data(grid_position:Vector2i)->BattleGrid:
 	return get_grid_data_dict().get(grid_position)
@@ -36,7 +36,7 @@ func get_grid_unit(grid_position:Vector2i)->Unit:
 
 #获取路径(grid路径)
 func get_nav_grid_path(start_grid_position:Vector2i,end_grid_position:Vector2i)->Array[Vector2i]:
-	return data_layer.a_star.get_id_path(start_grid_position,end_grid_position)
+	return a_star.get_id_path(start_grid_position,end_grid_position)
 #获取路径(world路径)
 func get_nav_world_path(start_grid_position:Vector2i,end_grid_position:Vector2i)->Array[Vector2]:
 	var grid_path := get_nav_grid_path(start_grid_position,end_grid_position)
@@ -47,7 +47,7 @@ func get_nav_world_path(start_grid_position:Vector2i,end_grid_position:Vector2i)
 	return world_path
 #将a_star中的某网格设置为不可移动
 func set_point_solid(id: Vector2i, solid: bool = true):
-	data_layer.a_star.set_point_solid(id,solid)
+	a_star.set_point_solid(id,solid)
 #获取路径长度
 #简单长度,无权重
 func  get_grid_path_length(grid_path:Array[Vector2i]) -> float:
@@ -82,33 +82,33 @@ func D_get_all_path(start: Vector2i, max_cost: float = INF)-> Dictionary:
 
 #根据传入的数组高亮格子
 func visulize_grids(grids : Array[Vector2i],color:Color = Color.WHITE)->void:
-	virulize_layer.clear()
-	virulize_layer.modulate = color
-	virulize_layer.set_cells_terrain_connect(grids,0,0)
+	highlight_layer.clear()
+	highlight_layer.modulate = color
+	highlight_layer.set_cells_terrain_connect(grids,0,0)
 
 #判断目标格子是否是合法的(在grid_data_dict中注册的)
 func is_valid_grid(grid_position : Vector2i) -> bool:
-	return data_layer.grid_data_dict.has(grid_position)
+	return MainTileMap.grid_data_dict.has(grid_position)
 
 #判断目标格子是否被单位占据
 func is_grid_occupied(grid_position : Vector2i) -> bool:
-	return is_valid_grid(grid_position) and data_layer.grid_data_dict[grid_position].is_occupied_by_unit()
+	return is_valid_grid(grid_position) and MainTileMap.grid_data_dict[grid_position].is_occupied_by_unit()
 #获取占据格子的单位
 func get_grid_occupied(grid_position : Vector2i) -> Unit:
 	if not is_valid_grid(grid_position):
 		return null
 	if not get_grid_data_dict().has(grid_position):
 		return null
-	if not is_instance_valid(data_layer.grid_data_dict[grid_position].unit):
+	if not is_instance_valid(MainTileMap.grid_data_dict[grid_position].unit):
 		return null
-	return data_layer.grid_data_dict[grid_position].unit
+	return MainTileMap.grid_data_dict[grid_position].unit
 
 		
 #设置占据格子的单位
 func set_grid_occupied(grid_position : Vector2i,unit:Unit)->void:
 	if not is_valid_grid(grid_position):
 		return
-	data_layer.grid_data_dict[grid_position].unit = unit
+	MainTileMap.grid_data_dict[grid_position].unit = unit
 	
 #寻找邻居地块
 func find_neighbors_cell(cell:Vector2i) -> Array[Vector2i]:
