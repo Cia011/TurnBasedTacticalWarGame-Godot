@@ -4,7 +4,7 @@ var mouse_grid_position : Vector2i
 @onready var label: Label = $Label
 
 func _ready() -> void:
-	pass
+	visible = true
 func _physics_process(delta: float) -> void:
 	var new_mouse_grid_position = BattleGridManager.get_mouse_grid_position()
 	if new_mouse_grid_position != mouse_grid_position:

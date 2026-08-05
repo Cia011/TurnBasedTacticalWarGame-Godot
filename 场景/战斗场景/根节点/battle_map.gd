@@ -3,8 +3,7 @@ extends Node2D
 @onready var dec_layer: TileMapLayer = $MainTileMap/DecLayer
 #@onready var highlight_layer: TileMapLayer = $MainTileMap/HighlightLayer
 
-@onready var team_position_1: Node2D = $TeamPosition1
-@onready var team_position_2: Node2D = $TeamPosition2
+
 
 class PositionAndID extends RefCounted:
 	var position: Vector2i
@@ -38,9 +37,7 @@ func _ready() -> void:
 		
 		#设置角色生成网格位置
 		
-		#var team1_position:Vector2i = BattleGridManager.get_grid_position(team_position_1.position)
-		#var grid_position:Vector2i = BattleGridManager.BFS_find_first_not_occupied_gird(team1_position)
-		#
+
 		var grid_position:Vector2i
 		for i in team_positions_1.size():
 			if team_positions_1[i].id == 0:
