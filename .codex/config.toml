@@ -1,6 +1,9 @@
 approval_policy = "never"
 
-sandbox_mode = "workspace-write"
+sandbox_mode = "danger-full-access"
 
 [sandbox_workspace_write]
 network_access = true
+
+[mcp_servers.godot_editor]
+url = "http://localhost:9080/mcp"

@@ -13,8 +13,8 @@ func _ready() -> void:
 	pass
 
 func _unhandled_input(event: InputEvent) -> void:
-	#if UiManager.have_ui_opening():
-		#return
+	if UiManager.have_ui_opening():
+		return
 	handle_dragging(event)
 	handle_zooming(event)
 

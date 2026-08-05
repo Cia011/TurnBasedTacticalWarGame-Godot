@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://btc0inu7qx02a"]
+
+[ext_resource type="Script" uid="uid://caacq7iarbvar" path="res://场景/UI/背包UI/team_inventory_ui.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://bceqp4t7k0x1f" path="res://场景/UI/背包UI/character_equipment_panel.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://biip4f7eax02h" path="res://场景/UI/背包UI/item_info_panel.tscn" id="3"]
+
+[node name="TeamInventoryUI" type="Control" unique_id=149594877]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=778664700]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="Margin" unique_id=911437314]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="Margin/VBox" unique_id=408790264]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Margin/VBox/Header" unique_id=1400614005]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "队伍背包"
+
+[node name="Spacer" type="Control" parent="Margin/VBox/Header" unique_id=1640567103]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MoneyLabel" type="Label" parent="Margin/VBox/Header" unique_id=1178190407]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "金币：0"
+
+[node name="CloseButton" type="Button" parent="Margin/VBox/Header" unique_id=1404617336]
+layout_mode = 2
+text = "关闭"
+
+[node name="Body" type="HBoxContainer" parent="Margin/VBox" unique_id=307751096]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="Left" type="VBoxContainer" parent="Margin/VBox/Body" unique_id=770164548]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+
+[node name="LeftLabel" type="Label" parent="Margin/VBox/Body/Left" unique_id=1205356335]
+layout_mode = 2
+text = "队伍背包"
+
+[node name="InventoryContainer" type="Control" parent="Margin/VBox/Body/Left" unique_id=415003066]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Right" type="VBoxContainer" parent="Margin/VBox/Body" unique_id=229549624]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="EquipmentPanel" parent="Margin/VBox/Body/Right" unique_id=1410214632 instance=ExtResource("2")]
+layout_mode = 2
+
+[node name="ItemInfoPanel" parent="Margin/VBox/Body/Right" unique_id=583173959 instance=ExtResource("3")]

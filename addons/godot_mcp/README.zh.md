@@ -62,13 +62,13 @@ npm install mcp-remote
 ```json
 {
   "mcpServers": {
-    "godot-mcp": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
+	"godot-mcp": {
+	  "command": "npx",
+	  "args": [
+		"mcp-remote",
         "http://localhost:9080/mcp"
-      ]
-    }
+	  ]
+	}
   }
 }
 ```
@@ -80,9 +80,9 @@ npm install mcp-remote
 ```json
 {
   "mcpServers": {
-    "godot-mcp": {
-      "url": "http://localhost:9080/mcp"
-    }
+	"godot-mcp": {
+	  "url": "http://localhost:9080/mcp"
+	}
   }
 }
 ```
@@ -91,12 +91,12 @@ npm install mcp-remote
 ```json
 {
   "mcpServers": {
-    "godot-mcp": {
-      "url": "http://localhost:9080/mcp",
-      "headers": {
-        "Authorization": "Bearer your-secret-token-here"
-      }
-    }
+	"godot-mcp": {
+	  "url": "http://localhost:9080/mcp",
+	  "headers": {
+		"Authorization": "Bearer your-secret-token-here"
+	  }
+	}
   }
 }
 ```
@@ -109,12 +109,12 @@ npm install mcp-remote
 ```json
 {
   "mcpServers": {
-    "godot-mcp": {
-      "url": "http://localhost:9080/mcp",
-      "type": "streamableHttp",
-      "disabled": false,
-      "autoApprove": []
-    }
+	"godot-mcp": {
+	  "url": "http://localhost:9080/mcp",
+	  "type": "streamableHttp",
+	  "disabled": false,
+	  "autoApprove": []
+	}
   }
 }
 ```
@@ -126,10 +126,10 @@ npm install mcp-remote
 ```json
 {
   "mcp": {
-    "godot-mcp": {
-      "type": "remote",
-      "url": "http://localhost:9080/mcp"
-    }
+	"godot-mcp": {
+	  "type": "remote",
+	  "url": "http://localhost:9080/mcp"
+	}
   }
 }
 ```

@@ -48,7 +48,7 @@
 │   ├── grid_indicator.gd      # 网格指示器
 │   └── 队伍/Baseteam.tscn     # 玩家队伍
 └── 战斗场景/                  # 战斗场景 (红色标记)
-    └── 根节点/battle_map.tscn # 战斗地图
+	└── 根节点/battle_map.tscn # 战斗地图
 ```
 
 ---
@@ -71,7 +71,7 @@
 ### 场景切换
 ```
 世界场景 (WorldScenes) ↔ 战斗场景 (battle_map)
-    ↓                          ↓
+	↓                          ↓
  GameState.change_scene_to()  (存档系统已移除)
 ```
 
@@ -302,13 +302,13 @@ await GBIS.load()  # 加载背包和装备槽
 
 1. **HTTP 模式（推荐）** — 已配置 `http://localhost:9080/mcp`
    - 在 Codex 桌面应用中配置 MCP 服务器：
-     - 设置 → MCP Servers → 添加 `godot-editor`
-     - URL: `http://localhost:9080/mcp`
+	 - 设置 → MCP Servers → 添加 `godot-editor`
+	 - URL: `http://localhost:9080/mcp`
    - 或在 `~/.codex/config.toml` 中添加：
-     ```toml
-     [mcp_servers.godot_editor]
-     url = "http://localhost:9080/mcp"
-     ```
+	 ```toml
+	 [mcp_servers.godot_editor]
+	 url = "http://localhost:9080/mcp"
+	 ```
    - 确保 **Godot 编辑器正在运行**且已打开本项目
 
 2. **STDIO 模式** — 通过命令行启动 Godot MCP：

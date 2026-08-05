@@ -62,6 +62,17 @@ func register_enemy_unit(unit:UnitData) -> void:
 	enemy_characters.append(unit)
 
 
+# 根据角色 id 查找 UnitData（背包装备槽反查用）
+func find_unit_data_by_id(character_id: String) -> UnitData:
+	for unit in player_characters:
+		if unit.get_character_id() == character_id:
+			return unit
+	for unit in enemy_characters:
+		if unit.get_character_id() == character_id:
+			return unit
+	return null
+
+
 func change_scene_to(scene:String):
 	UiManager.close_all_open_ui()
 	match scene:

@@ -1,4 +1,4 @@
-﻿[gd_scene load_steps=2 format=3 uid="uid://order_unit_icon"]
+[gd_scene load_steps=2 format=3 uid="uid://order_unit_icon"]
 
 [ext_resource type="Script" path="res://场景/UI/战斗场景UI/BattleOrderUI/order_unit_icon.gd" id="1"]
 

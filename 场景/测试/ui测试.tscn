@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://bgerxmlmaljp0"]
+
+[ext_resource type="Theme" uid="uid://c13013vn0usql" path="res://资源/主题/main_theme.tres" id="1_ugmri"]
+[ext_resource type="Texture2D" uid="uid://cadkw312nqbwv" path="res://素材/UI/main_ui/01.png" id="2_73tbb"]
+
+[node name="Control" type="Control" unique_id=261644173]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=508017795]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=1044690835]
+layout_mode = 2
+theme = ExtResource("1_ugmri")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=54929078]
+layout_mode = 0
+offset_left = 174.0
+offset_top = 142.0
+offset_right = 610.0
+offset_bottom = 251.0
+texture = ExtResource("2_73tbb")
+region_rect = Rect2(0, 0, 96, 96)
+patch_margin_left = 22
+patch_margin_top = 23
+patch_margin_right = 22
+patch_margin_bottom = 22
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="NinePatchRect" unique_id=278048881]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

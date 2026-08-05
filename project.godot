@@ -8,10 +8,12 @@
 
 config_version=5
 
+"ï»¿config_version"=5
+
 [application]
 
 config/name="战旗项目重构"
-run/main_scene="uid://7c3lfbn51y1q"
+run/main_scene="uid://crmdepyqcrl1w"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://素材/icon.svg"
 
@@ -30,6 +32,10 @@ BattleTurnManager="*res://场景/全局/BattleGlobal/BattleTurnManager.gd"
 BattleUnitManager="*res://场景/全局/BattleGlobal/BattleUnitManager.gd"
 BattleEventBus="*res://场景/全局/BattleGlobal/BattleEventBus.gd"
 GBIS="*res://addons/grid_base_inventory_system/core/grid_base_inventory_system.gd"
+PartyWallet="*res://场景/背包系统/PartyWallet.gd"
+InventoryContext="*res://场景/背包系统/InventoryContext.gd"
+ShopManager="*res://场景/背包系统/ShopManager.gd"
+GameItemDatabase="*res://场景/背包系统/GameItemDatabase.gd"
 MCPRuntimeProbe="*res://addons/godot_mcp/runtime/mcp_runtime_probe.gd"
 
 [display]
