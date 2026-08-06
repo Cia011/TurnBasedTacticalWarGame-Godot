@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://caacq7iarbvar" path="res://场景/UI/背包UI/team_inventory_ui.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://bceqp4t7k0x1f" path="res://场景/UI/背包UI/character_equipment_panel.tscn" id="2"]
+[ext_resource type="Script" uid="uid://b3x4mwtjmm4tp" path="res://addons/grid_base_inventory_system/core/view/container/inventory/inventory_view.gd" id="2_qph7s"]
 [ext_resource type="PackedScene" uid="uid://biip4f7eax02h" path="res://场景/UI/背包UI/item_info_panel.tscn" id="3"]
 
 [node name="TeamInventoryUI" type="Control" unique_id=149594877]
@@ -71,6 +72,17 @@ text = "队伍背包"
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
+
+[node name="InventoryView" type="Control" parent="Margin/VBox/Body/Left/InventoryContainer" unique_id=1759223742]
+anchors_preset = 0
+offset_right = 400.0
+offset_bottom = 400.0
+script = ExtResource("2_qph7s")
+container_name = "TeamInventory"
+container_columns = 10
+container_rows = 10
+base_size = 40
+metadata/_custom_type_script = "uid://b3x4mwtjmm4tp"
 
 [node name="Right" type="VBoxContainer" parent="Margin/VBox/Body" unique_id=229549624]
 layout_mode = 2

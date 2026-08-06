@@ -119,6 +119,70 @@ func get_all_final_stats() -> Dictionary:
 	return result
 
 
+# ---- 装备连接（与 GBIS 装备槽联动） ----
+
+## 返回该角色某个装备槽的完整槽名，例如 "{角色id}_主手"
+func get_equipment_slot_name(slot_key: String) -> String:
+	return "%s_%s" % [character_id, slot_key]
+
+
+## 获取某个槽位上已装备的物品
+func get_equipped_item(slot_key: String) -> BaseEquipmentItemData:
+	var slot := GBIS.equipment_slot_service.get_slot(get_equipment_slot_name(slot_key))
+	if slot and slot.equipped_item is BaseEquipmentItemData:
+		return slot.equipped_item as BaseEquipmentItemData
+	return null
+
+
+## 把装备穿到指定槽位，成功后属性会写入 DataManager
+func equip_item(item: BaseEquipmentItemData, slot_key: String) -> bool:
+	if item == null or slot_key.is_empty():
+		return false
+	var slot_name := get_equipment_slot_name(slot_key)
+	if not GBIS.equipment_slot_service.regist_slot(slot_name, [item.type]):
+		return false
+	return GBIS.equipment_slot_service.equip_to(slot_name, item)
+
+
+## 脱下指定槽位的装备，优先放回已打开的背包，否则放回队伍背包
+func unequip_item(slot_key: String) -> BaseEquipmentItemData:
+	var slot_name := get_equipment_slot_name(slot_key)
+	var item := GBIS.equipment_slot_service.unequip(slot_name)
+	if item != null:
+		return item as BaseEquipmentItemData
+
+	var slot := GBIS.equipment_slot_service.get_slot(slot_name)
+	if slot and slot.equipped_item is BaseEquipmentItemData:
+		item = slot.equipped_item as BaseEquipmentItemData
+		slot.unequip()
+		if GBIS.inventory_service.get_container("TeamInventory") != null:
+			GBIS.inventory_service.add_item("TeamInventory", item)
+		return item
+	return null
+
+
+## 装备加成统一写入 DataManager（add=true 穿上，add=false 脱下）
+func apply_equipment_bonuses(bonuses: Dictionary, add: bool) -> void:
+	for stat in bonuses:
+		var amount := int(bonuses[stat])
+		if add:
+			data_manager.add_flat_bonus(stat, amount)
+		else:
+			data_manager.remove_flat_bonus(stat, amount)
+
+
+## 汇总所有已装备物品的属性加成
+func get_equipment_stat_bonuses() -> Dictionary:
+	var result := {}
+	for slot_key in ["主手", "副手", "盔甲", "头盔", "戒指", "项链", "道具"]:
+		var item := get_equipped_item(slot_key)
+		if item == null:
+			continue
+		for stat in item.stat_bonuses:
+			result[stat] = result.get(stat, 0) + int(item.stat_bonuses[stat])
+	return result
+
+
 # ---- Buff 委托 ----
 
 func add_buff(buff: BaseBuff) -> bool:

@@ -10,6 +10,8 @@ const TEAM_INVENTORY := "TeamInventory"
 @onready var shop_container: Control = $Center/Panel/Margin/VBox/Body/ShopColumn/ShopContainer
 @onready var inv_container: Control = $Center/Panel/Margin/VBox/Body/InvColumn/InvContainer
 @onready var item_info_panel: ItemInfoPanel = $Center/Panel/Margin/VBox/ItemInfoPanel
+#@onready var shop_view: ShopView = $Center/Panel/Margin/VBox/Body/ShopColumn/ShopContainer/ShopView
+#@onready var inv_view: InventoryView = $Center/Panel/Margin/VBox/Body/InvColumn/InvContainer/InventoryView
 
 
 func _ready() -> void:

@@ -29,8 +29,7 @@ func equipped(slot_name: String) -> void:
 	if unit == null:
 		push_warning("[%s] 找不到装备归属角色：%s" % [item_name, slot_name])
 		return
-	for stat in stat_bonuses:
-		unit.data_manager.add_flat_bonus(stat, stat_bonuses[stat])
+	unit.apply_equipment_bonuses(stat_bonuses, true)
 	print("[%s] 装备到 %s，加成 %s" % [item_name, slot_name, stat_bonuses])
 
 ## 脱下时移除属性
@@ -38,8 +37,7 @@ func unequipped(slot_name: String) -> void:
 	var unit := _get_owner_unit(slot_name)
 	if unit == null:
 		return
-	for stat in stat_bonuses:
-		unit.data_manager.remove_flat_bonus(stat, stat_bonuses[stat])
+	unit.apply_equipment_bonuses(stat_bonuses, false)
 	print("[%s] 从 %s 脱下" % [item_name, slot_name])
 
 ## 从槽位名解析角色

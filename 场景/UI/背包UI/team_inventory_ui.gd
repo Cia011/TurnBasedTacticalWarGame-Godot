@@ -9,19 +9,20 @@ const TEAM_INVENTORY := "TeamInventory"
 @onready var inventory_container: Control = $Margin/VBox/Body/Left/InventoryContainer
 @onready var equipment_panel: CharacterEquipmentPanel = $Margin/VBox/Body/Right/EquipmentPanel
 @onready var item_info_panel: ItemInfoPanel = $Margin/VBox/Body/Right/ItemInfoPanel
+@onready var _inventory_view: InventoryView = $Margin/VBox/Body/Left/InventoryContainer/InventoryView
 
-var _inventory_view: InventoryView
+#var _inventory_view: InventoryView
 var selected_unit: UnitData
 
 
 func _ready() -> void:
 	# 创建队伍背包网格视图
-	_inventory_view = InventoryView.new()
-	_inventory_view.container_name = TEAM_INVENTORY
-	_inventory_view.container_columns = 8
-	_inventory_view.container_rows = 5
-	_inventory_view.base_size = 40
-	inventory_container.add_child(_inventory_view)
+	#_inventory_view = InventoryView.new()
+	#_inventory_view.container_name = TEAM_INVENTORY
+	#_inventory_view.container_columns = 8
+	#_inventory_view.container_rows = 5
+	#_inventory_view.base_size = 40
+	#inventory_container.add_child(_inventory_view)
 
 	# 注册 UI 并连接信号
 	UiManager.register_ui(self)
