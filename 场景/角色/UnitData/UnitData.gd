@@ -119,6 +119,94 @@ func get_all_final_stats() -> Dictionary:
 	return result
 
 
+# ---- 存档序列化 ----
+
+func serialize() -> Dictionary:
+	var buff_list: Array = []
+	for buff in buff_manager.get_active_buffs():
+		var buff_data := {
+			"class": buff.get_class(),
+			"id": buff.id,
+			"name": buff.name,
+			"duration": buff.duration,
+			"max_stacks": buff.max_stacks,
+			"current_stacks": buff.current_stacks,
+		}
+		if buff is ModifierBuff:
+			var modifiers: Array = []
+			for entry in buff.modifiers:
+				modifiers.append({
+					"stat": entry.stat,
+					"flat": entry.flat,
+					"mult": entry.mult,
+				})
+			buff_data["modifiers"] = modifiers
+		buff_list.append(buff_data)
+	return {
+		"character_id": character_id,
+		"character_name": character_name,
+		"stats": get_states(),
+		"flat_bonuses": data_manager.flat_bonuses.duplicate(),
+		"final_bonuses": data_manager.final_bonuses.duplicate(),
+		"buffs": buff_list,
+	}
+
+
+func deserialize(data: Dictionary) -> void:
+	character_id = data.get("character_id", character_id)
+	character_name = data.get("character_name", character_name)
+	var stats: Dictionary = data.get("stats", {})
+	level = int(stats.get("level", level))
+	defense = int(stats.get("defense", defense))
+	agility = int(stats.get("agility", agility))
+	strength = int(stats.get("strength", strength))
+	constitution = int(stats.get("constitution", constitution))
+	intelligence = int(stats.get("intelligence", intelligence))
+	action_points = int(stats.get("action_points", action_points))
+	max_health = int(stats.get("max_health", max_health))
+	current_health = int(stats.get("current_health", current_health))
+
+	for stat in data.get("flat_bonuses", {}):
+		var amount := int(data["flat_bonuses"][stat])
+		if amount != 0:
+			data_manager.add_flat_bonus(stat, amount)
+	for stat in data.get("final_bonuses", {}):
+		var amount := int(data["final_bonuses"][stat])
+		if amount != 0:
+			data_manager.add_final_bonus(stat, amount)
+
+	buff_manager.clear_all_buffs()
+	for buff_data in data.get("buffs", []):
+		var buff := _create_buff_from_data(buff_data)
+		if buff:
+			buff_manager.add_buff(buff)
+
+
+func _create_buff_from_data(data: Dictionary) -> BaseBuff:
+	var buff: BaseBuff
+	match data.get("class", ""):
+		"ModifierBuff":
+			var modifier_buff := ModifierBuff.new()
+			for entry_data in data.get("modifiers", []):
+				var entry := ModifierBuff.StatModifierEntry.new(
+					entry_data.get("stat", ""),
+					int(entry_data.get("flat", 0)),
+					float(entry_data.get("mult", 1.0))
+				)
+				modifier_buff.modifiers.append(entry)
+			buff = modifier_buff
+		"AttackBuff":
+			buff = AttackBuff.new()
+		_:
+			return null
+	buff.id = data.get("id", buff.id)
+	buff.name = data.get("name", buff.name)
+	buff.duration = int(data.get("duration", -1))
+	buff.max_stacks = int(data.get("max_stacks", 1))
+	buff.current_stacks = int(data.get("current_stacks", 1))
+	return buff
+
+
 # ---- 装备连接（与 GBIS 装备槽联动） ----
 
 ## 返回该角色某个装备槽的完整槽名，例如 "{角色id}_主手"

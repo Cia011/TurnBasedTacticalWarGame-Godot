@@ -36,7 +36,6 @@ PartyWallet="*res://场景/背包系统/PartyWallet.gd"
 InventoryContext="*res://场景/背包系统/InventoryContext.gd"
 ShopManager="*res://场景/背包系统/ShopManager.gd"
 GameItemDatabase="*res://场景/背包系统/GameItemDatabase.gd"
-MCPRuntimeProbe="*res://addons/godot_mcp/runtime/mcp_runtime_probe.gd"
 
 [display]
 

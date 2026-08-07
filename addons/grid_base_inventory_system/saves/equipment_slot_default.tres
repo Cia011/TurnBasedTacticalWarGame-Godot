@@ -1,7 +1,157 @@
 [gd_resource type="Resource" script_class="EquipmentSlotRepository" format=3]
 
 [ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/model/slot/equipment_slot_data.gd" id="1_v2ldv"]
+[ext_resource type="Texture2D" path="res://素材/图标/slot/盾牌slot.png" id="2_4dl6n"]
 [ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/repository/equipment_slot_repository.gd" id="2_fql2m"]
+[ext_resource type="Script" path="res://场景/背包系统/物品/装备/WeaponItemData.gd" id="3_1ntcd"]
+[ext_resource type="Texture2D" path="res://素材/图标/slot/盔甲slot.png" id="4_tefme"]
+[ext_resource type="Script" path="res://场景/背包系统/物品/装备/ArmorItemData.gd" id="5_gc14p"]
+[ext_resource type="Texture2D" path="res://素材/图标/iton/剑.png" id="6_7xn5m"]
+[ext_resource type="Texture2D" path="res://素材/图标/slot/腰带slot.png" id="7_1nxd0"]
+[ext_resource type="Script" path="res://场景/背包系统/物品/装备/TrinketItemData.gd" id="8_x87os"]
+
+[sub_resource type="Resource" id="Resource_mf5j0"]
+script = ExtResource("1_v2ldv")
+avilable_types = Array[String](["头盔"])
+slot_name = "placeholder_helmet"
+
+[sub_resource type="Resource" id="Resource_nocju"]
+script = ExtResource("1_v2ldv")
+avilable_types = Array[String](["项链"])
+slot_name = "placeholder_slot_necklace"
+
+[sub_resource type="Resource" id="Resource_l3oyc"]
+script = ExtResource("1_v2ldv")
+avilable_types = Array[String](["武器"])
+slot_name = "placeholder_slot_mainhand"
+
+[sub_resource type="Resource" id="Resource_knbx0"]
+script = ExtResource("1_v2ldv")
+avilable_types = Array[String](["盔甲"])
+slot_name = "placeholder_slot_armor"
+
+[sub_resource type="Resource" id="Resource_artif"]
+script = ExtResource("1_v2ldv")
+avilable_types = Array[String](["武器"])
+slot_name = "placeholder_slot_offhand"
+
+[sub_resource type="Resource" id="Resource_61in0"]
+script = ExtResource("1_v2ldv")
+avilable_types = Array[String](["戒指"])
+slot_name = "placeholder_slot_ring"
+
+[sub_resource type="Resource" id="Resource_wlegg"]
+script = ExtResource("1_v2ldv")
+avilable_types = Array[String](["道具"])
+slot_name = "placeholder_slot_trinket"
+
+[sub_resource type="Resource" id="Resource_5pmjh"]
+script = ExtResource("1_v2ldv")
+avilable_types = Array[String](["头盔"])
+slot_name = "17860913796672_头盔"
+
+[sub_resource type="Resource" id="Resource_u25sa"]
+script = ExtResource("1_v2ldv")
+avilable_types = Array[String](["项链"])
+slot_name = "17860913796672_项链"
+
+[sub_resource type="Resource" id="Resource_2fhhd"]
+script = ExtResource("3_1ntcd")
+price = 90
+description = "坚固的铁盾，能有效抵挡攻击。"
+weight = 3.0
+compatible_slots = Array[String](["主手", "副手"])
+stat_bonuses = {
+"defense": 2
+}
+item_name = "铁盾"
+type = "武器"
+icon = ExtResource("2_4dl6n")
+
+[sub_resource type="Resource" id="Resource_w3j6d"]
+script = ExtResource("1_v2ldv")
+equipped_item = SubResource("Resource_2fhhd")
+avilable_types = Array[String](["武器"])
+slot_name = "17860913796672_主手"
+
+[sub_resource type="Resource" id="Resource_0lcbo"]
+script = ExtResource("5_gc14p")
+price = 150
+description = "轻便的皮革护甲。"
+weight = 4.0
+compatible_slots = Array[String](["盔甲"])
+stat_bonuses = {
+"defense": 2,
+"max_health": 5
+}
+item_name = "皮甲"
+type = "盔甲"
+icon = ExtResource("4_tefme")
+
+[sub_resource type="Resource" id="Resource_khiiw"]
+script = ExtResource("1_v2ldv")
+equipped_item = SubResource("Resource_0lcbo")
+avilable_types = Array[String](["盔甲"])
+slot_name = "17860913796672_盔甲"
+
+[sub_resource type="Resource" id="Resource_egefx"]
+script = ExtResource("3_1ntcd")
+price = 120
+description = "普通的铁制长剑，攻击稳定。"
+weight = 2.5
+compatible_slots = Array[String](["主手", "副手"])
+stat_bonuses = {
+"strength": 3
+}
+item_name = "铁剑"
+type = "武器"
+icon = ExtResource("6_7xn5m")
+
+[sub_resource type="Resource" id="Resource_n86yw"]
+script = ExtResource("1_v2ldv")
+equipped_item = SubResource("Resource_egefx")
+avilable_types = Array[String](["武器"])
+slot_name = "17860913796672_副手"
+
+[sub_resource type="Resource" id="Resource_qd7ao"]
+script = ExtResource("1_v2ldv")
+avilable_types = Array[String](["戒指"])
+slot_name = "17860913796672_戒指"
+
+[sub_resource type="Resource" id="Resource_qyabw"]
+script = ExtResource("8_x87os")
+price = 60
+description = "多挂几个口袋的腰带，行动更灵活。"
+weight = 0.5
+compatible_slots = Array[String](["道具"])
+stat_bonuses = {
+"action_points": 1
+}
+item_name = "行军腰带"
+type = "道具"
+icon = ExtResource("7_1nxd0")
+
+[sub_resource type="Resource" id="Resource_mpo8b"]
+script = ExtResource("1_v2ldv")
+equipped_item = SubResource("Resource_qyabw")
+avilable_types = Array[String](["道具"])
+slot_name = "17860913796672_道具"
 
 [resource]
 script = ExtResource("2_fql2m")
+_slot_data_map = Dictionary[String, ExtResource("1_v2ldv")]({
+"17860913796672_主手": SubResource("Resource_w3j6d"),
+"17860913796672_副手": SubResource("Resource_n86yw"),
+"17860913796672_头盔": SubResource("Resource_5pmjh"),
+"17860913796672_戒指": SubResource("Resource_qd7ao"),
+"17860913796672_盔甲": SubResource("Resource_khiiw"),
+"17860913796672_道具": SubResource("Resource_mpo8b"),
+"17860913796672_项链": SubResource("Resource_u25sa"),
+"placeholder_helmet": SubResource("Resource_mf5j0"),
+"placeholder_slot_armor": SubResource("Resource_knbx0"),
+"placeholder_slot_mainhand": SubResource("Resource_l3oyc"),
+"placeholder_slot_necklace": SubResource("Resource_nocju"),
+"placeholder_slot_offhand": SubResource("Resource_artif"),
+"placeholder_slot_ring": SubResource("Resource_61in0"),
+"placeholder_slot_trinket": SubResource("Resource_wlegg")
+})

@@ -22,7 +22,7 @@ func exit_grid():
 func enter_grid():
 	print("[WorldGrid] "+"进入" + str(grid_position))
 	#尝试触发事件
-	WorldEventManager.trigger_event(grid_position)
+	WorldEventManager.trigger_grid(grid_position)
 	
 # # 序列化网格数据
 # func serialize() -> Dictionary:

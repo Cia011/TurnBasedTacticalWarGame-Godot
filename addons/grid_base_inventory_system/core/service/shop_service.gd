@@ -8,10 +8,14 @@ func load_goods(shop_name: String, goods: Array[ItemData]) -> void:
 
 ## 购买物品
 func buy(shop_name: String, item: ItemData) -> bool:
+	if ShopManager.has_method("try_buy"):
+		return ShopManager.try_buy(shop_name, item)
 	return item.buy()
 
 ## 出售物品
 func sell(item: ItemData) -> bool:
+	if ShopManager.has_method("try_sell"):
+		return ShopManager.try_sell(item)
 	if item.can_sell():
 		item.sold()
 		GBIS.moving_item_service.clear_moving_item()

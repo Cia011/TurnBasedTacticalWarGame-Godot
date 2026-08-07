@@ -33,14 +33,13 @@ func creat_items(mouse_grid_position:Vector2i):
 	data_dictionaries.clear()
 	var id:int = 0
 	
-	var event:BaseEvent = WorldEventManager.get_grid_event(mouse_grid_position)
+	var event_list: Array = WorldEventManager.get_grid_events(mouse_grid_position)
 	
 	if mouse_grid_position == GameState.baseteam_node.grid_position:
-		if event:
-			var item:String = event.name
-			popup_menu.add_item(item,id)
+		for event in event_list:
+			popup_menu.add_item(event.name, id)
 			data_dictionaries[id] = event
-			id+=1;
+			id += 1
 	
 	#
 	popup_menu.add_item("移动",100)

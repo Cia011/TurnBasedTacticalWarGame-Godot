@@ -74,6 +74,12 @@ text = "存档
 "
 flat = true
 
+[node name="读档按钮" type="Button" parent="HBoxContainer/set/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "读档"
+flat = true
+
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=1615631970]
 layout_mode = 2
 
@@ -156,5 +162,6 @@ label_settings = SubResource("LabelSettings_4dp2d")
 [connection signal="pressed" from="HBoxContainer/set/HBoxContainer/帮助按钮" to="." method="_on_帮助按钮_pressed"]
 [connection signal="pressed" from="HBoxContainer/set/HBoxContainer/菜单按钮" to="." method="_on_菜单按钮_pressed"]
 [connection signal="pressed" from="HBoxContainer/set/HBoxContainer/存档按钮" to="." method="_on_存档按钮_pressed"]
+[connection signal="pressed" from="HBoxContainer/set/HBoxContainer/读档按钮" to="." method="_on_读档按钮_pressed"]
 [connection signal="pressed" from="HBoxContainer/function/HBoxContainer/背包按钮" to="." method="_on_背包按钮_pressed"]
 [connection signal="pressed" from="HBoxContainer/function/HBoxContainer/商店按钮" to="." method="_on_商店按钮_pressed"]

@@ -1,112 +1,174 @@
-[gd_resource type="Resource" script_class="ContainerRepository" format=3 uid="uid://ddagaqjn5r52x"]
+[gd_resource type="Resource" script_class="ContainerRepository" format=3]
 
-[ext_resource type="Script" uid="uid://3a8er1gtaua3" path="res://addons/grid_base_inventory_system/core/model/container/container_data.gd" id="1_2rihp"]
-[ext_resource type="Script" uid="uid://c5uqs7o5b2w68" path="res://addons/grid_base_inventory_system/core/model/item/item_data.gd" id="2_c32pk"]
-[ext_resource type="Texture2D" uid="uid://enb4xxna56gy" path="res://素材/图标/iton/剑.png" id="3_sels7"]
-[ext_resource type="Texture2D" uid="uid://113aqj7j3u3y" path="res://素材/图标/slot/slot.png" id="4_jknxf"]
-[ext_resource type="Script" uid="uid://x8lw6iyk5rf5" path="res://addons/grid_base_inventory_system/core/model/item/consumable_data.gd" id="5_vylbe"]
-[ext_resource type="Texture2D" uid="uid://l4jnj07b7px7" path="res://素材/图标/slot/盔甲slot.png" id="6_eemdc"]
-[ext_resource type="Script" uid="uid://c81d67advvltj" path="res://addons/grid_base_inventory_system/core/model/item/equipment_data.gd" id="7_61wgs"]
-[ext_resource type="Script" uid="uid://buv85ki5jyttc" path="res://addons/grid_base_inventory_system/core/repository/container_repository.gd" id="8_totqh"]
-
-[sub_resource type="Resource" id="Resource_vylbe"]
-script = ExtResource("7_61wgs")
-item_name = "铁甲"
-type = "盔甲"
-icon = ExtResource("6_eemdc")
+[ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/model/container/container_data.gd" id="1_0u4sr"]
+[ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/model/item/item_data.gd" id="2_3vkxh"]
+[ext_resource type="Texture2D" path="res://素材/图标/slot/slot.png" id="3_jtr41"]
+[ext_resource type="Script" path="res://场景/背包系统/物品/FoodItemData.gd" id="4_xvrqk"]
+[ext_resource type="Script" path="res://场景/背包系统/物品/PotionItemData.gd" id="5_6lkbr"]
+[ext_resource type="Script" path="res://场景/背包系统/物品/TradeGoodsItemData.gd" id="6_oigvv"]
+[ext_resource type="Texture2D" path="res://素材/图标/slot/头盔slot.png" id="12_d0yca"]
+[ext_resource type="Script" path="res://场景/背包系统/物品/装备/HelmetItemData.gd" id="13_ajgfn"]
+[ext_resource type="Texture2D" path="res://素材/图标/slot/戒指slot.png" id="14_gdw7a"]
+[ext_resource type="Script" path="res://场景/背包系统/物品/装备/RingItemData.gd" id="15_vuryn"]
+[ext_resource type="Texture2D" path="res://素材/图标/slot/项链slot.png" id="16_u8vpt"]
+[ext_resource type="Script" path="res://场景/背包系统/物品/装备/NecklaceItemData.gd" id="17_d1622"]
+[ext_resource type="Script" path="res://addons/grid_base_inventory_system/core/repository/container_repository.gd" id="20_5s5y1"]
 
 [sub_resource type="Resource" id="Resource_eemdc"]
-script = ExtResource("1_2rihp")
-columns = 4
-rows = 3
-container_name = "SecondaryInventory"
-avilable_types = Array[String](["ANY"])
-items = Array[ExtResource("2_c32pk")]([SubResource("Resource_vylbe")])
-item_grids_map = Dictionary[ExtResource("2_c32pk"), Array]({
-SubResource("Resource_vylbe"): Array[Vector2i]([Vector2i(2, 0)])
-})
-grid_item_map = Dictionary[Vector2i, ExtResource("2_c32pk")]({
-Vector2i(0, 0): null,
-Vector2i(0, 1): null,
-Vector2i(0, 2): null,
-Vector2i(1, 0): null,
-Vector2i(1, 1): null,
-Vector2i(1, 2): null,
-Vector2i(2, 0): SubResource("Resource_vylbe"),
-Vector2i(2, 1): null,
-Vector2i(2, 2): null,
-Vector2i(3, 0): null,
-Vector2i(3, 1): null,
-Vector2i(3, 2): null
-})
-
-[sub_resource type="Resource" id="Resource_2rihp"]
-script = ExtResource("2_c32pk")
-item_name = "剑"
-type = "武器"
-icon = ExtResource("3_sels7")
-
-[sub_resource type="Resource" id="Resource_c32pk"]
-script = ExtResource("5_vylbe")
+script = ExtResource("4_xvrqk")
+price = 8
+description = "补充体力的硬面包，回复 10 点生命。"
+weight = 0.3
 stack_size = 10
 current_amount = 5
+item_name = "面包"
+type = "食物"
+icon = ExtResource("3_jtr41")
+
+[sub_resource type="Resource" id="Resource_61wgs"]
+script = ExtResource("4_xvrqk")
+heal_amount = 20
+price = 15
+description = "咸香的肉干，回复 20 点生命。"
+weight = 0.4
+stack_size = 10
+current_amount = 5
+item_name = "肉干"
+type = "食物"
+icon = ExtResource("3_jtr41")
+
+[sub_resource type="Resource" id="Resource_totqh"]
+script = ExtResource("5_6lkbr")
+price = 30
+description = "清澈的红色药水，回复 25 点生命。"
+weight = 0.3
+stack_size = 10
+current_amount = 3
 item_name = "生命药水"
 type = "消耗品"
-icon = ExtResource("4_jknxf")
+icon = ExtResource("3_jtr41")
 
-[sub_resource type="Resource" id="Resource_sels7"]
-script = ExtResource("5_vylbe")
-stack_size = 10
-current_amount = 5
-item_name = "魔法药水"
-type = "消耗品"
-icon = ExtResource("4_jknxf")
+[sub_resource type="Resource" id="Resource_umlxg"]
+script = ExtResource("6_oigvv")
+price = 20
+description = "常见的布料，可以在城镇出售。"
+weight = 0.5
+stack_size = 20
+item_name = "布料"
+type = "商品"
+icon = ExtResource("3_jtr41")
 
-[sub_resource type="Resource" id="Resource_jknxf"]
-script = ExtResource("1_2rihp")
-columns = 6
-rows = 4
-container_name = "TestInventory"
+[sub_resource type="Resource" id="Resource_yxmen"]
+script = ExtResource("6_oigvv")
+price = 12
+description = "可用于炼金的草药。"
+weight = 0.2
+stack_size = 20
+item_name = "草药"
+type = "商品"
+icon = ExtResource("3_jtr41")
+
+[sub_resource type="Resource" id="Resource_2itfv"]
+script = ExtResource("13_ajgfn")
+price = 80
+description = "保护头部的铁盔。"
+weight = 2.0
+compatible_slots = Array[String](["头盔"])
+stat_bonuses = {
+"defense": 2
+}
+item_name = "铁盔"
+type = "头盔"
+icon = ExtResource("12_d0yca")
+
+[sub_resource type="Resource" id="Resource_fxsod"]
+script = ExtResource("15_vuryn")
+price = 200
+description = "蕴含敏捷之力的银戒指。"
+weight = 0.1
+compatible_slots = Array[String](["戒指"])
+stat_bonuses = {
+"agility": 2
+}
+item_name = "银戒指"
+type = "戒指"
+icon = ExtResource("14_gdw7a")
+
+[sub_resource type="Resource" id="Resource_0u4sr"]
+script = ExtResource("17_d1622")
+price = 180
+description = "提升魔法感知的吊坠。"
+weight = 0.2
+compatible_slots = Array[String](["项链"])
+stat_bonuses = {
+"intelligence": 2
+}
+item_name = "智慧吊坠"
+type = "项链"
+icon = ExtResource("16_u8vpt")
+
+[sub_resource type="Resource" id="Resource_3vkxh"]
+script = ExtResource("1_0u4sr")
+columns = 8
+rows = 5
+container_name = "TeamInventory"
 avilable_types = Array[String](["ANY"])
-items = Array[ExtResource("2_c32pk")]([SubResource("Resource_2rihp"), SubResource("Resource_c32pk"), SubResource("Resource_sels7")])
-item_grids_map = Dictionary[ExtResource("2_c32pk"), Array]({
-SubResource("Resource_2rihp"): Array[Vector2i]([Vector2i(0, 0)]),
-SubResource("Resource_c32pk"): Array[Vector2i]([Vector2i(1, 0)]),
-SubResource("Resource_sels7"): Array[Vector2i]([Vector2i(2, 0)])
+items = Array[ExtResource("2_3vkxh")]([SubResource("Resource_eemdc"), SubResource("Resource_61wgs"), SubResource("Resource_totqh"), SubResource("Resource_umlxg"), SubResource("Resource_yxmen"), SubResource("Resource_2itfv"), SubResource("Resource_fxsod"), SubResource("Resource_0u4sr")])
+item_grids_map = Dictionary[ExtResource("2_3vkxh"), Array]({
+SubResource("Resource_eemdc"): Array[Vector2i]([Vector2i(0, 0)]),
+SubResource("Resource_61wgs"): Array[Vector2i]([Vector2i(1, 0)]),
+SubResource("Resource_totqh"): Array[Vector2i]([Vector2i(2, 0)]),
+SubResource("Resource_umlxg"): Array[Vector2i]([Vector2i(3, 0)]),
+SubResource("Resource_yxmen"): Array[Vector2i]([Vector2i(4, 0)]),
+SubResource("Resource_2itfv"): Array[Vector2i]([Vector2i(0, 1)]),
+SubResource("Resource_fxsod"): Array[Vector2i]([Vector2i(1, 1)]),
+SubResource("Resource_0u4sr"): Array[Vector2i]([Vector2i(2, 1)])
 })
-grid_item_map = Dictionary[Vector2i, ExtResource("2_c32pk")]({
-Vector2i(0, 0): SubResource("Resource_2rihp"),
-Vector2i(0, 1): null,
+grid_item_map = Dictionary[Vector2i, ExtResource("2_3vkxh")]({
+Vector2i(0, 0): SubResource("Resource_eemdc"),
+Vector2i(0, 1): SubResource("Resource_2itfv"),
 Vector2i(0, 2): null,
 Vector2i(0, 3): null,
-Vector2i(1, 0): SubResource("Resource_c32pk"),
-Vector2i(1, 1): null,
+Vector2i(0, 4): null,
+Vector2i(1, 0): SubResource("Resource_61wgs"),
+Vector2i(1, 1): SubResource("Resource_fxsod"),
 Vector2i(1, 2): null,
 Vector2i(1, 3): null,
-Vector2i(2, 0): SubResource("Resource_sels7"),
-Vector2i(2, 1): null,
+Vector2i(1, 4): null,
+Vector2i(2, 0): SubResource("Resource_totqh"),
+Vector2i(2, 1): SubResource("Resource_0u4sr"),
 Vector2i(2, 2): null,
 Vector2i(2, 3): null,
-Vector2i(3, 0): null,
+Vector2i(2, 4): null,
+Vector2i(3, 0): SubResource("Resource_umlxg"),
 Vector2i(3, 1): null,
 Vector2i(3, 2): null,
 Vector2i(3, 3): null,
-Vector2i(4, 0): null,
+Vector2i(3, 4): null,
+Vector2i(4, 0): SubResource("Resource_yxmen"),
 Vector2i(4, 1): null,
 Vector2i(4, 2): null,
 Vector2i(4, 3): null,
+Vector2i(4, 4): null,
 Vector2i(5, 0): null,
 Vector2i(5, 1): null,
 Vector2i(5, 2): null,
-Vector2i(5, 3): null
+Vector2i(5, 3): null,
+Vector2i(5, 4): null,
+Vector2i(6, 0): null,
+Vector2i(6, 1): null,
+Vector2i(6, 2): null,
+Vector2i(6, 3): null,
+Vector2i(6, 4): null,
+Vector2i(7, 0): null,
+Vector2i(7, 1): null,
+Vector2i(7, 2): null,
+Vector2i(7, 3): null,
+Vector2i(7, 4): null
 })
 
 [resource]
-script = ExtResource("8_totqh")
-_container_data_map = Dictionary[String, ExtResource("1_2rihp")]({
-"SecondaryInventory": SubResource("Resource_eemdc"),
-"TestInventory": SubResource("Resource_jknxf")
-})
-_quick_move_relations_map = Dictionary[String, Array]({
-"TestInventory": Array[String](["SecondaryInventory"])
+script = ExtResource("20_5s5y1")
+_container_data_map = Dictionary[String, ExtResource("1_0u4sr")]({
+"TeamInventory": SubResource("Resource_3vkxh")
 })

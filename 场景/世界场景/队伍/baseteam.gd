@@ -35,8 +35,11 @@ func serialize() -> Dictionary:
 ## 从序列化数据恢复队伍位置
 func deserialize(data:Dictionary):
 	if data.has("grid_position"):
-		print("[Baseteam] deserialize grid_position"+str(ToolBox.string_to_vector2i(data["grid_position"])))	
-		set_grid_position(ToolBox.string_to_vector2i(data["grid_position"]))
+		var saved_position = data["grid_position"]
+		if saved_position is String:
+			saved_position = ToolBox.string_to_vector2i(saved_position)
+		print("[Baseteam] deserialize grid_position"+str(saved_position))
+		set_grid_position(saved_position)
 
 func get_path_and_try_move(mouse_grid_position:Vector2i):
 	if not path.is_empty():

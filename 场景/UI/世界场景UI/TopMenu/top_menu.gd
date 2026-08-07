@@ -24,4 +24,8 @@ func _on_菜单按钮_pressed() -> void:
 
 
 func _on_存档按钮_pressed() -> void:
-	pass
+	WorldSaveManager.save_game()
+
+
+func _on_读档按钮_pressed() -> void:
+	WorldSaveManager.load_game()

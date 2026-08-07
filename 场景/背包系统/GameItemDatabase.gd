@@ -173,27 +173,27 @@ func _build_shops() -> void:
 		make_cloth(),
 		make_herb(),
 		make_war_belt(),
-	], 6, 4)
+	], 6, 4, {"tier": 1, "funds": 300})
 
 	ShopManager.register_shop("武器店", [
 		make_iron_sword(),
 		make_iron_shield(),
 		make_iron_sword(),
-	], 4, 3)
+	], 4, 3, {"tier": 2, "funds": 800})
 
 	ShopManager.register_shop("防具店", [
 		make_leather_armor(),
 		make_iron_armor(),
 		make_iron_helmet(),
 		make_war_belt(),
-	], 5, 3)
+	], 5, 3, {"tier": 2, "funds": 700})
 
 	ShopManager.register_shop("饰品店", [
 		make_silver_ring(),
 		make_pendant(),
 		make_silver_ring(),
 		make_pendant(),
-	], 4, 2)
+	], 4, 2, {"tier": 3, "funds": 1200})
 
 func _seed_inventory() -> void:
 	# 初始背包给一些补给和商品
