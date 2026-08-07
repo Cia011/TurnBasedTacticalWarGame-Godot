@@ -4,6 +4,8 @@ extends Node
 ## - 城镇为永久事件，战斗/探索事件按回合数消失
 ## - 负责事件的注册、触发、回合推进、图标显示和存档
 
+signal turn_ticked
+
 var events: Array[BaseEvent] = []
 var events_by_grid: Dictionary = {}
 
@@ -58,7 +60,7 @@ func tick_turns() -> void:
 			event.tick_duration()
 			if event.is_expired():
 				unregister_event(event)
-	ShopManager.restock_all_shops()
+	turn_ticked.emit()
 
 
 ## 显示事件图标（同一格多个事件时错开摆放）
@@ -100,6 +102,10 @@ func serialize() -> Dictionary:
 	return {"events": event_list}
 
 
+func get_save_data() -> Dictionary:
+	return serialize()
+
+
 ## 从存档恢复所有事件
 func deserialize(data: Dictionary) -> void:
 	for event in events.duplicate():
@@ -109,3 +115,7 @@ func deserialize(data: Dictionary) -> void:
 			var event := create_event_from_data(event_data)
 			if event:
 				register_event(event)
+
+
+func apply_save_data(data: Dictionary) -> void:
+	deserialize(data)

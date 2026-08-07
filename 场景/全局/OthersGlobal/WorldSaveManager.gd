@@ -7,6 +7,28 @@ extends Node
 const SAVE_VERSION := 1
 const SAVE_PATH := "user://save_game.json"
 
+## 可存档组件：实现 get_save_data() / apply_save_data(data) 后注册，即可自动进出存档
+var savables: Array[Node] = []
+
+
+func _ready() -> void:
+	call_deferred("_register_default_savables")
+
+
+func _register_default_savables() -> void:
+	register_savable(PartyWallet)
+	register_savable(WorldEventManager)
+	register_savable(ShopManager)
+
+
+func register_savable(node: Node) -> void:
+	if node and not savables.has(node):
+		savables.append(node)
+
+
+func unregister_savable(node: Node) -> void:
+	savables.erase(node)
+
 
 func save_game() -> bool:
 	var data := _collect_save_data()
@@ -43,10 +65,8 @@ func load_game() -> bool:
 func _collect_save_data() -> Dictionary:
 	var data := {
 		"version": SAVE_VERSION,
-		"money": PartyWallet.money,
 		"players": [],
-		"events": WorldEventManager.serialize(),
-		"shops": ShopManager.serialize(),
+		"custom": {},
 	}
 	for unit in GameState.player_characters:
 		data["players"].append(unit.serialize())
@@ -54,13 +74,14 @@ func _collect_save_data() -> Dictionary:
 		data["map"] = WorldGridManager.data_layer.serialize()
 	if GameState.baseteam_node and GameState.baseteam_node.has_method("serialize"):
 		data["team"] = GameState.baseteam_node.serialize()
+	for node in savables:
+		if node and node.has_method("get_save_data"):
+			data["custom"][node.name] = node.get_save_data()
 	return data
 
 
 ## 把存档数据写回运行时状态
 func _apply_save_data(data: Dictionary) -> void:
-	PartyWallet.money = int(data.get("money", 500))
-
 	var players: Array = data.get("players", [])
 	for i in mini(players.size(), GameState.player_characters.size()):
 		GameState.player_characters[i].deserialize(players[i])
@@ -69,10 +90,10 @@ func _apply_save_data(data: Dictionary) -> void:
 		WorldGridManager.data_layer.deserialize(data["map"])
 	if data.has("team") and GameState.baseteam_node and GameState.baseteam_node.has_method("deserialize"):
 		GameState.baseteam_node.deserialize(data["team"])
-	if data.has("events"):
-		WorldEventManager.deserialize(data["events"])
-	if data.has("shops"):
-		ShopManager.deserialize(data["shops"])
+	var custom: Dictionary = data.get("custom", {})
+	for node in savables:
+		if node and custom.has(node.name) and node.has_method("apply_save_data"):
+			node.apply_save_data(custom[node.name])
 
 
 ## 存档数据是否存在

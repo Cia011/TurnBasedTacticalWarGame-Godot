@@ -99,7 +99,8 @@ func reset_game_state():
 
 ## 角色数据创建工厂
 func create_unit_data(data:Dictionary)->UnitData:
-	#var unit = UnitData.create_from_data(data)
 	var unit =UnitData.new()
 	unit.character_name = data["character_name"]
+	if data.has("texture_path"):
+		unit.texture = load(data["texture_path"])
 	return unit

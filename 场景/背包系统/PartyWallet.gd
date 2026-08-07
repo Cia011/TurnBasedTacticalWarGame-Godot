@@ -22,3 +22,12 @@ func spend(amount: int) -> bool:
 
 func earn(amount: int) -> void:
 	money += amount
+
+
+func get_save_data() -> Dictionary:
+	return {"money": money}
+
+
+func apply_save_data(data: Dictionary) -> void:
+	if data.has("money"):
+		money = int(data["money"])

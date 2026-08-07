@@ -11,9 +11,14 @@ const ShopUIScene := preload("res://场景/UI/商店UI/shop_ui.tscn")
 ## shop_name -> {goods, columns, rows, tier, funds, base_funds, stock_limits, restock_interval, restock_counter, sell_ratio}
 var shop_defs: Dictionary = {}
 var current_shop_name: String = ""
+var team_inventory_name: String = "TeamInventory"
 
 var _shop_layer: CanvasLayer
 var _shop_ui: Control
+
+
+func _ready() -> void:
+	WorldEventManager.turn_ticked.connect(restock_all_shops)
 
 
 ## 注册一个商店。opts 支持 tier / funds / stock_limits / restock_interval / sell_ratio
@@ -72,7 +77,7 @@ func try_buy(shop_name: String, item: ItemData) -> bool:
 		return false
 	if not PartyWallet.can_afford(item.price):
 		return false
-	if not GBIS.inventory_service.add_item(GameItemDatabase.TEAM_INVENTORY, item):
+	if not GBIS.inventory_service.add_item(team_inventory_name, item):
 		return false
 	def["stock_limits"][item.item_name] = stock - 1
 	def["funds"] = int(def["funds"]) - item.price
@@ -166,6 +171,10 @@ func serialize() -> Dictionary:
 	return {"shops": shops}
 
 
+func get_save_data() -> Dictionary:
+	return serialize()
+
+
 func deserialize(data: Dictionary) -> void:
 	if not data.has("shops"):
 		return
@@ -179,3 +188,7 @@ func deserialize(data: Dictionary) -> void:
 		def["base_funds"] = saved.get("base_funds", def.get("base_funds", 200))
 		def["stock_limits"] = saved.get("stock_limits", def.get("stock_limits", {}))
 		def["restock_counter"] = saved.get("restock_counter", 0)
+
+
+func apply_save_data(data: Dictionary) -> void:
+	deserialize(data)
