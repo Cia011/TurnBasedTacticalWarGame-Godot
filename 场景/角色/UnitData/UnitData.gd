@@ -87,6 +87,9 @@ func _on_stat_changed(new_stats: Dictionary):
 
 # 视觉表现
 @export var texture: Texture2D = preload("res://素材/角色/Sprite-0010.png")
+## 身体图像在角色节点上的中心位置（不同种族可以有不同的身体锚点）
+@export var body_position: Vector2 = Vector2(0, -7)
+@export var body_offset: Vector2 = Vector2.ZERO
 
 
 func get_states() -> Dictionary:
@@ -149,6 +152,8 @@ func serialize() -> Dictionary:
 		"flat_bonuses": data_manager.flat_bonuses.duplicate(),
 		"final_bonuses": data_manager.final_bonuses.duplicate(),
 		"buffs": buff_list,
+		"body_position": {"x": body_position.x, "y": body_position.y},
+		"body_offset": {"x": body_offset.x, "y": body_offset.y},
 	}
 
 
@@ -180,6 +185,13 @@ func deserialize(data: Dictionary) -> void:
 		var buff := _create_buff_from_data(buff_data)
 		if buff:
 			buff_manager.add_buff(buff)
+
+	if data.get("body_position") is Dictionary:
+		var saved_position: Dictionary = data["body_position"]
+		body_position = Vector2(float(saved_position.get("x", body_position.x)), float(saved_position.get("y", body_position.y)))
+	if data.get("body_offset") is Dictionary:
+		var saved_offset: Dictionary = data["body_offset"]
+		body_offset = Vector2(float(saved_offset.get("x", body_offset.x)), float(saved_offset.get("y", body_offset.y)))
 
 
 func _create_buff_from_data(data: Dictionary) -> BaseBuff:

@@ -11,6 +11,8 @@ class_name CharacterOverlayData
 @export var offset: Vector2 = Vector2.ZERO
 @export var layer: int = 0
 @export var visible: bool = true
+## 由哪个装备槽生成；空字符串表示 buff 等额外覆盖
+@export var source_slot: String = ""
 
 func to_save_data() -> Dictionary:
 	return {
@@ -21,6 +23,7 @@ func to_save_data() -> Dictionary:
 		"offset": {"x": offset.x, "y": offset.y},
 		"layer": layer,
 		"visible": visible,
+		"source_slot": source_slot,
 	}
 
 
@@ -34,6 +37,7 @@ func load_from_data(data: Dictionary) -> void:
 	offset = _parse_vector(data.get("offset", {}), offset)
 	layer = int(data.get("layer", 0))
 	visible = bool(data.get("visible", true))
+	source_slot = str(data.get("source_slot", ""))
 
 
 func _parse_vector(raw: Variant, fallback: Vector2) -> Vector2:

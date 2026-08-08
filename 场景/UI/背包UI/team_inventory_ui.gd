@@ -39,6 +39,7 @@ func _ready() -> void:
 func open() -> void:
 	visible = true
 	UiManager.open_ui(self)
+	_set_bag_manager_visible(true)
 	if selected_unit == null and not GameState.player_characters.is_empty():
 		select_unit(GameState.player_characters[0])
 	_on_money_changed(PartyWallet.money, PartyWallet.money)
@@ -47,6 +48,13 @@ func open() -> void:
 func close() -> void:
 	visible = false
 	UiManager.close_ui(self)
+	_set_bag_manager_visible(false)
+
+
+func _set_bag_manager_visible(visible: bool) -> void:
+	var bag_manager := get_node_or_null("../BagManager") as Control
+	if bag_manager:
+		bag_manager.visible = visible
 
 
 func toggle() -> void:

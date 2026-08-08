@@ -1,10 +1,32 @@
 extends Node2D
 class_name BaseTeam
+@onready var sprite: Sprite2D = $Sprite2D
 var grid_position : Vector2i:
 	get: return WorldGridManager.get_grid_position(position)
 func _ready() -> void:
 	GameState.baseteam_node = self
 	position = WorldGridManager.get_world_position(WorldGridManager.get_grid_position(position))
+	GameState.signal_player_characters_change.connect(_refresh_team_portrait)
+	GBIS.sig_slot_item_equipped.connect(_on_equipment_changed)
+	GBIS.sig_slot_item_unequipped.connect(_on_equipment_changed)
+	GBIS.sig_slot_refresh.connect(_on_slots_refreshed)
+	_refresh_team_portrait()
+
+
+func _on_equipment_changed(_slot_name: String = "", _item_data: ItemData = null) -> void:
+	_refresh_team_portrait()
+
+
+func _on_slots_refreshed() -> void:
+	_refresh_team_portrait()
+
+
+func _refresh_team_portrait() -> void:
+	if GameState.player_characters.is_empty():
+		sprite.texture = null
+		return
+	sprite.scale = Vector2(0.8, 0.8)
+	sprite.texture = CharacterPortraitService.get_portrait_texture(GameState.player_characters[0], Vector2i(64, 64))
 	
 	
 var path : Array[Vector2i]

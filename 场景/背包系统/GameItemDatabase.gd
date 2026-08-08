@@ -122,6 +122,7 @@ func _apply_equipment_fields(item: BaseEquipmentItemData, data: Dictionary) -> v
 	item.appearance_position = _parse_vector2(data.get("appearance_position", {}), item.appearance_position)
 	item.appearance_scale = _parse_vector2(data.get("appearance_scale", {}), item.appearance_scale)
 	item.appearance_offset = _parse_vector2(data.get("appearance_offset", {}), item.appearance_offset)
+	item.animations = _parse_animations(data.get("animations", {}))
 
 
 func _load_texture(raw_path: Variant, fallback: Texture2D) -> Texture2D:
@@ -144,6 +145,93 @@ func _to_string_array(raw: Variant) -> Array[String]:
 	if raw is Array:
 		for value in raw:
 			result.append(str(value))
+	return result
+
+
+## 解析 JSON 中的动画定义，统一成运行时格式
+func _parse_animations(raw: Variant) -> Dictionary:
+	var result := {}
+	if not (raw is Dictionary):
+		return result
+	for anim_name in raw:
+		var parsed := _parse_animation(raw[anim_name])
+		if not parsed.is_empty():
+			result[str(anim_name)] = parsed
+	return result
+
+
+func _parse_animation(raw: Variant) -> Dictionary:
+	if raw is Array:
+		return _build_animation("", false, true, "cubic", "out", raw, 0.0)
+	if not (raw is Dictionary):
+		return {}
+	var keys_raw: Variant = raw.get("keys", [])
+	if not (keys_raw is Array):
+		keys_raw = [raw]
+	return _build_animation(
+		str(raw.get("target", "")),
+		bool(raw.get("loop", false)),
+		bool(raw.get("restore", true)),
+		str(raw.get("transition", "cubic")),
+		str(raw.get("ease", "out")),
+		keys_raw,
+		float(raw.get("duration", 0.0))
+	)
+
+
+func _build_animation(target: String, loop: bool, restore: bool, transition: String, ease: String, keys_raw: Array, explicit_duration: float) -> Dictionary:
+	var keys: Array = []
+	var duration := 0.0
+	for key_raw in keys_raw:
+		if not (key_raw is Dictionary):
+			continue
+		var key := {"time": float(key_raw.get("time", 0.0))}
+		if key_raw.has("position") and key_raw["position"] is Dictionary:
+			key["position"] = _parse_vector2(key_raw["position"], Vector2.ZERO)
+		if key_raw.has("scale") and key_raw["scale"] is Dictionary:
+			key["scale"] = _parse_vector2(key_raw["scale"], Vector2.ONE)
+		if key_raw.has("rotation"):
+			key["rotation"] = float(key_raw["rotation"])
+		keys.append(key)
+		duration = maxf(duration, float(key["time"]))
+	if explicit_duration > 0.0:
+		duration = explicit_duration
+	return {
+		"target": target,
+		"duration": duration,
+		"loop": loop,
+		"restore": restore,
+		"transition": transition,
+		"ease": ease,
+		"keys": keys,
+	}
+
+
+func _serialize_animations(animations: Dictionary) -> Dictionary:
+	var result := {}
+	for anim_name in animations:
+		var anim: Dictionary = animations[anim_name]
+		var keys: Array = []
+		for key in anim.get("keys", []):
+			var out := {"time": float(key.get("time", 0.0))}
+			if key.has("position"):
+				var pos: Vector2 = key["position"]
+				out["position"] = {"x": pos.x, "y": pos.y}
+			if key.has("scale"):
+				var scale: Vector2 = key["scale"]
+				out["scale"] = {"x": scale.x, "y": scale.y}
+			if key.has("rotation"):
+				out["rotation"] = float(key["rotation"])
+			keys.append(out)
+		result[str(anim_name)] = {
+			"target": str(anim.get("target", "")),
+			"duration": float(anim.get("duration", 0.0)),
+			"loop": bool(anim.get("loop", false)),
+			"restore": bool(anim.get("restore", true)),
+			"transition": str(anim.get("transition", "cubic")),
+			"ease": str(anim.get("ease", "out")),
+			"keys": keys,
+		}
 	return result
 
 
@@ -184,6 +272,7 @@ func serialize_item(item: ItemData) -> Dictionary:
 		data["appearance_position"] = {"x": eq.appearance_position.x, "y": eq.appearance_position.y}
 		data["appearance_scale"] = {"x": eq.appearance_scale.x, "y": eq.appearance_scale.y}
 		data["appearance_offset"] = {"x": eq.appearance_offset.x, "y": eq.appearance_offset.y}
+		data["animations"] = _serialize_animations(eq.animations)
 	return data
 
 

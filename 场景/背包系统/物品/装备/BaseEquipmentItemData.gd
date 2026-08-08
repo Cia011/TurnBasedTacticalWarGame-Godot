@@ -29,6 +29,16 @@ class_name BaseEquipmentItemData
 ## 覆盖层级：0 在最底层，数字越大越靠上
 @export var appearance_layer: int = 0
 
+## 装备动画：动画名 -> {duration, loop, restore, transition, ease, keys:[{time, position, scale, rotation}]}
+@export var animations: Dictionary = {}
+
+func has_animation(anim_name: String) -> bool:
+	return animations.has(anim_name)
+
+
+func get_animation(anim_name: String) -> Dictionary:
+	return animations.get(anim_name, {})
+
 ## 检测是否可以装备到指定槽位
 func test_need(slot_name: String) -> bool:
 	var sep_index := slot_name.rfind("_")

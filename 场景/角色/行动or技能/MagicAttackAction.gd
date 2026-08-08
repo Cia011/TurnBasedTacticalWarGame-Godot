@@ -25,22 +25,16 @@ func start_action(target_grid_position: Vector2i, on_action_finished: Callable):
 		finish_action()
 		return
 	
-	# 播放施法动画
-	var animation_player = $"../../AnimationPlayer" as AnimationPlayer
-	animation_player.play("attack")
-	var finished_animation_name = await animation_player.animation_finished
-	
-	if finished_animation_name == "attack":
-		animation_player.play("RESET")
-		# 创建并发射火球
-		await launch_fireball(target_grid_position)
-		
-		# 火球命中后处理伤害
-		var target_unit: Unit = BattleGridManager.get_grid_occupied(target_grid_position)
-		attack_logic(target_unit)
-		finish_animation()
-	else:
-		finish_action()
+	# 播放施法动画，优先使用装备 JSON 里定义的 attack 动画
+	if unit.play_equipment_animation("attack", "主手"):
+		await unit.equipment_animation_finished
+	# 创建并发射火球
+	await launch_fireball(target_grid_position)
+
+	# 火球命中后处理伤害
+	var target_unit: Unit = BattleGridManager.get_grid_occupied(target_grid_position)
+	attack_logic(target_unit)
+	finish_animation()
 
 func is_valid_action_grid(target_grid_position: Vector2i) -> bool:
 	# 检查目标位置是否有单位且距离在范围内

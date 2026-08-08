@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://tnkufuwwfm5k" path="res://场景/角色/unit.gd" id="1_23877"]
 [ext_resource type="Texture2D" uid="uid://uxo4vhkdv271" path="res://素材/角色/Sprite-0010.png" id="1_cddf8"]
-[ext_resource type="Texture2D" uid="uid://ccerbbevdqr8j" path="res://素材/角色/兽人.png" id="2_etk83"]
 [ext_resource type="Shader" uid="uid://sqsovmkyrsaq" path="res://shaders/描边shader.gdshader" id="2_udull"]
 [ext_resource type="Script" uid="uid://dutife1puiymm" path="res://场景/角色/行动or技能/action_manager.gd" id="3_4h3ag"]
 [ext_resource type="Script" uid="uid://clfxsuyhxydf0" path="res://场景/角色/行动or技能/MoveAction.gd" id="3_dnxxf"]
@@ -50,94 +49,10 @@ font_color = Color(0.9083, 0.758066, 3.85046e-07, 1)
 outline_size = 10
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="Animation" id="Animation_etk83"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("图像/OverlayLayer/weapon:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-3, -3)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("图像/OverlayLayer/weapon:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("图像/OverlayLayer/weapon:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.5, 0.5)]
-}
-
-[sub_resource type="Animation" id="Animation_udull"]
-resource_name = "attack\\"
-length = 0.4
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("图像/OverlayLayer/weapon:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(-3, -3), Vector2(4, -4)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("图像/OverlayLayer/weapon:rotation")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 0.1),
-"update": 0,
-"values": [0.0, 2.36842]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("图像/OverlayLayer/weapon:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.5, 0.5)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hf7qr"]
-_data = {
-&"RESET": SubResource("Animation_etk83"),
-&"attack": SubResource("Animation_udull")
-}
 
 [node name="Unit" type="Node2D" unique_id=1739780072]
 script = ExtResource("1_23877")
-bodytexture = ExtResource("2_etk83")
 
 [node name="图像" type="Node2D" parent="." unique_id=769748846]
 

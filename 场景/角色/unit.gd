@@ -4,6 +4,7 @@ class_name Unit
 
 @onready var action_manager: ActionsManager = $ActionsManager
 @onready var health_ui: Node = $HealthUI
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 #--------------shader---------------------
 var shader_material: ShaderMaterial
 #---------------------------------------
@@ -16,6 +17,7 @@ var current_action_points:int
 var AI : BaseAI
 signal unit_die(unit:Unit)
 signal current_action_points_changed(new_value:int)
+signal equipment_animation_finished(anim_name:String)
 
 var grid_position:Vector2i
 #var grid_position :Vector2i:
@@ -31,9 +33,9 @@ var _overlay_data: Array[CharacterOverlayData] = []
 ## overlay_id -> Sprite2D
 var _overlay_nodes: Dictionary = {}
 var _overlay_layer: Node2D
+var _equipment_animation_clips: Dictionary = {}
+var _animation_finished_callback: Callable
 
-@onready var body: Sprite2D = $图像/body
-@export var bodytexture : Texture2D
 
 ## 确保覆盖层存在，并保留一个供攻击动画使用的 weapon 占位节点
 func _ensure_overlay_layer() -> void:
@@ -78,6 +80,7 @@ func rebuild_equipment_overlays() -> void:
 		overlay.scale = item.appearance_scale
 		overlay.offset = item.appearance_offset
 		overlay.layer = item.appearance_layer
+		overlay.source_slot = slot_key
 		add_overlay(overlay, slot_key == "主手")
 
 
@@ -137,6 +140,146 @@ func get_overlay_data() -> Array[CharacterOverlayData]:
 	return _overlay_data.duplicate()
 
 
+## 播放某件装备定义的动画（attack/hit 等），返回是否成功开始播放
+func play_equipment_animation(anim_name: String, prefer_slot: String = "") -> bool:
+	if unit_data == null or anim_name.is_empty():
+		return false
+	var result := _find_animation_sprite(anim_name, prefer_slot)
+	if result.is_empty():
+		return false
+	var sprite: Sprite2D = result["sprite"]
+	var item: BaseEquipmentItemData = result["item"]
+	var anim: Dictionary = item.get_animation(anim_name)
+	if anim.is_empty() or (anim.get("keys", []) as Array).is_empty():
+		return false
+	_play_equipment_animation_clip(sprite, anim, anim_name)
+	return true
+
+
+func stop_equipment_animation() -> void:
+	if animation_player:
+		animation_player.stop()
+	_animation_finished_callback = Callable()
+
+
+func _find_animation_sprite(anim_name: String, prefer_slot: String) -> Dictionary:
+	var slot_order: Array[String] = []
+	if not prefer_slot.is_empty():
+		slot_order.append(prefer_slot)
+	for slot_key in EQUIPMENT_SLOT_KEYS:
+		if not slot_order.has(slot_key):
+			slot_order.append(slot_key)
+	for slot_key in slot_order:
+		var item := unit_data.get_equipped_item(slot_key)
+		if item == null or not item.has_animation(anim_name):
+			continue
+		var anim: Dictionary = item.get_animation(anim_name)
+		var target := str(anim.get("target", ""))
+		var sprite: Sprite2D = null
+		if target == "body":
+			sprite = get_node_or_null("图像/body") as Sprite2D
+		else:
+			var overlay_id := "%s_%s" % [slot_key, item.item_name]
+			sprite = _overlay_nodes.get(overlay_id) as Sprite2D
+			if sprite == null:
+				sprite = get_node_or_null("图像/body") as Sprite2D
+		if sprite:
+			return {"sprite": sprite, "item": item, "slot": slot_key}
+	return {}
+
+
+func _play_equipment_animation_clip(sprite: Sprite2D, anim: Dictionary, anim_name: String) -> void:
+	var clip_name := _get_or_build_equipment_clip(sprite, anim, anim_name)
+	if clip_name.is_empty():
+		return
+	if _animation_finished_callback.is_valid() and animation_player.animation_finished.is_connected(_animation_finished_callback):
+		animation_player.animation_finished.disconnect(_animation_finished_callback)
+	_animation_finished_callback = _on_equipment_animation_finished.bind(clip_name)
+	animation_player.animation_finished.connect(_animation_finished_callback, CONNECT_ONE_SHOT)
+	animation_player.play(clip_name)
+
+
+func _get_or_build_equipment_clip(sprite: Sprite2D, anim: Dictionary, anim_name: String) -> String:
+	var cache_key := "%d_%s_%s" % [sprite.get_instance_id(), anim_name, str(anim.get("target", ""))]
+	if _equipment_animation_clips.has(cache_key):
+		return str(_equipment_animation_clips[cache_key])
+	var clip_name := "equip_%s_%d" % [anim_name, sprite.get_instance_id()]
+	var library := _get_animation_library()
+	if library == null:
+		return ""
+	var clip := _build_animation_resource(sprite, anim)
+	if clip == null:
+		return ""
+	library.add_animation(clip_name, clip)
+	_equipment_animation_clips[cache_key] = clip_name
+	return clip_name
+
+
+func _get_animation_library() -> AnimationLibrary:
+	var library := animation_player.get_animation_library(&"")
+	if library == null:
+		library = AnimationLibrary.new()
+		animation_player.add_animation_library(&"", library)
+	return library
+
+
+func _build_animation_resource(sprite: Sprite2D, anim: Dictionary) -> Animation:
+	var keys: Array = anim.get("keys", [])
+	if keys.is_empty():
+		return null
+	var clip := Animation.new()
+	clip.length = 0.0
+	var base_position := sprite.position
+	var base_scale := sprite.scale
+	var base_rotation := sprite.rotation
+	var current_position := base_position
+	var current_scale := base_scale
+	var current_rotation := base_rotation
+
+	var track_position := clip.add_track(Animation.TYPE_VALUE)
+	clip.track_set_path(track_position, _animation_track_path(sprite, "position"))
+	var track_scale := clip.add_track(Animation.TYPE_VALUE)
+	clip.track_set_path(track_scale, _animation_track_path(sprite, "scale"))
+	var track_rotation := clip.add_track(Animation.TYPE_VALUE)
+	clip.track_set_path(track_rotation, _animation_track_path(sprite, "rotation"))
+
+	for key in keys:
+		var time := float(key.get("time", 0.0))
+		if key.has("position"):
+			current_position = base_position + key["position"]
+		if key.has("scale"):
+			current_scale = key["scale"]
+		if key.has("rotation"):
+			current_rotation = deg_to_rad(float(key["rotation"]))
+		clip.track_insert_key(track_position, time, current_position)
+		clip.track_insert_key(track_scale, time, current_scale)
+		clip.track_insert_key(track_rotation, time, current_rotation)
+		clip.length = maxf(clip.length, time)
+
+	var loop := bool(anim.get("loop", false))
+	clip.loop_mode = Animation.LOOP_LINEAR if loop else Animation.LOOP_NONE
+	if not loop and bool(anim.get("restore", true)):
+		var restore_time := clip.length + 0.12
+		clip.track_insert_key(track_position, restore_time, base_position)
+		clip.track_insert_key(track_scale, restore_time, base_scale)
+		clip.track_insert_key(track_rotation, restore_time, base_rotation)
+		clip.length = restore_time
+	return clip
+
+
+func _animation_track_path(sprite: Sprite2D, property: String) -> NodePath:
+	var root := animation_player.get_node_or_null(animation_player.root_node) as Node
+	var relative := root.get_path_to(sprite) if root else animation_player.get_path_to(sprite)
+	return NodePath("%s:%s" % [str(relative), property])
+
+
+func _on_equipment_animation_finished(finished_name: StringName, expected_clip: String) -> void:
+	if str(finished_name) != expected_clip:
+		return
+	equipment_animation_finished.emit(str(finished_name))
+	_animation_finished_callback = Callable()
+
+
 func _create_overlay_sprite(overlay: CharacterOverlayData, is_main_weapon: bool) -> Sprite2D:
 	_ensure_overlay_layer()
 	if _overlay_layer == null or overlay == null or overlay.texture == null:
@@ -182,83 +325,20 @@ func _reset_weapon_placeholder(node: Sprite2D) -> void:
 	node.z_index = 0
 	node.visible = true
 
-## 把所有精灵图按层级叠加成一张最终图片
+## 把所有身体+装备图层叠加成一张最终图片（与大地图共用合成服务）
 func get_combined_image() -> Image:
-	var bounds := Rect2()
-	var prepared: Array[Dictionary] = []
-	var body_node := get_node_or_null("图像/body") as Sprite2D
-	if body_node and body_node.texture and body_node.visible:
-		var body_entry := _prepare_image_entry(body_node.texture, body_node.position, body_node.scale, body_node.offset)
-		if not body_entry.is_empty():
-			prepared.append(body_entry)
-	var sorted_overlays := _overlay_data.duplicate()
-	sorted_overlays.sort_custom(_compare_overlay_layer)
-	for overlay in sorted_overlays:
-		if overlay == null or overlay.texture == null or not overlay.visible:
-			continue
-		var entry := _prepare_image_entry(overlay.texture, overlay.position, overlay.scale, overlay.offset)
-		if not entry.is_empty():
-			prepared.append(entry)
-
-	var first_entry := true
-	for entry in prepared:
-		var part_rect: Rect2 = entry["rect"]
-		if first_entry:
-			bounds = part_rect
-			first_entry = false
-		else:
-			bounds = bounds.merge(part_rect)
-
-	if prepared.is_empty():
-		return Image.create(1, 1, false, Image.FORMAT_RGBA8)
-
-	var canvas := Image.create(
-		maxi(1, ceili(bounds.size.x)),
-		maxi(1, ceili(bounds.size.y)),
-		false,
-		Image.FORMAT_RGBA8
-	)
-	canvas.fill(Color(0, 0, 0, 0))
-	for entry in prepared:
-		var src: Image = entry["image"]
-		var dst := Vector2i((entry["rect"].position - bounds.position).floor())
-		canvas.blit_rect(src, Rect2i(0, 0, src.get_width(), src.get_height()), dst)
-	return canvas
-
-
-func _compare_overlay_layer(a: CharacterOverlayData, b: CharacterOverlayData) -> bool:
-	return a.layer < b.layer
-
-
-func _prepare_image_entry(texture: Texture2D, position: Vector2, scale: Vector2, offset: Vector2) -> Dictionary:
-	var src := texture.get_image()
-	if src == null:
-		return {}
-	var final_scale := scale
-	if final_scale.x < 0.0:
-		src = src.duplicate()
-		src.flip_x()
-		final_scale.x = -final_scale.x
-	if final_scale.y < 0.0:
-		src = src.duplicate()
-		src.flip_y()
-		final_scale.y = -final_scale.y
-	if final_scale != Vector2.ONE:
-		src = src.duplicate()
-		src.resize(
-			maxi(1, roundi(src.get_width() * final_scale.x)),
-			maxi(1, roundi(src.get_height() * final_scale.y)),
-			Image.INTERPOLATE_NEAREST
-		)
-	var top_left := position + offset - Vector2(src.get_width(), src.get_height()) * 0.5
-	return {"image": src, "rect": Rect2(top_left, Vector2(src.get_width(), src.get_height()))}
+	var extra_overlays: Array[CharacterOverlayData] = []
+	for overlay in _overlay_data:
+		if overlay.source_slot.is_empty():
+			extra_overlays.append(overlay)
+	return CharacterPortraitService.get_combined_image(unit_data, extra_overlays)
 
 
 ## 把变装后的最终图片保存为 PNG
 func save_combined_png(path: String) -> bool:
 	var image := get_combined_image()
 	return image.save_png(path) == OK
-
+#--------------------------UnitData-----------------------------
 var unit_data:UnitData
 #从data_manager中获取属性
 #单独写一个函数是为了方便使用 即 委托方法
@@ -301,6 +381,12 @@ func _ready() -> void:
 	if not buff_manager:
 		print("[unit] [error]buff_manager不存在")
 		return
+	var body_node := get_node_or_null("图像/body") as Sprite2D
+	if body_node:
+		body_node.position = unit_data.body_position
+		body_node.offset = unit_data.body_offset
+		if unit_data.texture:
+			body_node.texture = unit_data.texture
 	rebuild_equipment_overlays()
 	#角色创建时在BattleUnitManager内注册
 	BattleUnitManager.register_unit(self)
@@ -315,7 +401,6 @@ func _ready() -> void:
 		AI = AggressiveEnemyAI.new(self)
 		add_child(AI)
 	#--------------shader---------------------
-	var body_node := get_node_or_null("图像/body") as Sprite2D
 	shader_material = body_node.material as ShaderMaterial if body_node else null
 
 #由角色生成器来控制生成角色的位置,目前角色生成器为战斗场景根节点
@@ -332,6 +417,7 @@ func unit_data_change(new_stats:Dictionary):
 		#受伤弹幕
 		var change_health:int = new_stats["current_health"]-pre_health
 		if(change_health<=0):
+			play_equipment_animation("hit")
 			PopManager.pop_lable(self.position,str(new_stats["current_health"]-pre_health),Color.RED)
 		elif(change_health>0):
 			PopManager.pop_lable(self.position,"+"+str(new_stats["current_health"]-pre_health),Color.GREEN)
