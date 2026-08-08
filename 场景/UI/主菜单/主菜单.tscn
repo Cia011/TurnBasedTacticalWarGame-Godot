@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://clrlqrnark0mp" path="res://场景/UI/主菜单/menu_button.tscn" id="1_i65ta"]
 [ext_resource type="Script" uid="uid://ggvge03kx80n" path="res://场景/UI/主菜单/主菜单.gd" id="1_qbaap"]
+[ext_resource type="PackedScene" path="res://场景/UI/存档UI/save_ui.tscn" id="2_saveui"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4ts2"]
 bg_color = Color(0.93333334, 0.7411765, 0.5411765, 1)
@@ -79,3 +80,7 @@ layout_mode = 2
 
 [node name="退出游戏" parent="MarginContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_i65ta")]
 layout_mode = 2
+
+[node name="SaveUI" parent="." unique_id=884216332 instance=ExtResource("2_saveui")]
+visible = false
+layout_mode = 1

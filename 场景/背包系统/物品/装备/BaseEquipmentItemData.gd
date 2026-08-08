@@ -15,6 +15,20 @@ class_name BaseEquipmentItemData
 ## 属性加成：{"strength": 5, "defense": 3}
 @export var stat_bonuses: Dictionary = {}
 
+## ---- 变装外观：装备自带覆盖图 ----
+## 物品图标是 item.icon，这里是角色身上叠加显示的覆盖图
+@export var appearance_image: Texture2D
+## 覆盖到变装系统的哪个部位（如 "weapon" / "head" / "armor"）
+@export var appearance_slot: String = "weapon"
+## 覆盖图相对角色中心的偏移（等价于 Sprite2D.position）
+@export var appearance_position: Vector2 = Vector2.ZERO
+## 覆盖图缩放（等价于 Sprite2D.scale）
+@export var appearance_scale: Vector2 = Vector2.ONE
+## 覆盖图贴图偏移（等价于 Sprite2D.offset）
+@export var appearance_offset: Vector2 = Vector2.ZERO
+## 覆盖层级：0 在最底层，数字越大越靠上
+@export var appearance_layer: int = 0
+
 ## 检测是否可以装备到指定槽位
 func test_need(slot_name: String) -> bool:
 	var sep_index := slot_name.rfind("_")

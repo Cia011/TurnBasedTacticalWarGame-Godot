@@ -47,6 +47,27 @@ func add_slot(slot_name: String, avilable_types: Array[String]) -> bool:
 		return true
 	return false
 
+## 清空所有装备槽，读档前调用
+func clear_all_slots() -> void:
+	for slot in _slot_data_map.values():
+		if slot and slot.equipped_item:
+			slot.equipped_item.unequipped(slot.slot_name)
+	_slot_data_map.clear()
+
+func get_all_slots() -> Dictionary:
+	return _slot_data_map
+
+## 直接恢复一个装备槽（不会走 equip 判断，由存档数据为准）
+func restore_slot(slot_name: String, avilable_types: Array[String], equipped_item: ItemData) -> bool:
+	if _slot_data_map.has(slot_name):
+		return false
+	var slot := EquipmentSlotData.new(slot_name, avilable_types)
+	slot.equipped_item = equipped_item
+	_slot_data_map[slot_name] = slot
+	if equipped_item:
+		equipped_item.equipped(slot_name)
+	return true
+
 ## 尝试装备一件物品，如果装备成功，返回装备上这个物品的装备槽
 func try_equip(item_data: ItemData) -> EquipmentSlotData:
 	for slot in _slot_data_map.values():

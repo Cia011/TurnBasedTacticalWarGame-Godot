@@ -52,6 +52,21 @@ func add_quick_move_relation(inv_name: String, target_inv_name: String) -> void:
 		var arr: Array[String] = [target_inv_name]
 		_quick_move_relations_map[inv_name] = arr
 
+## 清空所有背包与快速移动关系，用于读档前重置
+func clear_all() -> void:
+	_container_data_map.clear()
+	_quick_move_relations_map.clear()
+
+func get_quick_move_relations_map() -> Dictionary:
+	return _quick_move_relations_map
+
+func set_quick_move_relations_map(data: Dictionary) -> void:
+	var typed: Dictionary[String, Array] = {}
+	for key in data:
+		var values: Variant = data[key]
+		typed[str(key)] = values if values is Array else []
+	_quick_move_relations_map = typed
+
 ## 移除快速移动关系
 func remove_quick_move_relation(inv_name: String, target_inv_name: String) -> void:
 	if _quick_move_relations_map.has(inv_name):

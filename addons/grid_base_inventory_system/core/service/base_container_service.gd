@@ -21,6 +21,15 @@ func regist(container_name: String, columns: int, rows: int, is_shop: bool, avil
 		GBIS.inventory_names.append(container_name)
 	return _container_repository.add_container(container_name, columns, rows, avilable_types)
 
+func clear_all_containers() -> void:
+	_container_repository.clear_all()
+
+func get_quick_move_relations_map() -> Dictionary:
+	return _container_repository.get_quick_move_relations_map()
+
+func restore_quick_move_relations(data: Dictionary) -> void:
+	_container_repository.set_quick_move_relations_map(data)
+
 ## 通过物品名称找所有物品（同名物品可能有多个实例）
 func find_item_data_by_item_name(container_name: String, item_name: String) -> Array[ItemData]:
 	var inv = _container_repository.get_container(container_name)

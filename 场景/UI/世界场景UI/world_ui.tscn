@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dwtyhaagerol4" path="res://场景/UI/世界场景UI/TopMenu/top_menu.tscn" id="5_o600o"]
 [ext_resource type="PackedScene" uid="uid://cqp2ekkvi1swq" path="res://场景/UI/世界场景UI/PopupMenu/PopupMenu.tscn" id="9_x1m8d"]
 [ext_resource type="PackedScene" uid="uid://btc0inu7qx02a" path="res://场景/UI/背包UI/team_inventory_ui.tscn" id="10_teaminv"]
+[ext_resource type="PackedScene" path="res://场景/UI/存档UI/save_ui.tscn" id="11_saveui"]
 
 [node name="WorldUI" type="CanvasLayer" unique_id=300757280]
 script = ExtResource("1_bejdh")
@@ -84,5 +85,9 @@ offset_right = 36.8567
 offset_bottom = -94.0693
 
 [node name="TeamInventoryUI" parent="UI" unique_id=2094452842 instance=ExtResource("10_teaminv")]
+visible = false
+layout_mode = 1
+
+[node name="SaveUI" parent="UI" unique_id=329847152 instance=ExtResource("11_saveui")]
 visible = false
 layout_mode = 1

@@ -11,8 +11,8 @@ func _ready() -> void:
 func _update_continue_button():
 	var continue_button = _find_button_by_name("继续游戏")
 	if continue_button:
-		continue_button.disabled = true
-		continue_button.text = "继续游戏 (未实现)"
+		continue_button.disabled = false
+		continue_button.text = "继续游戏"
 
 func _find_button_by_name(button_name: String) -> Control:
 	for button in v_box_container.get_children():
@@ -30,7 +30,10 @@ func on_menu_button_pressed(button_name:String):
 
 # 继续游戏逻辑（暂未实现）
 func _on_continue_game():
-	print("[主菜单] 继续游戏功能暂未实现")
+	print("[主菜单] 打开读档界面")
+	var save_ui = UiManager.get_ui("SaveUI")
+	if save_ui and save_ui.has_method("open_load"):
+		save_ui.open_load()
 
 # 新建游戏逻辑
 func _on_new_game():

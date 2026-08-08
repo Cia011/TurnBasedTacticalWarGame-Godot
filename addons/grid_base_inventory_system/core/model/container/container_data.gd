@@ -70,6 +70,20 @@ func remove_item(item: ItemData) -> bool:
 		return true
 	return false
 
+## 导出每个物品及其占用的网格，供存档使用
+func get_item_entries() -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	for item in item_grids_map.keys():
+		entries.append({
+			"item": item,
+			"grids": item_grids_map[item].duplicate(),
+		})
+	return entries
+
+## 按原网格位置恢复物品
+func restore_item(item_data: ItemData, grids: Array[Vector2i]) -> bool:
+	return _add_item_to_grids(item_data, grids)
+
 ## 检查物品是否可以被放入当前库存
 func is_item_avilable(item_data: ItemData) -> bool:
 	return avilable_types.has("ANY") or avilable_types.has(item_data.type)

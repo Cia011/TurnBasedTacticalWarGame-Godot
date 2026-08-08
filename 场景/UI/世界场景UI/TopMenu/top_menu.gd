@@ -24,8 +24,12 @@ func _on_菜单按钮_pressed() -> void:
 
 
 func _on_存档按钮_pressed() -> void:
-	WorldSaveManager.save_game()
+	var save_ui = UiManager.get_ui("SaveUI")
+	if save_ui and save_ui.has_method("open_save"):
+		save_ui.open_save()
 
 
 func _on_读档按钮_pressed() -> void:
-	WorldSaveManager.load_game()
+	var save_ui = UiManager.get_ui("SaveUI")
+	if save_ui and save_ui.has_method("open_load"):
+		save_ui.open_load()

@@ -80,3 +80,12 @@ func move_item(slot_name: String, base_size: int) -> void:
 		if _equipment_slot_repository.get_slot(slot_name).unequip():
 			GBIS.moving_item_service.move_item_by_data(item_data, Vector2i.ZERO, base_size)
 			GBIS.sig_slot_item_unequipped.emit(slot_name, item_data)
+
+func clear_all_slots() -> void:
+	_equipment_slot_repository.clear_all_slots()
+
+func get_all_slots() -> Dictionary:
+	return _equipment_slot_repository.get_all_slots()
+
+func restore_slot(slot_name: String, avilable_types: Array[String], equipped_item: ItemData) -> bool:
+	return _equipment_slot_repository.restore_slot(slot_name, avilable_types, equipped_item)
